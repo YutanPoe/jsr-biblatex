@@ -80,6 +80,10 @@ citetracker=true,
 \newboolean{reversenamebool}
 \setboolean{reversenamebool}{false}
 
+%%% related判定変数 %%%
+\newboolean{relatedbool}
+\setboolean{relatedbool}{false}
+
 % 日本語文献かどうかをチェック
 \AtEveryBibitem{
   \iflistundef{language}{}{%
@@ -384,7 +388,8 @@ citetracker=true,
   not test {\ifnameundef{author}}
 }
   {\usebibmacro{bbx:dashcheck}
-    {\bibnamedash\printdelim{nameyeardelim}}%
+    {\ifthenelse{\boolean{relatedbool}}
+      {}{\bibnamedash\printdelim{nameyeardelim}}}%
     {\usebibmacro{bbx:savehash}%
     \usebibmacro{reversename}{author}%
     \iffieldundef{authortype}{}%
@@ -417,7 +422,8 @@ citetracker=true,
   not test {\ifnameundef{editor}}
 }
   {\usebibmacro{bbx:dashcheck}
-    {\bibnamedash}
+    {\ifthenelse{\boolean{relatedbool}}
+      {}{\bibnamedash}}
     {\usebibmacro{reversename}{editor}%%
     \setunit{\printdelim{editortypedelim}}%
     \usebibmacro{bbx:savehash}}%
@@ -869,11 +875,13 @@ citetracker=true,
       {\usebibmacro{inbook}}}%
     {\usebibmacro{article}}}%
 \setunit{\printdelim{relatedpunct}}%
+\setboolean{relatedbool}{true}%
 \iffieldundef{journaltitle}%
   {\iffieldundef{booktitle}%
     {\printtext[jpparens]{再録：\usebibmacro{book}}}%
     {\printtext[jpparens]{再録：\usebibmacro{inbook}}}}%
   {\printtext[jpparens]{再録：\usebibmacro{article}}}%
+\setboolean{relatedbool}{false}%
 }
 
 %%% 再録（英語書籍）%%%
@@ -888,11 +896,13 @@ citetracker=true,
     {\usebibmacro{article}}}%
 \setunit{\printdelim{relatedpunct}}%
 \setboolean{reversenamebool}{false}%
+\setboolean{relatedbool}{true}%
 \iffieldundef{journaltitle}%
   {\iffieldundef{booktitle}%
     {Reprinted in: \usebibmacro{book}}%
     {Reprinted in: \usebibmacro{inbook}}}%
   {Reprinted in: \usebibmacro{article}}%
+\setboolean{relatedbool}{false}%
 }
 
 
