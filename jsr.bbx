@@ -672,10 +672,11 @@ citetracker=true,
 \newbibmacro*{yyyymmdd}
   {\iffieldundef{type}{}%
     {\printfield{year}
-    \addperiod\thinspace%
+    \setunit{\addperiod\thinspace}%
     \printfield{labelmonth}
-    \addperiod\thinspace
-    \printfield{day}}}%
+    \setunit{\addperiod\thinspace}%
+    \printfield{day}
+    \newunit}}%
 
 %%% 機関 %%%
 \newbibmacro*{type+institution}{%
