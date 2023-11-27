@@ -206,10 +206,19 @@ sortcites=false,
   }
 }
 
+% 苗字のみ出力 %
 \newbibmacro*{cite:relatednameL}{
   \iffieldundef{related}{
     \unspace
     \printnames{labelname}
+    \ifboolexpr{
+      test {\ifnameundef{author}}
+      and
+      not test {\ifnameundef{editor}}
+    }
+      {\setunit{\printdelim{editortypedelim}}%
+      \usebibmacro{ed-eds:editor}}%
+    {}
   }{
     \iffieldequalstr{relatedtype}{mvbook}{
       \unspace
@@ -280,6 +289,8 @@ sortcites=false,
       test {\iffieldundef{related}}
       and
       test {\ifnameundef{author}}
+      and
+      test {\ifnameundef{editor}}
     }
       {\usebibmacro{noauthorcite}}%
       {\ifnameundef{shortauthor}%"NASA"のような略称の有無判定
@@ -302,7 +313,8 @@ sortcites=false,
   % 誌名
   \usebibmacro{title}{jedkakko}{journal}%
   \setunit{\printdelim{titleafterdelim}}%
-  \usebibmacro{yyyymmdd}}
+  \usebibmacro{yyyymmdd}
+  \usebibmacro{vol+pages}}
 
 
 % relatedtypeがreprintofの場合の処理
