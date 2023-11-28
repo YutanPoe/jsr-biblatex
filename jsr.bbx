@@ -672,9 +672,9 @@ citetracker=true,
 \newbibmacro*{yyyymmdd}
   {\iffieldundef{type}{}%
     {\printfield{year}
-    \setunit{\addperiod\thinspace}%
+    \setunit*{\addperiod\thinspace}%
     \printfield{labelmonth}
-    \setunit{\addperiod\thinspace}%
+    \setunit*{\addperiod\thinspace}%
     \printfield{day}
     \newunit}}%
 
