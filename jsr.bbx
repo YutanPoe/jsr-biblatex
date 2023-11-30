@@ -106,7 +106,7 @@ citetracker=true,
 \renewcommand*{\newunitpunct}%基本の区切り文字
   {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
 \renewcommand*{\labelnamepunct}{\addperiod\space}
-%\newcommand*{\jpcomma}%基本の区切り文字（setunit用）
+%\newcommand*{\jecomma}%基本の区切り文字（setunit用）
 %  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
 \renewcommand*{\subtitlepunct}
   {\ifthenelse{\boolean{japanese}}
@@ -119,11 +119,13 @@ citetracker=true,
 
 %% デリム定義変更
 % 基本の区切り文字
-\DeclareDelimFormat{jpcomma}
-{\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
+\DeclareDelimFormat{jecomma}
+  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
+\DeclareDelimFormat{jecolon}{\ifthenelse{\boolean{japanese}}{\unspace{：}}{\addcolon\space}}
+\DeclareDelimFormat{jesemicolon}{\ifthenelse{\boolean{japanese}}{\unspace{；}}{\addsemicolon\space}}
 % 名前とXXフィールド
-\DeclareDelimAlias[bib,biblist]{nameyeardelim}{jpcomma}
-\DeclareDelimAlias[bib,biblist]{datetitledelim}{jpcomma}
+\DeclareDelimAlias[bib,biblist]{nameyeardelim}{jecomma}
+\DeclareDelimAlias[bib,biblist]{datetitledelim}{jecomma}
 % 名前とタイプ
 \DeclareDelimFormat{authortypedelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addspace}}
@@ -151,11 +153,15 @@ citetracker=true,
 % relatedフィールド間のデリム
 \DeclareDelimFormat{relatedpunct}%
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addspase}}%
+% おわりのデリム（後で削除する可能性あり）
+  \DeclareDelimFormat{findelim}
+  {\ifthenelse{\boolean{japanese}}{\unspace{．}}{\addperiod}}
 
 %%% フィールドの定義
 %% 追加
 % 全角かっこ包み込み
-\DeclareFieldFormat{jpparens}{\unspace{（}\unspace#1\unspace{）}\unspace}
+%\DeclareFieldFormat{jpparens}{\unspace{（}\unspace#1\unspace{）}\unspace}
+\DeclareFieldFormat{jpparens}{\unspace{（}#1\unspace{）}}
 % 全角or半角かっこ包み込み
 \DeclareFieldFormat{jeparens}
   {\ifthenelse{\boolean{japanese}}{\unspace{（}#1\unspace{）}}{\mkbibparens{#1}}}
@@ -400,9 +406,10 @@ citetracker=true,
     \usebibmacro{reversename}{author}%
     \iffieldundef{authortype}{}%
       {\setunit{\printdelim{authortypedelim}}
-      \usebibmacro{ed-eds:author}}}}%
+      \usebibmacro{ed-eds:author}}
+    \setunit*{\printdelim{nameyeardelim}}}}%
   {\global\undef\bbx@lasthash}%%
-\setunit{\printdelim{nameyeardelim}}}%
+}%
 
 
 %% 著者名+出版年 %%
@@ -428,14 +435,16 @@ citetracker=true,
   not test {\ifnameundef{editor}}
 }
   {\usebibmacro{bbx:dashcheck}
-    {\ifthenelse{\boolean{relatedbool}}
-      {}{\bibnamedash}}
+    {\ifthenelse{\boolean{relatedbool}}{}
+      {\bibnamedash%
+      \usebibmacro{ed-eds:editor}%
+      \setunit*{\printdelim{nameyeardelim}}}}
     {\usebibmacro{reversename}{editor}%%
     \setunit{\printdelim{editortypedelim}}%
-    \usebibmacro{bbx:savehash}}%
-  \usebibmacro{ed-eds:editor}%
-  \clearname{editor}%
-  \setunit{\printdelim{nameyeardelim}}}%
+    \usebibmacro{bbx:savehash}%
+    \usebibmacro{ed-eds:editor}%
+    \clearname{editor}%
+    \setunit*{\printdelim{nameyeardelim}}}}%
   {\global\undef\bbx@lasthash}}
 
 %% 編集者名が先頭でない時の出力 %%
@@ -488,7 +497,7 @@ citetracker=true,
   \usebibmacro{translatortype}%
   \ifnameundef{translatora}{}%
     {\usebibmacro{translatora}}%
-    \setunit{\printdelim{nameyeardelim}}}}%
+  \setunit*{\printdelim{nameyeardelim}}}}%
 
 \newbibmacro*{translatora}
 {\printnames[given-family]{translatora}%
@@ -742,16 +751,16 @@ citetracker=true,
   % 誌名
   \usebibmacro{title}{jedkakko}{journal}%
   % 出版社
-  \iflistundef{publisher}{}%
-    {\printlist{publisher}%
-    \newunit}%
+  %\iflistundef{publisher}{}%
+  \printlist{publisher}%
+  \setunit*{\printdelim{jecomma}}%
   \usebibmacro{yyyymmdd}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
   % doi,url,database
   \newunit%
   \usebibmacro{urldate+eprint/doi/url}%
-  \usebibmacro{finentry}
+  \printdelim{findelim}
 }%
 
 
@@ -780,7 +789,7 @@ citetracker=true,
     \newunit}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
-  \usebibmacro{finentry}%
+  \printdelim{findelim}
 }%
 
 %%% 翻訳書（origauthor使用の場合） %%%->削除
@@ -795,7 +804,7 @@ citetracker=true,
         {\usebibmacro{book}}%
         {\usebibmacro{inbook}}}%
       {\usebibmacro{article}}}%
-  \setunit{\printdelim{relatedpunct}}%
+  \setunit*{\printdelim{relatedpunct}}%
   \setboolean{japanese}{true}%
   \iffieldundef{journaltitle}%
     {\iffieldundef{booktitle}%
@@ -814,7 +823,7 @@ citetracker=true,
         {\usebibmacro{book}}%
         {\usebibmacro{inbook}}}%
       {\usebibmacro{article}}}%
-  \setunit{\printdelim{relatedpunct}}%
+  \setunit*{\printdelim{relatedpunct}}%
   \setboolean{reversenamebool}{false}%
   \iffieldundef{journaltitle}%
   {\iffieldundef{booktitle}%
@@ -869,13 +878,16 @@ citetracker=true,
       {\usebibmacro{book}}%
       {\usebibmacro{inbook}}}%
     {\usebibmacro{article}}}%
-\setunit{\printdelim{relatedpunct}}%
+\setunit*{\printdelim{relatedpunct}}%
 \setboolean{relatedbool}{true}%
-\iffieldundef{journaltitle}%
-  {\iffieldundef{booktitle}%
-    {\printtext[jpparens]{再録：\usebibmacro{book}}}%
-    {\printtext[jpparens]{再録：\usebibmacro{inbook}}}}%
-  {\printtext[jpparens]{再録：\usebibmacro{article}}}%
+\printtext[jpparens]
+  {\printtext{再録}
+  \setunit*{\printdelim{jecolon}}
+  \iffieldundef{journaltitle}%
+    {\iffieldundef{booktitle}%
+      {\usebibmacro{book}}%
+      {\usebibmacro{inbook}}}
+    {\usebibmacro{article}}}%
 \setboolean{relatedbool}{false}%
 }
 
@@ -889,14 +901,16 @@ citetracker=true,
       {\usebibmacro{book}}%
       {\usebibmacro{inbook}}}%
     {\usebibmacro{article}}}%
-\setunit{\printdelim{relatedpunct}}%
+\setunit*{\printdelim{relatedpunct}}%
 \setboolean{reversenamebool}{false}%
 \setboolean{relatedbool}{true}%
+\printtext{Reprinted in}
+\setunit*{\printdelim{jecolon}}
 \iffieldundef{journaltitle}%
   {\iffieldundef{booktitle}%
-    {Reprinted in: \usebibmacro{book}}%
-    {Reprinted in: \usebibmacro{inbook}}}%
-  {Reprinted in: \usebibmacro{article}}%
+    {\usebibmacro{book}}%
+    {\usebibmacro{inbook}}}%
+  {\usebibmacro{article}}%
 \setboolean{relatedbool}{false}%
 }
 
