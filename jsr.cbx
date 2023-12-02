@@ -16,9 +16,10 @@ sortcites=false,
 %jss変更ここから（コンマ→半角スペース）
 %\DeclareDelimFormat{nameyeardelim}{\addcomma\space}
 \DeclareDelimFormat[textcite,parencite]{nameyeardelim}{\addspace}%
-\DeclareDelimFormat[textcite,parencite]{transeq}{\unspace=}%
+\DeclareDelimFormat{transeq}{\unspace=}%
 \newcommand{\jpparenopen}{\unspace（}
 \newcommand{\jpparenclose}{\unspace）}
+\newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}
 %jss変更ここまで
 
 % 
@@ -361,23 +362,26 @@ sortcites=false,
 
 
 %%parenciteのかっこを全角に設定
-\DeclareCiteCommand{\parencite}%
-  {\jpparenopen%
+\DeclareCiteCommand{\parencite}[\mkbibjpparens]%
+  {%\jpparenopen%
   \usebibmacro{cite:init}%
   \usebibmacro{prenote}}%
   {\usebibmacro{citeindex}%
   \usebibmacro{cite}}%
   {}%
-  {\usebibmacro{postnote}%
-  \jpparenclose}%
+  {\usebibmacro{postnote}}%
+  %\jpparenclose}%
 
-\DeclareCiteCommand*{\parencite}%
-  {\jpparenopen%
+\DeclareCiteCommand*{\parencite}[\mkbibjpparens]%
+  {%\jpparenopen%
   \usebibmacro{cite:init}%
   \usebibmacro{prenote}}%
   {\usebibmacro{citeindex}%
   \usebibmacro{cite}}%
   {}%
-  {\usebibmacro{postnote}%
-  \jpparenclose}%
+  {\usebibmacro{postnote}}%
+  %\jpparenclose}%
+
+\DeclareMultiCiteCommand{\parencites}[\mkbibjpparens]{\parencite}
+  {\setunit{\multicitedelim}}
 \endinput
