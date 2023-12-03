@@ -161,10 +161,10 @@ citetracker=true,
 %% 追加
 % 全角かっこ包み込み
 %\DeclareFieldFormat{jpparens}{\unspace{（}\unspace#1\unspace{）}\unspace}
-\DeclareFieldFormat{jpparens}{\unspace{（}#1\unspace{）}}
+\DeclareFieldFormat{jpparens}{\mkbibjpparens{#1}}
 % 全角or半角かっこ包み込み
 \DeclareFieldFormat{jeparens}
-  {\ifthenelse{\boolean{japanese}}{\unspace{（}#1\unspace{）}}{\mkbibparens{#1}}}
+  {\ifthenelse{\boolean{japanese}}{\mkbibjpparens{#1}}{\mkbibparens{#1}}}
 % 二重かっこ（booktitle）
 \DeclareFieldFormat{jedkakko}
   {\ifthenelse{\boolean{japanese}}{『#1』}{\emph{#1}}}%
