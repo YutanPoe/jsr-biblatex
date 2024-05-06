@@ -54,9 +54,9 @@ maxitems=999,%
 sorting=nymdt,%
 urldate=ymd,%
 dateabbrev=false,%
-useorigauthor=true,%
+%useorigauthor=true,%
 labeldateparts=true,
-giveninits=true,
+giveninits=false,
 citecounter=true,
 citetracker=true,
 }
@@ -156,6 +156,8 @@ citetracker=true,
 % おわりのデリム（後で削除する可能性あり）
   \DeclareDelimFormat{findelim}
   {\ifthenelse{\boolean{japanese}}{\unspace{．}}{\addperiod}}
+% ダブルクォーテーション内部にコンマを挿入するための
+\DeclareQuotePunctuation{\addcomma,}
 
 %%% フィールドの定義
 %% 追加
@@ -170,7 +172,7 @@ citetracker=true,
   {\ifthenelse{\boolean{japanese}}{『#1』}{\emph{#1}}}%
 % かっこ
 \DeclareFieldFormat{jekakko}
-  {\ifthenelse{\boolean{japanese}}{「#1」}{“#1,”}}
+  {\ifthenelse{\boolean{japanese}}{\foreignquote{japanese}{#1}}{\mkbibquote{#1}}}
 % URL取得日
 \DeclareFieldFormat{urldate}{Retrieved #1}%
 
@@ -581,7 +583,7 @@ citetracker=true,
       {\printfield[titlecase]{#2title}%
       \setunit{\subtitlepunct}%
       \printfield[titlecase]{#2subtitle}%
-      }\setunit*{\printdelim{titledelim}}}}
+      }\setunit{\printdelim{titledelim}}}}
 
 %%% 電子書籍の原著情報 %%%
 \newbibmacro*{eprintbook}{
