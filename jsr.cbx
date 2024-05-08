@@ -61,14 +61,21 @@ sortcites=false,
     }%
 }
 
-\DeclareDelimFormat[textcite,parencite]{multinamedelim}%
+\DeclareDelimFormat[parencite]{multinamedelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace{・}}{\addcomma\space}}%
-\DeclareDelimFormat[textcite,parencite]{finalnamedelim}%
+\DeclareDelimFormat[parencite]{finalnamedelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace{・}}%
     {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-\DeclareDelimFormat[textcite,parencite]{andothersdelim}%
+\DeclareDelimFormat[parencite]{andothersdelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace{ほか}}{\addspace{et al.}}}%
 
+\DeclareDelimFormat[textcite]{multinamedelim}{\unspace{と}}%
+\DeclareDelimFormat[textcite]{finalnamedelim}{\unspace{と}}%
+  %{\ifthenelse{\boolean{japanese}}{\unspace{・}}%
+    %{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
+\DeclareDelimFormat[textcite]{andothersdelim}{\unspace{ら}}%
+
+  
 \newbibmacro*{isJPorEN}%
   {\ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}%
     {\setboolean{japanese}{true}}%
