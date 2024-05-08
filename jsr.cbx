@@ -148,17 +148,22 @@ sortcites=false,
         \addcomma\space\ldots\space%
       }{%
         \ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}{}{%
-        \ifgiveninits%
-        {\usebibmacro{name:given-family}%
+        %\ifgiveninits%
+        %{\usebibmacro{name:given-family}%
+          %{\namepartfamily}%
+          %{\namepartgiveni}%
+          %{\namepartprefix}%
+          %{\namepartsuffix}}%
+        %{\usebibmacro{name:given-family}%
+          %{\namepartfamily}%
+          %{\namepartgiven}%
+          %{\namepartprefix}%
+          %{\namepartsuffix}}%
+          \usebibmacro{name:given-family}%
           {\namepartfamily}%
           {\namepartgiveni}%
           {\namepartprefix}%
-          {\namepartsuffix}}%
-        {\usebibmacro{name:given-family}%
-          {\namepartfamily}%
-          {\namepartgiven}%
-          {\namepartprefix}%
-          {\namepartsuffix}}%
+          {\namepartsuffix}%
         }%
     }%
   }%
