@@ -316,8 +316,8 @@ sortcites=false,
         \addspace\printnames[sabrackets]{shortauthor}}}%
       \setunit{\printdelim{nameyeardelim}}%
       \usebibmacro{cite:plabelyear+extradate}%
-      \savefield{namehash}{\cbx@lasthash}}%
-    \setunit{\multicitedelim}}}%
+      \savefield{namehash}{\cbx@lasthash}}}%
+    \setunit{\multicitedelim}}%
 
 \newbibmacro*{noauthorcite}%
   {\iffieldundef{title}{}%
@@ -374,6 +374,7 @@ sortcites=false,
 
 
 %%parenciteのかっこを全角に設定
+%%% \DeclareCiteCommand{〈command〉}[〈wrapper〉]{〈precode〉}{〈loopcode〉}{〈sepcode〉}{〈postcode〉}
 \DeclareCiteCommand{\parencite}[\mkbibjpparens]%
   {%\jpparenopen%
   \usebibmacro{cite:init}%
