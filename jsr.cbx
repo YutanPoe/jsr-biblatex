@@ -319,9 +319,10 @@ sortcites=false,
       \savefield{namehash}{\cbx@lasthash}}}%
     \setunit{\multicitedelim}}%
 
+%% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
 \newbibmacro*{noauthorcite}%
   {\iffieldundef{title}{}%
-  {\usebibmacro{title}{jekakko}{}%
+  {%\usebibmacro{title}{jekakko}{}%
   \setunit{\printdelim{titleafterdelim}}}%
   % 誌名
   \usebibmacro{title}{jedkakko}{journal}%
