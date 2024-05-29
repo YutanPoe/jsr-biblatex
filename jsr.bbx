@@ -466,8 +466,8 @@ citetracker=true,
       {\printtext{編}}%
       {\printfield{authortype}}}%
     {\ifthenelse{\value{author}>1}%
-      {\printtext{eds.}}%
-      {\printtext{ed.}}}}%
+      {\printtext{eds\adddot}}%
+      {\printtext{ed\adddot}}}}%
 
 %%% 編集者のタイプ %%%
 \newbibmacro*{ed-eds:editor}%
@@ -478,8 +478,8 @@ citetracker=true,
         {\printtext{編}}%
         {\printfield{editortype}}}}%
     {\ifthenelse{\value{editor}>1}%
-      {\printtext{eds.}}%
-      {\printtext{ed.}}}}%
+      {\printtext{eds\adddot}}%
+      {\printtext{ed\adddot}}}}%
 
 \newbibmacro*{ed-eds:editora}%
   {\ifthenelse{\boolean{japanese}}%
@@ -489,8 +489,8 @@ citetracker=true,
         {\printtext{編}}%
         {\printfield{editoratype}}}}%
     {\ifthenelse{\value{editor}>1}%
-      {\printtext{eds.}}%
-      {\printtext{ed.}}}}%
+      {\printtext{eds\adddot}}%
+      {\printtext{ed\adddot}}}}%
 
 %%% 翻訳者
 \renewbibmacro*{translator}%
@@ -514,7 +514,7 @@ citetracker=true,
       {\printtext{訳}}%
       {\printfield{translatortype}}}%
     {\iffieldundef{translatortype}%
-      {\printtext{trans.}}%
+      {\printtext{trans\adddot}}%
       {\printfield{translatortype}}}}%
 
 \newbibmacro*{translatoratype}%
@@ -523,7 +523,7 @@ citetracker=true,
       {\printtext{訳}}%
       {\printfield{translatoratype}}}%
     {\iffieldundef{translatoratype}%
-      {\printfield{translatoratype}\printtext{trans.}}%
+      {\printfield{translatoratype}\printtext{trans\adddot}}%
       {\printfield{translatoratype}}}}%
 
 
