@@ -141,13 +141,15 @@ citetracker=true,
 % 名前連続時
 \DeclareDelimFormat[bib,biblist]{multinamedelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace{・}}{\addcomma\space}}%
-\DeclareDelimFormat[bib,biblist]{finalnamedelim}{%
-  \ifthenelse{\boolean{japanese}}{\unspace{・}}{%
-    \ifthenelse{\value{listcount}>\maxprtnames}{}{%
-      \ifthenelse{\value{liststop}>2}{%
-        \finalandcomma\addspace\&\space
-      }{\addspace\&\space}%
-    }%
+\DeclareDelimFormat[bib,biblist]{finalnamedelim}%
+{\ifthenelse{\boolean{japanese}}
+  {\unspace{・}}%
+  {\ifthenelse{\value{listcount}>\maxprtnames}%
+    {}
+    %{%\ifthenelse{\value{liststop}>2}%
+      %{\finalandcomma\addspace\&\space}%
+      {\addspace\&\space}%
+    %}%
   }%
 }%
 % relatedフィールド間のデリム
@@ -262,34 +264,23 @@ citetracker=true,
     }%
   }%
 }
-\DeclareNameAlias{author}{default}
-\DeclareNameAlias{editor}{default}
-\DeclareNameAlias{editora}{default}
-\DeclareNameAlias{translator}{default}
-\DeclareNameAlias{translatora}{default}
-\DeclareNameAlias{origauthor}{default}
-\DeclareNameAlias{bookauthor}{default}
-
 %%% ファーストネーム（イニシャル），ファミリーネームの順（reprintなど文献リストの先頭ではない部分に名前が登場する場合に備えて）
-\DeclareNameFormat{given-family}{%
-  \ifthenelse{\boolean{japanese}}{%
-    \ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}{%
-      \space\ldots\space%
-      }{%
-        \ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}{}{%
-        \usebibmacro{jpname:family-given}%
-          {\namepartfamily}%
-          {\namepartgiven}%
-          {\namepartprefix}%
-          {\namepartsuffix}%
-      }%
-    }%
-  }{%
-    \ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}{%
-        \addcomma\space\ldots\space%
-      }{%
-        \ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}{}{%
-        \ifgiveninits%
+\DeclareNameFormat{j:family-givem/e:given-family}%
+{\ifthenelse{\boolean{japanese}}%
+  {\ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}%
+    {\space\ldots\space}%
+    {\ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}%
+      {}
+      {\usebibmacro{jpname:family-given}%
+        {\namepartfamily}%
+        {\namepartgiven}%
+        {\namepartprefix}%
+        {\namepartsuffix}}}}%
+  {\ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}%
+    {\addcomma\space\ldots\space}%
+    {\ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}%
+      {}
+      {\ifgiveninits%
         {\usebibmacro{name:given-family}%
           {\namepartfamily}%
           {\namepartgiveni}%
@@ -299,11 +290,20 @@ citetracker=true,
           {\namepartfamily}%
           {\namepartgiven}%
           {\namepartprefix}%
-          {\namepartsuffix}}%
-        }%
-    }%
-  }%
-}
+          {\namepartsuffix}}}}}}
+
+\DeclareNameAlias{author}{default}
+\DeclareNameAlias{editor}{default}
+\DeclareNameAlias{editora}{default}
+\DeclareNameAlias{translator}{default}
+\DeclareNameAlias{translatora}{default}
+\DeclareNameAlias{origauthor}{default}
+\DeclareNameAlias{bookauthor}{default}
+
+\DeclareNameAlias{byeditor}{j:family-givem/e:given-family}
+\DeclareNameAlias{byauthor}{byeditor}
+\DeclareNameAlias{bytranslator}{byeditor}
+
 %%% 日本著者の表示設定（英語著者で設定される姓名間のスペースの削除）
 \newbibmacro*{jpname:family-given}[4]{%
   \ifuseprefix
@@ -372,7 +372,8 @@ citetracker=true,
 \newbibmacro*{reversename}[1]
 {\ifthenelse{\boolean{reversenamebool}}%
   {\printnames{#1}}%
-  {\printnames[given-family]{#1}}}
+  {\DeclareNameAlias{#1}{given-family}%
+  \printnames{#1}}}
 
 %%% 先頭名前　%%%
 %% book %%
@@ -452,7 +453,7 @@ citetracker=true,
 %% 編集者名が先頭でない時の出力 %%
 \renewbibmacro*{byeditor}{%
   \ifnameundef{editor}{}
-    {\printnames[given-family]{editor}%
+    {\printnames[byeditor]{editor}%
     \setunit{\printdelim{editortypedelim}}%
     \usebibmacro{ed-eds:editor}%
     \setunit{\printdelim{titledelim}}}%
@@ -494,7 +495,7 @@ citetracker=true,
 %%% 翻訳者
 \renewbibmacro*{translator}%
 {\ifnameundef{translator}{}%
-  {\printnames[given-family]{translator}%
+  {\printnames[bytranslator]{translator}%
   \setunit{\printdelim{translatortypedelim}}%
   \usebibmacro{translatortype}%
   \ifnameundef{translatora}{}%
@@ -502,7 +503,7 @@ citetracker=true,
   \setunit*{\printdelim{nameyeardelim}}}}%
 
 \newbibmacro*{translatora}
-{\printnames[given-family]{translatora}%
+{\printnames[bytranslator]{translatora}%
 \usebibmacro{translatoratype}%
 }%
 
@@ -537,7 +538,7 @@ citetracker=true,
 % 英語inbookの編集者名
 \newbibmacro*{editor:given-family}{%
   \printtext{In}\addspace%
-  \printnames[given-family]{editor}%
+  \printnames[byeditor]{editor}%
   \usebibmacro{ed-eds:editor}%%
   \addcomma\space%%
 }
@@ -548,7 +549,7 @@ citetracker=true,
     \addjspace\printnames{editor}%
     \usebibmacro{ed-eds:editor}\addjspace%
   }{%
-    \addspace\bibopenparen\printnames[given-family]{editor}%
+    \addspace\bibopenparen\printnames[byeditor]{editor}%
     \setunit{\addcomma\addspace}\printtext{Series}\addspace%
     \ifthenelse{\value{editor}>1}{\printtext{Eds.}}{\printtext{Ed.}}%
     \bibcloseparen%
