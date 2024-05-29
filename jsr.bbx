@@ -630,17 +630,16 @@ citetracker=true,
 %% 巻号設定 %%
 % volume(number)が基本
 % numberだけある場合、それをそのまま出力
-\newbibmacro*{volume+issues}{%
-  \ifboolexpr{
+\newbibmacro*{volume+issues}%
+  {\ifboolexpr{%
     test {\iffieldundef{volume}}
     and
-    not test {\iffieldundef{number}}
-  }{\printfield{number}}
-  {\printfield{volume}%
-    \iffieldundef{number}{}
-    {\printtext[parens]{\printfield{number}}}
-  }
-}
+    test {\iffieldundef{number}}
+  }{}%
+  {\iffieldundef{volume}%
+    {\printfield{number}}%
+    {\printfield{volume}\printfield[parens]{number}}%
+    \setunit{\addcolon\space}}}%
 
 \newbibmacro*{pages}
   {\iffieldundef{pages}{}
@@ -650,8 +649,8 @@ citetracker=true,
       \newunit%
       \printfield{version}%
       \newunit%
-      \printtext{\printfield{pages}面}}
-      {\setunit{\addcolon\space}\printfield{pages}\newunit}}}
+      \printtext{\printfield{pages}面}}%
+      {\printfield{pages}\newunit}}}%
 
 %% 巻数・引用ページ表示マクロ %%%
 \newbibmacro*{vol+pages}{%
@@ -786,10 +785,13 @@ citetracker=true,
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}
+  % 出版都市名
+  \ifthenelse{\boolean{japanese}}{}%
+    {\printlist{location}%
+    \setunit*{\addcolon\space}}%
   % 出版社
-  \iflistundef{publisher}{}%
-    {\printlist{publisher}%
-    \newunit}%
+  \printlist{publisher}%
+  \setunit*{\printdelim{jecomma}}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
   \printdelim{findelim}
