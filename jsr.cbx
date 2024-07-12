@@ -7,7 +7,7 @@ maxcitenames=2,%
 mincitenames=1,%
 uniquelist=minyear,
 uniquename=init,%
-sortcites=false,
+sortcites=true,
 }
 % et alが重複して表示されないようにする
 \DefineBibliographyStrings{english}{andothers={}}
@@ -20,6 +20,7 @@ sortcites=false,
 \newcommand{\jpparenopen}{\unspace（}
 \newcommand{\jpparenclose}{\unspace）}
 \newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}
+\newbool{cbx:samename}%
 %jss変更ここまで
 
 % 
@@ -90,21 +91,21 @@ sortcites=false,
   \ifthenelse{\boolean{japanese}}%
     {\ifcase\value{uniquename}%
       {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}%
-    \or
+    \or%
       {\usebibmacro{name:family-given}{#1}{#3}{\relax}{\relax}}%
-    \or
+    \or%
       {\usebibmacro{name:family-given}{#1}{#3}{\relax}{\relax}}%
     \fi}%
     {\ifcase\value{uniquename}%
-      \ifuseprefix
+      \ifuseprefix%
         {\usebibmacro{name:family}{#1}{#3}{#5}{\relax}}
         {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}%
-    \or
-      \ifuseprefix
+    \or%
+      \ifuseprefix%
         {\usebibmacro{name:given-family}{#1}{#4}{#5}{\relax}}
         {\usebibmacro{name:given-family}{#1}{#4}{\relax}{\relax}}%
-    \or
-      \ifuseprefix
+    \or%
+      \ifuseprefix%
         {\usebibmacro{name:given-family}{#1}{#3}{#5}{\relax}}
         {\usebibmacro{name:given-family}{#1}{#3}{\relax}{\relax}}%
     \fi}%
@@ -119,7 +120,6 @@ sortcites=false,
         {}}%
     \printdelim{andothersdelim}}
 {}}
-
 
 \DeclareNameFormat{labelname}%
   {\usebibmacro{labelname:doname}%
@@ -180,99 +180,130 @@ sortcites=false,
 
 %%% 引用形式定義 %%%
 %% 最初の引用時はフルネーム %%
-\newbibmacro*{citecountname}{
-  \ifciteseen{
-    \usebibmacro{cite:relatednameL}
-  }{
-    \usebibmacro{cite:relatednameAE}
+\newbibmacro*{citecountname}{%
+  \ifciteseen{%
+    \usebibmacro{cite:relatednameL}%
+  }{%
+    \usebibmacro{cite:relatednameAE}%
   }%
-}
-
-\newbibmacro*{cite:relatednameAE}{
-  \iffieldundef{related}{
-    \ifnameundef{author}{
-      \unspace
-      \printnames[given-family]{editor}
+}%
+% フルネームを出力 %
+\newbibmacro*{cite:relatednameAE}{%
+  \iffieldundef{related}{%
+    \ifnameundef{author}{%
+      \unspace%
+      \printnames[given-family]{editor}%
       \setunit{\printdelim{editortypedelim}}%
       \usebibmacro{ed-eds:editor}%
-    }{
-      \unspace
-      \printnames[given-family]{author}
-    }
-  }{
-    \iffieldequalstr{relatedtype}{mvbook}{
-      \ifnameundef{author}{
-        \unspace
-        \printnames[given-family]{editor}
+    }{%
+      \unspace%
+      \printnames[given-family]{author}%
+    }%
+  }{%
+    \iffieldequalstr{relatedtype}{mvbook}{%
+      \ifnameundef{author}{%
+        \unspace%
+        \printnames[given-family]{editor}%
         \setunit{\printdelim{editortypedelim}}%
         \usebibmacro{ed-eds:editor}%
-      }{
-        \unspace
-        \printnames[given-family]{author}
-      }     
-    }{
-      \entrydata*{\thefield{related}}{
-        \usebibmacro{isJPorEN}
-        \usebibmacro{cite:relatednameAE}
-      }
-    }
-  }
-}
+      }{%
+        \unspace%
+        \printnames[given-family]{author}%
+      }%
+    }{%
+      \entrydata*{\thefield{related}}{%
+        \usebibmacro{isJPorEN}%
+        \usebibmacro{cite:relatednameAE}%
+      }%
+    }%
+  }%
+}%
 
 % 苗字のみ出力 %
-\newbibmacro*{cite:relatednameL}{
-  \iffieldundef{related}{
-    \unspace
-    \printnames{labelname}
-    \ifboolexpr{
+\newbibmacro*{cite:relatednameL}{%
+  \iffieldundef{related}{%
+    \unspace%
+    \printnames{labelname}%
+    \ifboolexpr{%
       test {\ifnameundef{author}}
       and
       not test {\ifnameundef{editor}}
-    }
+    }%
       {\setunit{\printdelim{editortypedelim}}%
       \usebibmacro{ed-eds:editor}}%
-    {}
-  }{
-    \iffieldequalstr{relatedtype}{mvbook}{
-      \unspace
-      \printnames{labelname}
-    }{
-      \entrydata*{\thefield{related}}{
-        \usebibmacro{isJPorEN}
-        \usebibmacro{cite:relatednameL}
-      }
-    }
-  }
-}
+    {}%
+  }{%
+    \iffieldequalstr{relatedtype}{mvbook}{%
+      \unspace%
+      \printnames{labelname}%
+    }{%
+      \entrydata*{\thefield{related}}{%
+        \usebibmacro{isJPorEN}%
+        \usebibmacro{cite:relatednameL}%
+      }%
+    }%
+  }%
+}%
+
+%% namehashが同じかどうかをrelatedが途切れるまで遡って判断する
+\newbibmacro*{check:samename}{%
+  \iffieldundef{related}{%
+    \iffieldequals{namehash}{\cbx@lasthash}{%
+      \global\booltrue{cbx:samename}%
+    }{%
+      \global\boolfalse{cbx:samename}%
+    }%
+  }{%
+    \entrydata*{\thefield{related}}{%
+      \usebibmacro*{check:samename}%
+    }%
+  }%
+}%
+
+%% namehashをrelatedが途切れるまで遡って保存する
+\newbibmacro{save:namehash}{%
+  \iffieldundef{related}{% namehashの保存
+    \savefield{namehash}{\cbx@lasthash}% relatedが設定されていない場合は素直にnamehashを保存
+  }{% relatedが設定されている場合は設定先のnamehashを遡って保存
+    \entrydata*{\thefield{related}}{%
+      \usebibmacro{save:namehash}%
+    }%
+  }%
+}%
 
 %%% author et al.(year: pages) %%%
 %% 本体 %%
-\renewbibmacro*{textcite}%
-{\iffieldequals{namehash}{\cbx@lasthash}% 同じ著者の引用が複数続く場合は区切り文字と出版年のみを表示
-  {\setunit{\compcitedelim}\usebibmacro{cite:plabelyear+extradate}}%
-  %引用開始
-  {\ifbool{cbx:parens}%
-    {\jpparenclose%
-    \global\boolfalse{cbx:parens}}%cbx:parens（parenが開いているか否か）がtrue=開いているとき、閉める
-    {}%
-  \setunit{\textcitedelim}%
-  \ifnameundef{origauthor}% 著者名 日本語訳の書籍の場合は，原著者の名前を原語表記
-    {\usebibmacro{citecountname}}%
-    {\printnames{origauthor}}% 再録の場合のオリジナル出力
-    % 著者名と出版年の区切り：なし,全角かっこ開
-  \setunit{
-    \global\booltrue{cbx:parens}%
-    \printdelim{nameyeardelim}%
-    \jpparenopen}%
-  % 「prenote」の処理
-  \ifnumequal{\value{citecount}}{1}
-    {\usebibmacro{prenote}}
-    {}%
-  % 出版年
-  \usebibmacro{cite:plabelyear+extradate}%
-  % 著者名ハッシュの一時保存
-  \savefield{namehash}{\cbx@lasthash}%
-  \stepcounter{textcitecount}}}%
+\renewbibmacro*{textcite}{%
+  \usebibmacro*{check:samename}%
+  \ifbool{cbx:samename}{% 同じ著者の引用が複数続く場合は区切り文字と出版年のみを表示
+    \setunit{\compcitedelim}%
+    \usebibmacro{cite:plabelyear+extradate}%
+  }{%引用開始
+    \ifbool{cbx:parens}{% parenが開いていれば
+      \jpparenclose% 全角閉じ丸かっこを挿入し
+      \global\boolfalse{cbx:parens}% cbx:parensをfalseにする
+    }{}%
+    \setunit{\textcitedelim}% 複数引用時のデリムの追加
+    \ifnameundef{origauthor}{% 著者名 日本語訳の書籍の場合は，原著者の名前を原語表記
+      \usebibmacro{citecountname}%
+    }{%
+      \printnames{origauthor}% 再録の場合のオリジナル出力
+    }%
+    \setunit{%
+      \global\booltrue{cbx:parens}% cbx:parensでparenをopenの状態に
+      \printdelim{nameyeardelim}% 著者名と出版年の区切り
+      \jpparenopen% 全角開き丸かっこを挿入
+    }%「prenote」の処理
+    \ifnumequal{\value{citecount}}{1}{%
+      \usebibmacro{prenote}%
+      }{}%
+    % 出版年
+    \usebibmacro{cite:plabelyear+extradate}%
+    % 著者名ハッシュの一時保存
+    \usebibmacro{save:namehash}%
+    \stepcounter{textcitecount}%
+  }%
+}%
 
 %% textciteの終わりを全角かっこに変更
 \renewbibmacro*{textcite:postnote}%
@@ -293,31 +324,42 @@ sortcites=false,
 
 
 %%% (author et al.year: pages) %%%
-\renewbibmacro*{cite}%
-  {\iffieldequals{namehash}{\cbx@lasthash}%
-  % 同じ著者の引用が複数続く場合は区切り文字と出版年のみを表示
-    {\setunit{\compcitedelim}\usebibmacro{cite:plabelyear+extradate}}%
-  %引用開始
-    {\ifboolexpr{
-      test {\iffieldundef{related}}
-      and
-      test {\ifnameundef{author}}
-      and
-      test {\ifnameundef{editor}}
-    }
-      {\usebibmacro{noauthorcite}}%
-      {\ifnameundef{shortauthor}%"NASA"のような略称の有無判定
-      {\ifnameundef{origauthor}%再販著者情報がない場合
-        {\usebibmacro{cite:relatednameL}}%
-        {\printnames{origauthor}}}%再販著者情報がある場合、それを出力
-      {\cbx@apa@ifnamesaved%
-        {\printnames{shortauthor}}%
-        {\printnames[labelname]{author}%
-        \addspace\printnames[sabrackets]{shortauthor}}}%
-      \setunit{\printdelim{nameyeardelim}}%
-      \usebibmacro{cite:plabelyear+extradate}%
-      \savefield{namehash}{\cbx@lasthash}}}%
-    \setunit{\multicitedelim}}%
+\renewbibmacro*{cite}{%
+  \usebibmacro*{check:samename}%
+  \ifbool{cbx:samename}{% 同じ著者の引用が複数続く場合は区切り文字と出版年のみを表示
+    \setunit{\compcitedelim}%
+    \usebibmacro{cite:plabelyear+extradate}%
+  }{%引用開始
+  \ifboolexpr{
+    test {\iffieldundef{related}}
+    and
+    test {\ifnameundef{author}}
+    and
+    test {\ifnameundef{editor}}
+    }{%著者も編者もrelatedでリンクもされていない場合
+      \usebibmacro{noauthorcite}%
+    }{%
+      \ifnameundef{shortauthor}{%"NASA"のような略称の有無判定
+        \ifnameundef{origauthor}{%再販著者情報がない場合
+          \usebibmacro{cite:relatednameL}%名前の出力
+        }{%
+          \printnames{origauthor}%再販著者情報がある場合、それを出力
+        }%
+      }{%
+        \cbx@apa@ifnamesaved{%
+          \printnames{shortauthor}%
+        }{%
+          \printnames[labelname]{author}%
+          \addspace\printnames[sabrackets]{shortauthor}%
+        }%
+      }%
+      \setunit{\printdelim{nameyeardelim}}% authorとyearの間のデリム
+      \usebibmacro{cite:plabelyear+extradate}% yearの出力
+      \usebibmacro{save:namehash}%
+    }%
+  \setunit{\multicitedelim}% 複数引用時のデリムの追加
+  }%
+}%
 
 %% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
 \newbibmacro*{noauthorcite}%
@@ -376,15 +418,17 @@ sortcites=false,
 
 %%parenciteのかっこを全角に設定
 %%% \DeclareCiteCommand{〈command〉}[〈wrapper〉]{〈precode〉}{〈loopcode〉}{〈sepcode〉}{〈postcode〉}
-\DeclareCiteCommand{\parencite}[\mkbibjpparens]%
-  {%\jpparenopen%
+\DeclareCiteCommand{\parencite}[\mkbibjpparens]{%
   \usebibmacro{cite:init}%
-  \usebibmacro{prenote}}%
-  {\usebibmacro{citeindex}%
-  \usebibmacro{cite}}%
-  {}%
-  {\usebibmacro{postnote}}%
-  %\jpparenclose}%
+  \usebibmacro{prenote}%
+}{% loopcode
+  \usebibmacro{citeindex}%
+  \usebibmacro{cite}%
+}{%
+% sepcode
+}{%
+  \usebibmacro{postnote}%
+}%
 
 \DeclareCiteCommand*{\parencite}[\mkbibjpparens]%
   {%\jpparenopen%
