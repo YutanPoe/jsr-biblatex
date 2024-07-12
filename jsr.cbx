@@ -17,9 +17,9 @@ sortcites=true,
 %\DeclareDelimFormat{nameyeardelim}{\addcomma\space}
 \DeclareDelimFormat[textcite,parencite]{nameyeardelim}{\addspace}%
 \DeclareDelimFormat{transeq}{\unspace=}%
-\newcommand{\jpparenopen}{\unspace（}
-\newcommand{\jpparenclose}{\unspace）}
-\newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}
+\newcommand{\jpparenopen}{\unspace（}%
+\newcommand{\jpparenclose}{\unspace）}%
+\newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}%
 \newbool{cbx:samename}%
 %jss変更ここまで
 
@@ -28,8 +28,9 @@ sortcites=true,
 
 %jss変更ここから
 %%引用箇所で‘p(p).’から': 'へ変更
-\DeclareFieldFormat{postnote}{\mkcomprange{#1}}
-\DeclareDelimFormat{postnotedelim}{\addcolon\addthinspace}
+\DeclareFieldFormat{postnote}{\mkcomprange{#1}}%
+\DeclareDelimFormat{postnotedelim}{\addcolon\addthinspace}%
+\DeclareDelimFormat{multipostnotedelim}{\nopunct}%
 %jss変更ここまで
 
 % citesコマンドの区切り文字（文書全体で変更）
@@ -364,8 +365,8 @@ sortcites=true,
 %% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
 \newbibmacro*{noauthorcite}%
   {\iffieldundef{title}{}%
-  {%\usebibmacro{title}{jekakko}{}%
-  \setunit{\printdelim{titleafterdelim}}}%
+    {%\usebibmacro{title}{jekakko}{}%
+    \setunit{\printdelim{titleafterdelim}}}%
   % 誌名
   \usebibmacro{title}{jedkakko}{journal}%
   \setunit{\printdelim{titleafterdelim}}%
