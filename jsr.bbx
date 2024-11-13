@@ -65,7 +65,8 @@ citetracker=true,
 \renewcommand*{\bibnamedash}{------------}
 %\renewcommand{\bibnamedash}{\rule[.55ex]{4em}{.3pt}}
 %%% ぶら下がりインデント幅 %%%
-\setlength{\bibhang}{2\zw}
+%%\setlength{\bibhang}{2\zw}
+\setlength{\bibhang}{2em}
 
 %%% （擬似）全角幅のスペース
 \newrobustcmd*{\addjspace}{%
@@ -174,7 +175,7 @@ citetracker=true,
   {\ifthenelse{\boolean{japanese}}{『#1』}{\emph{#1}}}%
 % かっこ
 \DeclareFieldFormat{jekakko}
-  {\ifthenelse{\boolean{japanese}}{\foreignquote{japanese}{#1}}{\mkbibquote{#1}}}
+  {\ifthenelse{\boolean{japanese}}{「#1」}{\mkbibquote{#1}}}
 % URL取得日
 \DeclareFieldFormat{urldate}{Retrieved #1}%
 
@@ -202,12 +203,12 @@ citetracker=true,
 \DeclareNameAlias{sortname}{family-given}
 
 % %%% 著者名の区別を抑制
-\DeclareUniquenameTemplate{
-  \namepart[use=true, base=true]{prefix}
-  \namepart[base=true]{family}
-  \namepart[base=true]{giveni}
-  \namepart{suffix}
-}
+%\DeclareUniquenameTemplate{
+%  \namepart[use=true, base=true]{prefix}
+%  \namepart[base=true]{family}
+%  \namepart[base=true]{giveni}
+%  \namepart{suffix}
+%}
 
 %%% 著者名のフォーマット
 %%% 日本語文献と英語文献で処理を変える
