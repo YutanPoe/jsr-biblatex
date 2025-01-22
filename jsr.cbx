@@ -2,38 +2,84 @@
 
 \RequireCitationStyle{authoryear-comp}
 
+%% オプションの設定
 \ExecuteBibliographyOptions{%
-maxcitenames=2,%
-mincitenames=1,%
-uniquelist=minyear,
-uniquename=init,%
-sortcites=true,
+maxcitenames=2,% 3人以上は「〜ら」とする
+mincitenames=1,% あたりまえ体操
+uniquelist=minyear,% 発行年が違えば著者名を追跡して曖昧さを判断しない
+uniquename=full,% 同年の同じ名字の著作があった場合、英語はイニシャルを、日本語は名前を表示させる
+sortcites=true,% 引用をymdでソートする
 }
+
+% 引用ごとに言語を判断して処理
+\AtEveryCitekey{%
+  \ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}{%
+      \setboolean{japanese}{true}%
+    }{%
+      \setboolean{japanese}{false}%
+    }%
+}%
+
+
+
+%%%====================
+%
+% 表現の調整パート
+%
+%%%====================
+
 % et alが重複して表示されないようにする
 \DefineBibliographyStrings{english}{andothers={}}
 
-% 著者名と出版年の区切りはコンマ
-%jss変更ここから（コンマ→半角スペース）
-%\DeclareDelimFormat{nameyeardelim}{\addcomma\space}
-\DeclareDelimFormat[textcite,parencite]{nameyeardelim}{\addspace}%
-\DeclareDelimFormat{transeq}{\unspace=}%
-\newcommand{\jpparenopen}{\unspace（}%
-\newcommand{\jpparenclose}{\unspace）}%
-\newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}%
-\newbool{cbx:samename}%
-%jss変更ここまで
 
-% 
-%\DeclareDelimFormat{multicitedelim}{\addsemicolon\space}
+%%==========デリムの調整==========
 
-%jss変更ここから
-%%引用箇所で‘p(p).’から': 'へ変更
-\DeclareFieldFormat{postnote}{\mkcomprange{#1}}%
-\DeclareDelimFormat{postnotedelim}{\addcolon\addthinspace}%
-\DeclareDelimFormat{multipostnotedelim}{\nopunct}%
-%jss変更ここまで
+% グローバル
+\DeclareDelimFormat[textcite,parencite]{nameyeardelim}{\addspace}%著者名と出版年の区切りは半角スペース
+\DeclareDelimFormat{transeq}{\unspace=}%翻訳書の場合のイコール
 
-% citesコマンドの区切り文字（文書全体で変更）
+% parenciteのとき
+\DeclareDelimFormat[parencite]{multinamedelim}% 人の著者名の間
+  {\ifthenelse{\boolean{japanese}}{\unspace{・}}{\addcomma\space}}%
+\DeclareDelimFormat[parencite]{finalnamedelim}% 3人以上のときの著者名の間（つかわないと思う）
+  {\ifthenelse{\boolean{japanese}}{\unspace{・}}%
+    {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
+\DeclareDelimFormat[parencite]{andothersdelim}% 3人以上のときの最後の文字
+  {\ifthenelse{\boolean{japanese}}{\unspace{ほか}}{\addspace{et al.}}}%
+
+% textciteのとき（スタイルガイドに明確な定義はなし）
+\DeclareDelimFormat[textcite]{multinamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
+\DeclareDelimFormat[textcite]{finalnamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
+  %{\ifthenelse{\boolean{japanese}}{\unspace{・}}%
+    %{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
+\DeclareDelimFormat[textcite]{andothersdelim}{\unspace{ら}}% 3人以上のときの最後の文字
+
+
+%%==========FiledFormatの宣言==========
+
+%書籍タイトル関係
+\DeclareFieldFormat{citetitle}{『#1』}% 基本は和英関わらず二重鉤かっこ
+\DeclareFieldFormat
+  [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
+  {citetitle}{「#1」}% 論文名などは鉤かっこ
+\DeclareFieldFormat
+  [suppbook,suppcollection,suppperiodical]
+  {citetitle}{#1}% なんかあった、たぶん使わない
+
+% ページ数関係
+\DeclareFieldFormat{postnote}{\mkcomprange{#1}}% ページ範囲の圧縮「123-125」を「123-5」に
+\DeclareDelimFormat{postnotedelim}{\addcolon\addthinspace}%  発行年とページ数の区切りをコロンとスペースに
+\DeclareDelimFormat{multipostnotedelim}{\nopunct}% 複数ページ数が表示された際に、余計なコンマなどを入れない
+
+
+%%==========新しいコマンドの定義==========
+
+%全角丸かっこ関連
+\newcommand{\jpparenopen}{\unspace（}%全角丸かっこ開き
+\newcommand{\jpparenclose}{\unspace）}%全角丸かっこ閉じ
+\newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}%全角丸かっこ
+
+% 複数citesコマンドを並べたときの区切り文字（文書全体で変更）
 \renewcommand*{\textcitedelim}{%
   \iftoggle{bbx:engmode}{%
     \iffinalcitedelim{%
@@ -54,65 +100,77 @@ sortcites=true,
   }%
 }
 
-% 引用ごとに言語を判断して処理
-\AtEveryCitekey{%
-  \ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}{%
-      \setboolean{japanese}{true}%
-    }{%
-      \setboolean{japanese}{false}%
-    }%
-}
-
-\DeclareDelimFormat[parencite]{multinamedelim}%
-  {\ifthenelse{\boolean{japanese}}{\unspace{・}}{\addcomma\space}}%
-\DeclareDelimFormat[parencite]{finalnamedelim}%
-  {\ifthenelse{\boolean{japanese}}{\unspace{・}}%
-    {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-\DeclareDelimFormat[parencite]{andothersdelim}%
-  {\ifthenelse{\boolean{japanese}}{\unspace{ほか}}{\addspace{et al.}}}%
-
-\DeclareDelimFormat[textcite]{multinamedelim}{\unspace{と}}%
-\DeclareDelimFormat[textcite]{finalnamedelim}{\unspace{と}}%
-  %{\ifthenelse{\boolean{japanese}}{\unspace{・}}%
-    %{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-\DeclareDelimFormat[textcite]{andothersdelim}{\unspace{ら}}%
-
-  
+% relatedフィールドまで遡ったときにlanguageを判断するために
 \newbibmacro*{isJPorEN}%
   {\ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}%
     {\setboolean{japanese}{true}}%
     {\setboolean{japanese}{false}}%
   }%
 
-%%% 処理用マクロ % apa.cbxのものを改変
-\newbibmacro*{labelname:doname}[8]
+
+%%==========新しい変数の定義==========
+\newbool{cbx:samename}%
+
+
+%%==========お名前調整==========
+
+%labelnameをuniquenameをつかって出力するときの名前フォーマット
+\newbibmacro*{labelname:given-family}[8]
   {\ifthenelse{\value{listcount}>1\OR\ifuniqueprimaryauthor}%
     {\setcounter{uniquename}{0}}%
     {}%
-  \ifthenelse{\boolean{japanese}}%
+  \ifthenelse{\boolean{japanese}}% 日本語の場合
     {\ifcase\value{uniquename}%
-      {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}%
+      {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}% 通常（佐藤）
     \or%
-      {\usebibmacro{name:family-given}{#1}{#3}{\relax}{\relax}}%
+      {\usebibmacro{jpname:family-given}{#1}{#3}{\relax}{\relax}}% 名前まで（佐藤健二）
     \or%
-      {\usebibmacro{name:family-given}{#1}{#3}{\relax}{\relax}}%
+      {\usebibmacro{jpname:family-given}{#1}{#3}{\relax}{\relax}}% 上に同じ
     \fi}%
-    {\ifcase\value{uniquename}%
+    {\ifcase\value{uniquename}% 日本語以外の場合
       \ifuseprefix%
-        {\usebibmacro{name:family}{#1}{#3}{#5}{\relax}}
+        {\usebibmacro{name:family}{#1}{#3}{#5}{\relax}}% 通常（Doe）
         {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}%
     \or%
       \ifuseprefix%
-        {\usebibmacro{name:given-family}{#1}{#4}{#5}{\relax}}
+        {\usebibmacro{name:given-family}{#1}{#4}{#5}{\relax}}% giveniを記載（A. Doe）
         {\usebibmacro{name:given-family}{#1}{#4}{\relax}{\relax}}%
     \or%
       \ifuseprefix%
-        {\usebibmacro{name:given-family}{#1}{#3}{#5}{\relax}}
+        {\usebibmacro{name:given-family}{#1}{#3}{#5}{\relax}}% givenを記載（Ander Doe）
         {\usebibmacro{name:given-family}{#1}{#3}{\relax}{\relax}}%
     \fi}%
   \usebibmacro{name:andothers}}%
 
-%% 曖昧さ回避の場合の「他」の前のコンマを削除
+%labelnameをuniquenameをつかって出力するときの名前フォーマット
+\newbibmacro*{labelname:family-given}[8]
+  {\ifthenelse{\value{listcount}>1\OR\ifuniqueprimaryauthor}%
+    {\setcounter{uniquename}{0}}%
+    {}%
+  \ifthenelse{\boolean{japanese}}% 日本語の場合
+    {\ifcase\value{uniquename}%
+      {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}% 通常（佐藤）
+    \or%
+      {\usebibmacro{jpname:family-given}{#1}{#3}{\relax}{\relax}}% 名前まで（佐藤健二）
+    \or%
+      {\usebibmacro{jpname:family-given}{#1}{#3}{\relax}{\relax}}% 上に同じ
+    \fi}%
+    {\ifcase\value{uniquename}% 日本語以外の場合
+      \ifuseprefix%
+        {\usebibmacro{name:family}{#1}{#3}{#5}{\relax}}% 通常（Doe）
+        {\usebibmacro{name:family}{#1}{#3}{\relax}{\relax}}%
+    \or%
+      \ifuseprefix%
+        {\usebibmacro{name:family-given}{#1}{#4}{#5}{\relax}}% giveniを記載（A. Doe）
+        {\usebibmacro{name:family-given}{#1}{#4}{\relax}{\relax}}%
+    \or%
+      \ifuseprefix%
+        {\usebibmacro{name:family-given}{#1}{#3}{#5}{\relax}}% givenを記載（Ander Doe）
+        {\usebibmacro{name:family-given}{#1}{#3}{\relax}{\relax}}%
+    \fi}%
+  \usebibmacro{name:andothers}}%
+
+  %% 曖昧さ回避の場合の「他」の前のコンマを削除
 \renewbibmacro*{name:andothers}{%
   \ifthenelse{\equal{\value{listcount}}{\value{liststop}}\AND\ifmorenames}{%
     \ifthenelse{\boolean{japanese}}{}{%  
@@ -123,7 +181,17 @@ sortcites=true,
 {}}
 
 \DeclareNameFormat{labelname}%
-  {\usebibmacro{labelname:doname}%
+  {\usebibmacro{labelname:given-family}%
+    {\namepartfamily}%
+    {\namepartfamilyi}%
+    {\namepartgiven}%
+    {\namepartgiveni}%
+    {\namepartprefix}%
+    {\namepartprefixi}%
+    {\namepartsuffix}%
+    {\namepartsuffixi}}
+\DeclareNameFormat{labelname:parencite}
+  {\usebibmacro{labelname:family-given}%
     {\namepartfamily}%
     {\namepartfamilyi}%
     {\namepartgiven}%
@@ -156,22 +224,22 @@ sortcites=true,
         \addcomma\space\ldots\space%
       }{%
         \ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}{}{%
-        %\ifgiveninits%
-        %{\usebibmacro{name:given-family}%
-          %{\namepartfamily}%
-          %{\namepartgiveni}%
-          %{\namepartprefix}%
-          %{\namepartsuffix}}%
-        %{\usebibmacro{name:given-family}%
-          %{\namepartfamily}%
-          %{\namepartgiven}%
-          %{\namepartprefix}%
-          %{\namepartsuffix}}%
-          \usebibmacro{name:given-family}%
+        \ifgiveninits%
+        {\usebibmacro{name:given-family}%
           {\namepartfamily}%
           {\namepartgiveni}%
           {\namepartprefix}%
-          {\namepartsuffix}%
+          {\namepartsuffix}}%
+        {\usebibmacro{name:given-family}%
+          {\namepartfamily}%
+          {\namepartgiven}%
+          {\namepartprefix}%
+          {\namepartsuffix}}%
+          %\usebibmacro{name:given-family}%
+          %{\namepartfamily}%
+          %{\namepartgiveni}%
+          %{\namepartprefix}%
+          %{\namepartsuffix}%
         }%
     }%
   }%
@@ -179,17 +247,23 @@ sortcites=true,
 }
 
 
+%%%====================
+%
+% 実際の処理パート
+%
+%%%====================
+
 %%% 引用形式定義 %%%
 %% 最初の引用時はフルネーム %%
 \newbibmacro*{citecountname}{%
   \ifciteseen{%
-    \usebibmacro{cite:relatednameL}%
+    \usebibmacro{cite:uniquename}{labelname}%
   }{%
-    \usebibmacro{cite:relatednameAE}%
+    \usebibmacro{cite:fullname}%
   }%
 }%
 % フルネームを出力 %
-\newbibmacro*{cite:relatednameAE}{%
+\newbibmacro*{cite:fullname}{%
   \iffieldundef{related}{%
     \ifnameundef{author}{%
       \unspace%
@@ -214,17 +288,17 @@ sortcites=true,
     }{%
       \entrydata*{\thefield{related}}{%
         \usebibmacro{isJPorEN}%
-        \usebibmacro{cite:relatednameAE}%
+        \usebibmacro{cite:fullname}%
       }%
     }%
   }%
 }%
 
 % 苗字のみ出力 %
-\newbibmacro*{cite:relatednameL}{%
+\newbibmacro*{cite:uniquename}[1]{%
   \iffieldundef{related}{%
     \unspace%
-    \printnames{labelname}%
+    \printnames[#1]{labelname}%
     \ifboolexpr{%
       test {\ifnameundef{author}}
       and
@@ -240,7 +314,7 @@ sortcites=true,
     }{%
       \entrydata*{\thefield{related}}{%
         \usebibmacro{isJPorEN}%
-        \usebibmacro{cite:relatednameL}%
+        \usebibmacro{cite:uniquename}{#1}%
       }%
     }%
   }%
@@ -342,7 +416,7 @@ sortcites=true,
     }{%
       \ifnameundef{shortauthor}{%"NASA"のような略称の有無判定
         \ifnameundef{origauthor}{%再販著者情報がない場合
-          \usebibmacro{cite:relatednameL}%名前の出力
+          \usebibmacro{cite:uniquename}{labelname:parencite}%名前の出力
         }{%
           \printnames{origauthor}%再販著者情報がある場合、それを出力
         }%
@@ -416,6 +490,28 @@ sortcites=true,
     \printlabeldateextra%
   }}%
 
+% citeauthorの場合の処理 apa.cbxのものを修正
+\renewbibmacro*{cite:author}{%
+  \iffieldequals{namehash}{\cbx@lasthash}%
+% Multiple cites in one command
+   {\setunit{\compcitedelim}%
+    \usebibmacro{cite:plabelyear+extradate}}%
+% Single cite
+   {\ifnameundef{labelname}%
+% No author/editor
+     {\usebibmacro{cite:noname}%
+       \savefield{namehash}{\cbx@lasthash}}%
+% Normal cite
+     {\ifnameundef{shortauthor}%
+       {\ifnameundef{origauthor}% 著者名 日本語訳の書籍の場合は，原著者の名前を原語表記
+         {\usebibmacro{citecountname}}%
+         {\printnames{origauthor}}}% 再録の場合のオリジナル出力
+       {\cbx@apa@ifnamesaved
+          {\printnames{shortauthor}}%
+          {\printnames[labelname]{author}%
+           \addspace\printnames[sabrackets]{shortauthor}}}%
+        \savefield{namehash}{\cbx@lasthash}}}%
+   \setunit{\multicitedelim}}
 
 %%parenciteのかっこを全角に設定
 %%% \DeclareCiteCommand{〈command〉}[〈wrapper〉]{〈precode〉}{〈loopcode〉}{〈sepcode〉}{〈postcode〉}
@@ -430,6 +526,15 @@ sortcites=true,
 }{%
   \usebibmacro{postnote}%
 }%
+
+%% 引用時のコマンドの宣言等
+\DeclareCiteCommand{\citeauthor}
+  {\usebibmacro{cite:init}%
+   \usebibmacro{prenote}}
+  {\usebibmacro{citeindex}%
+   \usebibmacro{cite:author}}%
+  {}
+  {\usebibmacro{postnote}}
 
 \DeclareCiteCommand*{\parencite}[\mkbibjpparens]%
   {%\jpparenopen%
