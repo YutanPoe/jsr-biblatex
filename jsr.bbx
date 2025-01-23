@@ -1,12 +1,14 @@
 \ProvidesFile{jsr.bbx}[2022/11/24\space v0.1\space 日本社会学会 2022年版文献スタイル]
 
 \RequireBibliographyStyle{authoryear}
-\urlstyle{same}% URLのフォントを本文に揃える
 
-%%% multiciteコマンド使用時の言語の設定
-\newtoggle{bbx:engmode}
-\settoggle{bbx:engmode}{false}
-\DeclareBibliographyOption[boolean]{engmode}{\settoggle{bbx:engmode}{#1}}
+% ------------------------------------------------------------------
+% フォーマットコマンド
+% ------------------------------------------------------------------
+
+% フォーマットコマンドなどの作成
+% ------------------------------------------------------------------
+
 %%% ソート順番の定義
 \DeclareSortingTemplate{nymdt}{
   \sort{
@@ -96,7 +98,12 @@ citetracker=true,
   }%
   % 氏名反転をOnに
   \setboolean{reversenamebool}{true}%
-}
+}%
+
+%%% multiciteコマンド使用時の言語の設定
+\newtoggle{bbx:engmode}
+\settoggle{bbx:engmode}{false}
+\DeclareBibliographyOption[boolean]{engmode}{\settoggle{bbx:engmode}{#1}}%
 
 \newtoggle{bbx:eprinttype}
 \DeclareBiblatexOption{global,type,entry}[boolean]{eprinttype}[true]{%
@@ -117,6 +124,10 @@ citetracker=true,
   {\ifthenelse{\boolean{japanese}}
     {\unspace{．}}
     {\addperiod}}
+\renewcommand*{\bibnamedelimd}%givennameの直前のスペース
+  {\ifthenelse{\boolean{japanese}}%
+    {\unspace}%
+    {\addlowpenspace}}%
 
 %% デリム定義変更
 % 基本の区切り文字
@@ -191,6 +202,7 @@ citetracker=true,
 \DeclareFieldAlias{journaltitle}{title}
 \DeclareFieldAlias{journalsubtitle}{subtitle}
 \DeclareFieldAlias{series}{title}
+\urlstyle{same}% URLのフォントを本文に揃える
 
 %%%%%%% 基本設定 %%%%%%%
 
@@ -223,7 +235,7 @@ citetracker=true,
         % 処理中の著者の順番が\maxprtnamesより大きく，総数未満である場合
         \ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}{%
         }{%
-        \usebibmacro{jpname:family-given}%
+        \usebibmacro{name:family-given}%
           {\namepartfamily}%
           {\namepartgiven}%
           {\namepartprefix}%
@@ -272,7 +284,7 @@ citetracker=true,
     {\space\ldots\space}%
     {\ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}%
       {}
-      {\usebibmacro{jpname:family-given}%
+      {\usebibmacro{name:family-given}%
         {\namepartfamily}%
         {\namepartgiven}%
         {\namepartprefix}%
@@ -360,6 +372,14 @@ citetracker=true,
 
 
 %%%%%%% 文献情報フォーマット・マクロ %%%%%%%
+% 日本語文献かどうかをチェック
+\newbibmacro{babelcheck}{%
+  \iflistundef{language}{%
+    \selectlanguage{english}%
+  }{%
+    \selectlanguage{\thefirstlistitem{language}}%
+  }%
+}%
 
 %%% 出版年 %%%
 \renewbibmacro*{date+extradate}
