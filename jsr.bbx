@@ -147,7 +147,7 @@ citetracker=true,
 \DeclareDelimFormat{revsdnamepunct}%
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addcomma}}%
 % タイトル関連
-\DeclareDelimFormat[bib,biblist]{titledelim}
+\DeclareDelimFormat{titledelim}
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addcomma\space}}%
 %\DeclareDelimAlias{titleafterdelim}{titledelim}%
 % 名前連続時
@@ -186,7 +186,7 @@ citetracker=true,
   {\ifthenelse{\boolean{japanese}}{『#1』}{\emph{#1}}}%
 % かっこ
 \DeclareFieldFormat{jekakko}
-  {\ifthenelse{\boolean{japanese}}{「#1」}{\mkbibquote{#1}}}
+  {\ifthenelse{\boolean{japanese}}{\foreigntextquote{japanese}{#1}}{\mkbibquote{#1}}}
 % URL取得日
 \DeclareFieldFormat{urldate}{Retrieved #1}%
 
@@ -316,46 +316,6 @@ citetracker=true,
 \DeclareNameAlias{byeditor}{j:family-givem/e:given-family}
 \DeclareNameAlias{byauthor}{byeditor}
 \DeclareNameAlias{bytranslator}{byeditor}
-
-%%% 日本著者の表示設定（英語著者で設定される姓名間のスペースの削除）
-\newbibmacro*{jpname:family-given}[4]{%
-  \ifuseprefix
-    {\usebibmacro{name:delim}{#3#1}%
-     \usebibmacro{name:hook}{#3#1}%
-     \mkbibcompletenamefamilygiven{%
-       \ifdefvoid{#3}
-         {}
-         {\ifcapital
-            {\mkbibnameprefix{\MakeCapital{#3}}\isdot}
-            {\mkbibnameprefix{#3}\isdot}%
-          \ifprefchar{}{\bibnamedelimc}}%
-       \mkbibnamefamily{#1}\isdot
-       \ifdefvoid{#4}
-         {}
-         {\mkbibnamesuffix{#4}\isdot}%
-       \ifdefvoid{#2}
-         {}
-         {\revsdnamepunct\mkbibnamegiven{#2}\isdot}}}
-    {\usebibmacro{name:delim}{#1}%
-     \usebibmacro{name:hook}{#1}%
-     \mkbibcompletenamefamilygiven{%
-       \mkbibnamefamily{#1}\isdot
-       \ifdefvoid{#4}
-         {}
-         {\mkbibnamesuffix{#4}\isdot}%
-       \ifboolexpe{%
-         test {\ifdefvoid{#2}}
-         and
-         test {\ifdefvoid{#3}}}
-         {}
-         {\revsdnamepunct}%
-       \ifdefvoid{#2}
-         {}
-         {\mkbibnamegiven{#2}\isdot}%
-       \ifdefvoid{#3}
-         {}
-         {\mkbibnameprefix{#3}\isdot}}}}
-
 
 %%% 文献リストでは et al. を使用しない
 %\DefineBibliographyStrings{english}{andothers={}}
