@@ -205,6 +205,8 @@ sortcites=true,% 引用をymdでソートする
   }%
 }%
 
+%%% 曖昧さを考慮したlabelnameとed-edsを、
+%%% relatedが途切れるまで追跡して出力する
 \newbibmacro*{cite:uniquename}{%
   \iffieldundef{related}{%
     \unspace%
@@ -231,8 +233,6 @@ sortcites=true,% 引用をymdでソートする
     }%
   }%
 }%
-
-
 
 %% namehashが同じかどうかをrelatedが途切れるまで遡って判断する
 \newbibmacro*{check:samename}{%
@@ -324,9 +324,7 @@ sortcites=true,% 引用をymdでソートする
   \ifboolexpr{
     test {\iffieldundef{related}}
     and
-    test {\ifnameundef{author}}
-    and
-    test {\ifnameundef{editor}}
+    test {\ifnameundef{labelname}}
     }{%著者も編者もrelatedでリンクもされていない場合
       \usebibmacro{noauthorcite}%
     }{%
@@ -355,11 +353,11 @@ sortcites=true,% 引用をymdでソートする
 %% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
 \newbibmacro*{noauthorcite}%
   {\iffieldundef{title}{}%
-    {%\usebibmacro{title}{jekakko}{}%
-    \setunit{\printdelim{titleafterdelim}}}%
+    {%タイトルを挿入したい場合はコメントアウトを削除する
+      %\usebibmacro{title}{jekakko}{}%
+    }%
   % 誌名
   \usebibmacro{title}{jedkakko}{journal}%
-  \setunit{\printdelim{titleafterdelim}}%
   \usebibmacro{yyyymmdd}
   \usebibmacro{vol+pages}}
 
