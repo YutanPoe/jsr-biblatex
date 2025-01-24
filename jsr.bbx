@@ -1,6 +1,6 @@
 \ProvidesFile{jsr.bbx}[2022/11/24\space v0.1\space 日本社会学会 2022年版文献スタイル]
 
-\RequireBibliographyStyle{authoryear}
+\RequireBibliographyStyle{authoryear}%
 
 % ------------------------------------------------------------------
 % フォーマットコマンド
@@ -10,40 +10,40 @@
 % ------------------------------------------------------------------
 
 %%% ソート順番の定義
-\DeclareSortingTemplate{nymdt}{
-  \sort{
-    \field{presort}
-  }
-  \sort[final]{
-    \field{sortkey}
-  }
-  \sort{
-    \field{sortname}
-    \field{author}
-    \field{editor}
-    \field{translator}
-    \field{sorttitle}
-    \field{title}
-  }
-  \sort{
-    \field{sortyear}
-    \field{year}
-  }
-  \sort{
-    \field{month}
-  }
-  \sort{
-    \field{day}
-  }
-  \sort{
-    \field{sorttitle}
-    \field{title}
-  }
-  \sort{
-    \field{volume}
-    \literal{0}
-  }
-}
+\DeclareSortingTemplate{nymdt}{%
+  \sort{%
+    \field{presort}%
+  }%
+  \sort[final]{%
+    \field{sortkey}%
+  }%
+  \sort{%
+    \field{sortname}%
+    \field{author}%
+    \field{editor}%
+    \field{translator}%
+    \field{sorttitle}%
+    \field{title}%
+  }%
+  \sort{%
+    \field{sortyear}%
+    \field{year}%
+  }%
+  \sort{%
+    \field{month}%
+  }%
+  \sort{%
+    \field{day}%
+  }%
+  \sort{%
+    \field{sorttitle}%
+    \field{title}%
+  }%
+  \sort{%
+    \field{volume}%
+    \literal{0}%
+  }%
+}%
 
 %%% オプションの設定
 \ExecuteBibliographyOptions{%
@@ -61,35 +61,35 @@ labeldateparts=true,
 giveninits=false,
 citecounter=true,
 citetracker=true,
-}
+}%
 
 %%% 同著者ダッシュ %%%
-\renewcommand*{\bibnamedash}{------------}
-%\renewcommand{\bibnamedash}{\rule[.55ex]{4em}{.3pt}}
+\renewcommand*{\bibnamedash}{------------}%
+%\renewcommand{\bibnamedash}{\rule[.55ex]{4em}{.3pt}}%
 %%% ぶら下がりインデント幅 %%%
-%%\setlength{\bibhang}{2\zw}
-\setlength{\bibhang}{2em}
+%%\setlength{\bibhang}{2\zw}%
+\setlength{\bibhang}{2em}%
 
 %%% （擬似）全角幅のスペース
 \newrobustcmd*{\addjspace}{%
   \unspace\blx@postpunct
-  \ \space\ \blx@imc@resetpunctfont}
+  \ \space\ \blx@imc@resetpunctfont}%
 
 %%% 言語判断用変数 %%%
-\newboolean{japanese}
-\setboolean{japanese}{false}
+\newboolean{japanese}%
+\setboolean{japanese}{false}%
 
 %%% 氏名反転用変数 %%%
 % Offにすると名前-名字の順になる。日本語は常に名字-名前になっているので関係なし。
-\newboolean{reversenamebool}
-\setboolean{reversenamebool}{false}
+\newboolean{reversenamebool}%
+\setboolean{reversenamebool}{false}%
 
 %%% related判定変数 %%%
-\newboolean{relatedbool}
-\setboolean{relatedbool}{false}
+\newboolean{relatedbool}%
+\setboolean{relatedbool}{false}%
 
 % 引用されるごとの処理
-\AtEveryBibitem{
+\AtEveryBibitem{%
   % 日本語文献かどうかをチェック
   \iflistundef{language}{}{%
   \ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}{%
@@ -101,29 +101,29 @@ citetracker=true,
 }%
 
 %%% multiciteコマンド使用時の言語の設定
-\newtoggle{bbx:engmode}
-\settoggle{bbx:engmode}{false}
+\newtoggle{bbx:engmode}%
+\settoggle{bbx:engmode}{false}%
 \DeclareBibliographyOption[boolean]{engmode}{\settoggle{bbx:engmode}{#1}}%
 
-\newtoggle{bbx:eprinttype}
+\newtoggle{bbx:eprinttype}%
 \DeclareBiblatexOption{global,type,entry}[boolean]{eprinttype}[true]{%
-  \settoggle{bbx:eprinttype}{#1}}
+  \settoggle{bbx:eprinttype}{#1}}%
 
 %%% デリム（区切り文字）
 %% コマンド追加・修正
 \renewcommand*{\newunitpunct}%基本の区切り文字
-  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
-\renewcommand*{\labelnamepunct}{\addperiod\space}
+  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}%
+\renewcommand*{\labelnamepunct}{\addperiod\space}%
 %\newcommand*{\jecomma}%基本の区切り文字（setunit用）
-%  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
-\renewcommand*{\subtitlepunct}
-  {\ifthenelse{\boolean{japanese}}
-    {------}%\hskip.1em\rule[.7ex]{1.8em}{.3pt}\hskip.1em}
-    {\addcolon\space}}
-\renewcommand*{\finentrypunct}
-  {\ifthenelse{\boolean{japanese}}
-    {\unspace{．}}
-    {\addperiod}}
+%  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}%
+\renewcommand*{\subtitlepunct}%
+  {\ifthenelse{\boolean{japanese}}%
+    {------}%\hskip.1em\rule[.7ex]{1.8em}{.3pt}\hskip.1em}%
+    {\addcolon\space}}%
+\renewcommand*{\finentrypunct}%
+  {\ifthenelse{\boolean{japanese}}%
+    {\unspace{．}}%
+    {\addperiod}}%
 \renewcommand*{\bibnamedelimd}%givennameの直前のスペース
   {\ifthenelse{\boolean{japanese}}%
     {\unspace}%
@@ -131,33 +131,33 @@ citetracker=true,
 
 %% デリム定義変更
 % 基本の区切り文字
-\DeclareDelimFormat{jecomma}
-  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}
-\DeclareDelimFormat{jecolon}{\ifthenelse{\boolean{japanese}}{\unspace{：}}{\addcolon\space}}
-\DeclareDelimFormat{jesemicolon}{\ifthenelse{\boolean{japanese}}{\unspace{；}}{\addsemicolon\space}}
+\DeclareDelimFormat{jecomma}%
+  {\ifthenelse{\boolean{japanese}}{\unspace{，}}{\addcomma\space}}%
+\DeclareDelimFormat{jecolon}{\ifthenelse{\boolean{japanese}}{\unspace{：}}{\addcolon\space}}%
+\DeclareDelimFormat{jesemicolon}{\ifthenelse{\boolean{japanese}}{\unspace{；}}{\addsemicolon\space}}%
 % 名前とXXフィールド
-\DeclareDelimAlias[bib,biblist]{nameyeardelim}{jecomma}
-\DeclareDelimAlias[bib,biblist]{datetitledelim}{jecomma}
+\DeclareDelimAlias[bib,biblist]{nameyeardelim}{jecomma}%
+\DeclareDelimAlias[bib,biblist]{datetitledelim}{jecomma}%
 % 名前とタイプ
 \DeclareDelimFormat{authortypedelim}%
-  {\ifthenelse{\boolean{japanese}}{\unspace}{\addspace}}
-\DeclareDelimAlias{editortypedelim}{authortypedelim}
-\DeclareDelimAlias{translatortypedelim}{authortypedelim}
+  {\ifthenelse{\boolean{japanese}}{\unspace}{\addspace}}%
+\DeclareDelimAlias{editortypedelim}{authortypedelim}%
+\DeclareDelimAlias{translatortypedelim}{authortypedelim}%
 % 氏名反転時のデリム
 \DeclareDelimFormat{revsdnamepunct}%
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addcomma}}%
 % タイトル関連
-\DeclareDelimFormat{titledelim}
+\DeclareDelimFormat{titledelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addcomma\space}}%
 %\DeclareDelimAlias{titleafterdelim}{titledelim}%
 % 名前連続時
 \DeclareDelimFormat[bib,biblist]{multinamedelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace{・}}{\addcomma\space}}%
 \DeclareDelimFormat[bib,biblist]{finalnamedelim}%
-{\ifthenelse{\boolean{japanese}}
+{\ifthenelse{\boolean{japanese}}%
   {\unspace{・}}%
   {\ifthenelse{\value{listcount}>\maxprtnames}%
-    {}
+    {}%
     %{%\ifthenelse{\value{liststop}>2}%
       %{\finalandcomma\addspace\&\space}%
       {\addspace\&\space}%
@@ -168,40 +168,43 @@ citetracker=true,
 \DeclareDelimFormat{relatedpunct}%
   {\ifthenelse{\boolean{japanese}}{\unspace}{\addspase}}%
 % おわりのデリム（後で削除する可能性あり）
-  \DeclareDelimFormat{findelim}
-  {\ifthenelse{\boolean{japanese}}{\unspace{．}}{\addperiod}}
+  \DeclareDelimFormat{findelim}%
+  {\ifthenelse{\boolean{japanese}}{\unspace{．}}{\addperiod}}%
 % ダブルクォーテーション内部にコンマを挿入するための
-\DeclareQuotePunctuation{,}
+\DeclareQuotePunctuation{,}%
 
 %%% フィールドの定義
 %% 追加
 % 全角かっこ包み込み
-%\DeclareFieldFormat{jpparens}{\unspace{（}\unspace#1\unspace{）}\unspace}
-\DeclareFieldFormat{jpparens}{\mkbibjpparens{#1}}
+%\DeclareFieldFormat{jpparens}{\unspace{（}\unspace#1\unspace{）}\unspace}%
+\DeclareFieldFormat{jpparens}{\mkbibjpparens{#1}}%
 % 全角or半角かっこ包み込み
-\DeclareFieldFormat{jeparens}
-  {\ifthenelse{\boolean{japanese}}{\mkbibjpparens{#1}}{\mkbibparens{#1}}}
+\DeclareFieldFormat{jeparens}%
+  {\ifthenelse{\boolean{japanese}}{\mkbibjpparens{#1}}{\mkbibparens{#1}}}%
 % 二重かっこ（booktitle）
-\DeclareFieldFormat{jedkakko}
+\DeclareFieldFormat{jedkakko}%
   {\ifthenelse{\boolean{japanese}}{『#1』}{\emph{#1}}}%
 % かっこ
-\DeclareFieldFormat{jekakko}
-  {\ifthenelse{\boolean{japanese}}{\foreigntextquote{japanese}{#1}}{\mkbibquote{#1}}}
+\DeclareFieldFormat{jekakko}%
+  {\ifthenelse{\boolean{japanese}}{\foreigntextquote{japanese}{#1}}{\mkbibquote{#1}}}%
 % URL取得日
-\DeclareFieldFormat{urldate}{Retrieved #1}%
+\DeclareFieldFormat{urldate}%
+  {\ifthenelse{\boolean{japanese}}%
+    {\thefield{urlyear}年\thefield{urlmonth}月\thefield{urlday}日取得}%
+    {Retrieved #1}}%
 
 %% 変更：すなおにそのまま
-\DeclareFieldFormat{pages}{\mkcomprange{#1}}
+\DeclareFieldFormat{pages}{\mkcomprange{#1}}%
 \DeclareFieldFormat{url}{\url{#1}}%
 \DeclareFieldFormat{doi}{\url{https://doi.org/#1}}%
-\DeclareFieldFormat{version}{#1}
-\DeclareFieldFormat{title}{#1}
-\DeclareFieldFormat{subtitle}{#1}
-\DeclareFieldAlias{booktitle}{title}
-\DeclareFieldAlias{booksubtitle}{subtitle}
-\DeclareFieldAlias{journaltitle}{title}
-\DeclareFieldAlias{journalsubtitle}{subtitle}
-\DeclareFieldAlias{series}{title}
+\DeclareFieldFormat{version}{#1}%
+\DeclareFieldFormat{title}{#1}%
+\DeclareFieldFormat{subtitle}{#1}%
+\DeclareFieldAlias{booktitle}{title}%
+\DeclareFieldAlias{booksubtitle}{subtitle}%
+\DeclareFieldAlias{journaltitle}{title}%
+\DeclareFieldAlias{journalsubtitle}{subtitle}%
+\DeclareFieldAlias{series}{title}%
 \urlstyle{same}% URLのフォントを本文に揃える
 
 %%%%%%% 基本設定 %%%%%%%
@@ -209,18 +212,18 @@ citetracker=true,
 %%% 著者名の最大数 %%%
 \newcount\maxprtnames\maxprtnames=20%
 \DeclareBibliographyOption{maxprtnames}{%
-  \ifstrempty{#1}{}{\maxprtnames=#1}}
+  \ifstrempty{#1}{}{\maxprtnames=#1}}%
 
 %%% 著者名の表示順（日英ともに姓・名の順）
-\DeclareNameAlias{sortname}{family-given}
+\DeclareNameAlias{sortname}{family-given}%
 
 % %%% 著者名の区別を抑制
-%\DeclareUniquenameTemplate{
-%  \namepart[use=true, base=true]{prefix}
-%  \namepart[base=true]{family}
-%  \namepart[base=true]{giveni}
-%  \namepart{suffix}
-%}
+%\DeclareUniquenameTemplate{%
+%  \namepart[use=true, base=true]{prefix}%
+%  \namepart[base=true]{family}%
+%  \namepart[base=true]{giveni}%
+%  \namepart{suffix}%
+%}%
 
 %%% 著者名のフォーマット
 %%% 日本語文献と英語文献で処理を変える
@@ -243,8 +246,8 @@ citetracker=true,
       }%
     }%
   }{% 英語文献の場合、最初の名前のみ姓・名でそのほかは名・姓とする
-    \ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}
-      {\addcomma\space\ldots\space}
+    \ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}%
+      {\addcomma\space\ldots\space}%
       {\ifnumequal{\value{listcount}}{1}%
       {\ifgiveninits%
          {\usebibmacro{name:family-given}%
@@ -258,7 +261,7 @@ citetracker=true,
            {\namepartprefix}%
            {\namepartsuffix}}%
        \ifboolexpe{%
-         test {\ifdefvoid\namepartgiven}
+         test {\ifdefvoid\namepartgiven}%
          and
          test {\ifdefvoid\namepartprefix}}%
          {}%
@@ -276,14 +279,14 @@ citetracker=true,
            {\namepartsuffix}}}%
     }%
   }%
-}
+}%
 %%% ファーストネーム（イニシャル），ファミリーネームの順（reprintなど文献リストの先頭ではない部分に名前が登場する場合に備えて）
 \DeclareNameFormat{j:family-givem/e:given-family}%
 {\ifthenelse{\boolean{japanese}}%
   {\ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}%
     {\space\ldots\space}%
     {\ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}%
-      {}
+      {}%
       {\usebibmacro{name:family-given}%
         {\namepartfamily}%
         {\namepartgiven}%
@@ -292,7 +295,7 @@ citetracker=true,
   {\ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}%
     {\addcomma\space\ldots\space}%
     {\ifthenelse{\value{listcount}>\maxprtnames\AND\value{listcount}<\value{listtotal}}%
-      {}
+      {}%
       {\ifgiveninits%
         {\usebibmacro{name:given-family}%
           {\namepartfamily}%
@@ -303,32 +306,32 @@ citetracker=true,
           {\namepartfamily}%
           {\namepartgiven}%
           {\namepartprefix}%
-          {\namepartsuffix}}}}}}
+          {\namepartsuffix}}}}}}%
 
-\DeclareNameAlias{author}{default}
-\DeclareNameAlias{editor}{default}
-\DeclareNameAlias{editora}{default}
-\DeclareNameAlias{translator}{default}
-\DeclareNameAlias{translatora}{default}
-\DeclareNameAlias{origauthor}{default}
-\DeclareNameAlias{bookauthor}{default}
+\DeclareNameAlias{author}{default}%
+\DeclareNameAlias{editor}{default}%
+\DeclareNameAlias{editora}{default}%
+\DeclareNameAlias{translator}{default}%
+\DeclareNameAlias{translatora}{default}%
+\DeclareNameAlias{origauthor}{default}%
+\DeclareNameAlias{bookauthor}{default}%
 
-\DeclareNameAlias{byeditor}{j:family-givem/e:given-family}
-\DeclareNameAlias{byauthor}{byeditor}
-\DeclareNameAlias{bytranslator}{byeditor}
+\DeclareNameAlias{byeditor}{j:family-givem/e:given-family}%
+\DeclareNameAlias{byauthor}{byeditor}%
+\DeclareNameAlias{bytranslator}{byeditor}%
 
 %%% 文献リストでは et al. を使用しない
-%\DefineBibliographyStrings{english}{andothers={}}
+%\DefineBibliographyStrings{english}{andothers={}}%
 
 %%% 雑誌名の前の「in:」を削除
-\renewbibmacro{in:}{}
+\renewbibmacro{in:}{}%
 
 %%% vol, volsを削除
-\DefineBibliographyStrings{english}{volume={}}
-\DefineBibliographyStrings{english}{volumes={}}
+\DefineBibliographyStrings{english}{volume={}}%
+\DefineBibliographyStrings{english}{volumes={}}%
 
 %%% 翻訳の際に表示される trans. ofを削除
-\DefineBibliographyStrings{english}{translationof={}}
+\DefineBibliographyStrings{english}{translationof={}}%
 
 
 %%%%%%% 文献情報フォーマット・マクロ %%%%%%%
@@ -342,55 +345,55 @@ citetracker=true,
 }%
 
 %%% 出版年 %%%
-\renewbibmacro*{date+extradate}
+\renewbibmacro*{date+extradate}%
 {\iffieldundef{labelyear}{}%
   {\printtext{\iflabeldateisdate{\printlabeldateextra}{\printlabeldateextra}}%
-    \setunit*{\printdelim{datetitledelim}}
-  }
+    \setunit*{\printdelim{datetitledelim}}%
+  }%
 }%
 
 %% 氏名逆転のOnOff %%
-\newbibmacro*{reversename}[1]
-{\ifthenelse{\boolean{reversenamebool}}%
-  {\printnames{#1}}%
-  {\DeclareNameAlias{#1}{given-family}%
-  \printnames{#1}}}
+\newbibmacro*{reversename}[1]{%
+  \ifthenelse{\boolean{reversenamebool}}%
+    {\printnames{#1}}%
+    {\DeclareNameAlias{#1}{given-family}%
+    \printnames{#1}}}%
 
 %%% 先頭名前　%%%
 %% book %%
 \newbibmacro*{translator/author/editor}{%
-  \ifnameundef{translator}
-    {\ifboolexpr{
+  \ifnameundef{translator}%
+    {\ifboolexpr{%
        test \ifuseauthor
        and
-       not test {\ifnameundef{author}}
-     }
-       {\usebibmacro{author}}
-       {\usebibmacro{editor}}}
-    {\usebibmacro{translator}}}
+       not test {\ifnameundef{author}}%
+     }%
+       {\usebibmacro{author}}%
+       {\usebibmacro{editor}}}%
+    {\usebibmacro{translator}}}%
 
 %%% 先頭名前　%%%
 %% inbook article %%
 \newbibmacro*{translator/author}{%
-  \ifnameundef{translator}
-    {\usebibmacro{author}}
-    {\usebibmacro{translator}}}
+  \ifnameundef{translator}%
+    {\usebibmacro{author}}%
+    {\usebibmacro{translator}}}%
 
 %%% 著者名 %%%
-\renewbibmacro*{author}
-{\ifboolexpr{
+\renewbibmacro*{author}%
+{\ifboolexpr{%
   test \ifuseauthor
   and
-  not test {\ifnameundef{author}}
-}
-  {\usebibmacro{bbx:dashcheck}
-    {\ifthenelse{\boolean{relatedbool}}
+  not test {\ifnameundef{author}}%
+}%
+  {\usebibmacro{bbx:dashcheck}%
+    {\ifthenelse{\boolean{relatedbool}}%
       {}{\bibnamedash\printdelim{nameyeardelim}}}%
     {\usebibmacro{bbx:savehash}%
     \usebibmacro{reversename}{author}%
     \iffieldundef{authortype}{}%
-      {\setunit{\printdelim{authortypedelim}}
-      \usebibmacro{ed-eds:author}}
+      {\setunit{\printdelim{authortypedelim}}%
+      \usebibmacro{ed-eds:author}}%
     \setunit*{\printdelim{nameyeardelim}}}}%
   {\global\undef\bbx@lasthash}%%
 }%
@@ -405,40 +408,40 @@ citetracker=true,
     \setunit*{\printdelim{nonameyeardelim}}%
   }%
   \iffieldundef{pubstate}{% 印刷中などの情報がない場合は出版年を出力
-    \usebibmacro{date+extradate}
+    \usebibmacro{date+extradate}%
   }{%
     \printfield[parens]{pubstate}%
-  }
-}
+  }%
+}%
 
 %%% 編集者名 %%%
-\renewbibmacro*{editor}
-{\ifboolexpr{
+\renewbibmacro*{editor}%
+{\ifboolexpr{%
   test \ifuseeditor
   and
-  not test {\ifnameundef{editor}}
-}
-  {\usebibmacro{bbx:dashcheck}
-    {\ifthenelse{\boolean{relatedbool}}{}
+  not test {\ifnameundef{editor}}%
+}%
+  {\usebibmacro{bbx:dashcheck}%
+    {\ifthenelse{\boolean{relatedbool}}{}%
       {\bibnamedash%
       \usebibmacro{ed-eds:editor}%
-      \setunit*{\printdelim{nameyeardelim}}}}
+      \setunit*{\printdelim{nameyeardelim}}}}%
     {\usebibmacro{reversename}{editor}%%
     \setunit{\printdelim{editortypedelim}}%
     \usebibmacro{bbx:savehash}%
     \usebibmacro{ed-eds:editor}%
     \clearname{editor}%
     \setunit*{\printdelim{nameyeardelim}}}}%
-  {\global\undef\bbx@lasthash}}
+  {\global\undef\bbx@lasthash}}%
 
 %% 編集者名が先頭でない時の出力 %%
 \renewbibmacro*{byeditor}{%
-  \ifnameundef{editor}{}
+  \ifnameundef{editor}{}%
     {\printnames[byeditor]{editor}%
     \setunit{\printdelim{editortypedelim}}%
     \usebibmacro{ed-eds:editor}%
     \setunit{\printdelim{titledelim}}}%
-  \usebibmacro{byeditorx}}
+  \usebibmacro{byeditorx}}%
 
 %%% 著者のタイプ %%%
 \newbibmacro*{ed-eds:author}%
@@ -483,7 +486,7 @@ citetracker=true,
     {\usebibmacro{translatora}}%
   \setunit*{\printdelim{nameyeardelim}}}}%
 
-\newbibmacro*{translatora}
+\newbibmacro*{translatora}%
 {\printnames[bytranslator]{translatora}%
 \usebibmacro{translatoratype}%
 }%
@@ -509,20 +512,20 @@ citetracker=true,
 
 
 % %%% 翻訳者がeditorに入力されている場合 %%%
-% \newbibmacro*{translation:editortype}{
+% \newbibmacro*{translation:editortype}{%
 %   \ifthenelse{\boolean{japanese}}{%
 %       \printfield[parens]{editortype}\addspace\space%
 %   }{%
 %       \printfield{editortype}\addspace%
 %   }%
-% }
+% }%
 % 英語inbookの編集者名
 \newbibmacro*{editor:given-family}{%
   \printtext{In}\addspace%
   \printnames[byeditor]{editor}%
   \usebibmacro{ed-eds:editor}%%
   \addcomma\space%%
-}
+}%
 
 %%% シリーズ編集者名
 \newbibmacro*{series-editor}{%
@@ -534,9 +537,9 @@ citetracker=true,
     \setunit{\addcomma\addspace}\printtext{Series}\addspace%
     \ifthenelse{\value{editor}>1}{\printtext{Eds.}}{\printtext{Ed.}}%
     \bibcloseparen%
-    \setunit{\addcomma\addspace}
+    \setunit{\addcomma\addspace}%
   }%
-}
+}%
 
 %%% incollectionのシリーズ編集者 %%%
 \newbibmacro{editor:incollection}{%
@@ -544,87 +547,86 @@ citetracker=true,
     \usebibmacro{editor}%
   }{%
     \usebibmacro{editor:given-family}%
-    \newunit
-  }
-}
+    \newunit%
+  }%
+}%
 
 %%% 編集者名+出版年 %%%
 \newbibmacro{editor+year}{%
   \usebibmacro{editor}%
   \usebibmacro{date+extradate}%
-}
+}%
 
 %%% 書籍タイトル %%%
-\renewbibmacro*{title}[2]
-{\ifboolexpr{
-    test {\iffieldundef{#2title}}
+\renewbibmacro*{title}[2]{%
+  \ifboolexpr{%
+    test {\iffieldundef{#2title}}%
     and
-    test {\iffieldundef{#2subtitle}}
+    test {\iffieldundef{#2subtitle}}%
   }{}{%
-    \printtext[#1]%
-      {\printfield[titlecase]{#2title}%
+    \printtext[#1]{%
+      \printfield[titlecase]{#2title}%
       \setunit{\subtitlepunct}%
       \printfield[titlecase]{#2subtitle}%
-      }\setunit{\printdelim{titledelim}}}}
+    }%
+    \setunit{\printdelim{titledelim}}%
+  }}%
 
 %%% 電子書籍の原著情報 %%%
-\newbibmacro*{eprintbook}{
-  \iffieldundef{note}{}{
-    \printtext[jeparens]{
-      \printfield{note}
-    }
-    \newunit
-  }
-}
+\newbibmacro*{eprintbook}{%
+  \iffieldundef{note}{}{%
+    \printtext[jeparens]{%
+      \printfield{note}%
+    }%
+    \newunit%
+  }%
+}%
 
 %%% doiと取得日 %%%
 % 表示マクロ
-\newbibmacro*{urldate+eprint/doi/url}{
-  \iffieldundef{urlyear}{}
-    {\printtext[jeparens]%
-      {\ifthenelse{\boolean{japanese}}%
-        {\printfield{urlyear}
-        \printtext{年}%
-        \unspace%
-        \printfield{urlmonth}
-        \printtext{月}%
-        \unspace%
-        \printfield{urlday}
-        \printtext{日取得}}%
-        {\printtext[urldate]{\printurldate}}%
-      \newunit
+\newbibmacro*{urldate+eprint/doi/url}{%
+  \iffieldundef{urlyear}{}{%
+    \printtext[jeparens]{%
+      \printtext[urldate]{\printurldate}%
+      \newunit%
       \usebibmacro{eprint/doi/url}%
-    }
-  }
+    }%
+  }%
 }%
 
 %%% データベースまたはdoiまたはurl %%%
 \newbibmacro*{eprint/doi/url}{%
-  \iffieldundef{eprinttype}
-    {\iffieldundef{doi}
-      {\iffieldundef{url}{}
-        {\printfield{url}}}
-      {\printfield{doi}}}
-    {\printfield{eprinttype}}}
+  \iffieldundef{eprinttype}{%
+    \iffieldundef{doi}{%
+      \printfield{url}%
+    }{%
+      \printfield{doi}%
+    }%
+  }{%
+    \printfield{eprinttype}%
+  }%
+}%
 
 %%% 巻号 %%%
 %% 巻号設定 %%
 % volume(number)が基本
 % numberだけある場合、それをそのまま出力
-\newbibmacro*{volume+issues}%
-  {\ifboolexpr{%
-    test {\iffieldundef{volume}}
+\newbibmacro*{volume+issues}{%
+  \ifboolexpr{%
+    test {\iffieldundef{volume}}%
     and
-    test {\iffieldundef{number}}
-  }{}%
-  {\iffieldundef{volume}%
-    {\printfield{number}}%
-    {\printfield{volume}\printfield[parens]{number}}%
-    \setunit{\addcolon\space}}}%
+    not test {\iffieldundef{number}}%
+  }{%
+    \printfield{number}%
+  }{%
+    \printfield{volume}\printfield[parens]{number}%
+  }%
+  \setunit{\addcolon\space}%
+}%
 
-\newbibmacro*{pages}
-  {\iffieldundef{pages}{}
-    {\iffieldequalstr{type}{newspaper}
+\newbibmacro*{pages}%
+  {\iffieldundef{pages}{}%
+    {\iffieldequalstr{type}{newspaper}%
       {\setunit{\unspace}%
       \printfield{issue}%
       \newunit%
@@ -635,38 +637,38 @@ citetracker=true,
 
 %% 巻数・引用ページ表示マクロ %%%
 \newbibmacro*{vol+pages}{%
-  \iffieldundef{howpublished}
-    {\usebibmacro{volume+issues}\usebibmacro{pages}}
+  \iffieldundef{howpublished}%
+    {\usebibmacro{volume+issues}\usebibmacro{pages}}%
     {\printtext{\ifthenelse{\boolean{japanese}}%
       {\addspace}%
       {\adddot}%
     Advance online publication%
-    }
-  }
-}
+    }%
+  }%
+}%
 
 %%% 書籍の Vol. の処理（1冊）%%%
 \newbibmacro*{volume:book}%
-  {\iffieldundef{volume}{}
+  {\iffieldundef{volume}{}%
     {\ifthenelse{\boolean{japanese}}%
-      {\unspace\printtext[jpparens]{\strfield{volume}}}
-      {\addspace\printtext[parens]{\strfield{volume}}}}}
+      {\unspace\printtext[jpparens]{\strfield{volume}}}%
+      {\addspace\printtext[parens]{\strfield{volume}}}}}%
 
 %%% 書籍の Vol. の処理（複数冊）%%%
 \newbibmacro*{volumes}%
-  {\iffieldundef{volumes}{}
+  {\iffieldundef{volumes}{}%
     {\ifthenelse{\boolean{japanese}}%
-      {\unspace\printtext[jpparens]{\strfield{volumes}}}
-      {\addspace\printtext[parens]{\strfield{volumes}}}}}
+      {\unspace\printtext[jpparens]{\strfield{volumes}}}%
+      {\addspace\printtext[parens]{\strfield{volumes}}}}}%
 
 %%% 新聞 %%%
-\newbibmacro*{yyyymmdd}
+\newbibmacro*{yyyymmdd}%
   {\iffieldundef{type}{}%
-    {\printfield{year}
+    {\printfield{year}%
     \setunit*{\addperiod\thinspace}%
-    \printfield{labelmonth}
+    \printfield{labelmonth}%
     \setunit*{\addperiod\thinspace}%
-    \printfield{day}
+    \printfield{day}%
     \newunit}}%
 
 %%% 機関 %%%
@@ -677,10 +679,10 @@ citetracker=true,
     \printfield{type}%
   }{%
     \printtext[parens]{\printfield{type}}%
-    \newunit
-    \printlist{institution}
-  }
-}
+    \newunit%
+    \printlist{institution}%
+  }%
+}%
 
 %%% 学会開催地 %%%
 \newbibmacro*{location}{%
@@ -691,7 +693,7 @@ citetracker=true,
   }{%
     \printlist{location}%
   }%
-}
+}%
 
 %% origdate記入における再販情報 %%
 \newbibmacro*{originaldate}%
@@ -701,7 +703,7 @@ citetracker=true,
 
 %%% 情報処理用マクロ %%%
 %%% 書籍 %%%
-\newbibmacro*{book}{
+\newbibmacro*{book}{%
   \unspace%
   \usebibmacro{translator/author/editor}%著者など
   \usebibmacro{originaldate}% 初出を出力
@@ -709,7 +711,7 @@ citetracker=true,
   % 表題
   \usebibmacro{title}{jedkakko}{}%
   % 電子書籍の場合の処理
-  \usebibmacro{eprintbook}
+  \usebibmacro{eprintbook}%
   % 版数
   \ifthenelse{\boolean{japanese}}{}%
     {\printfield{edition}%
@@ -720,11 +722,11 @@ citetracker=true,
     \setunit*{\addcolon\space}}%
   % 出版社
   \printlist{publisher}%
-  \usebibmacro{finentry}
+  \usebibmacro{finentry}%
 }%
 
 %%% 雑誌 %%%
-\newbibmacro*{article}{
+\newbibmacro*{article}{%
   \unspace%
   \usebibmacro{translator/author}%
   \usebibmacro{originaldate}% 初出を出力
@@ -743,12 +745,12 @@ citetracker=true,
   % doi,url,database
   \newunit%
   \usebibmacro{urldate+eprint/doi/url}%
-  \printdelim{findelim}
+  \printdelim{findelim}%
 }%
 
 
 %%% 編書・共著本内論文 %%%
-\newbibmacro*{inbook}{
+\newbibmacro*{inbook}{%
   \unspace%
   \usebibmacro{translator/author}%% 著者名
   \setboolean{reversenamebool}{false} % 先頭の引用が終了したのでfalseに
@@ -765,7 +767,7 @@ citetracker=true,
   \usebibmacro{title}{jedkakko}{book}%
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
-  \usebibmacro{eprintbook}
+  \usebibmacro{eprintbook}%
   % 出版都市名
   \ifthenelse{\boolean{japanese}}{}%
     {\printlist{location}%
@@ -775,7 +777,7 @@ citetracker=true,
   \setunit*{\printdelim{jecomma}}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
-  \printdelim{findelim}
+  \printdelim{findelim}%
 }%
 
 %%% 翻訳書（origauthor使用の場合） %%%->削除
@@ -845,20 +847,20 @@ citetracker=true,
     \setunit*{\addcolon\space}}%
   % 出版社
   \printlist{publisher}%
-  \usebibmacro{finentry}
-}
+  \usebibmacro{finentry}%
+}%
 
 %%% シリーズ（英語書籍）%%%
 \newbibmacro*{mvbook:english}{%
   %暫定的に日本語と同じ処理
-  \usebibmacro{mvbook:japanese}
-}
+  \usebibmacro{mvbook:japanese}%
+}%
 
 %%% 再録（日本語書籍）%%%
-\newbibmacro*{reprintof:japanese}
+\newbibmacro*{reprintof:japanese}%
 {\usebibmacro{related:init}%
 \setboolean{japanese}{true}%
-\entrydata*{\thefield{related}}
+\entrydata*{\thefield{related}}%
   {\iffieldundef{journaltitle}%
     {\iffieldundef{booktitle}%
       {\usebibmacro{book}}%
@@ -867,18 +869,18 @@ citetracker=true,
 \setunit*{\printdelim{relatedpunct}}%
 \setboolean{relatedbool}{true}%
 \printtext[jpparens]
-  {\printtext{再録}
-  \setunit*{\printdelim{jecolon}}
+  {\printtext{再録}%
+  \setunit*{\printdelim{jecolon}}%
   \iffieldundef{journaltitle}%
     {\iffieldundef{booktitle}%
       {\usebibmacro{book}}%
-      {\usebibmacro{inbook}}}
+      {\usebibmacro{inbook}}}%
     {\usebibmacro{article}}}%
 \setboolean{relatedbool}{false}%
-}
+}%
 
 %%% 再録（英語書籍）%%%
-\newbibmacro*{reprintof:english}
+\newbibmacro*{reprintof:english}%
 {\usebibmacro{related:init}%
 \setboolean{japanese}{false}%
 \entrydata*{\thefield{related}}%
@@ -890,57 +892,57 @@ citetracker=true,
 \setunit*{\printdelim{relatedpunct}}%
 \setboolean{reversenamebool}{false}%
 \setboolean{relatedbool}{true}%
-\printtext{Reprinted in}
-\setunit*{\printdelim{jecolon}}
+\printtext{Reprinted in}%
+\setunit*{\printdelim{jecolon}}%
 \iffieldundef{journaltitle}%
   {\iffieldundef{booktitle}%
     {\usebibmacro{book}}%
     {\usebibmacro{inbook}}}%
   {\usebibmacro{article}}%
 \setboolean{relatedbool}{false}%
-}
+}%
 
 
 %%%%%% 文献タイプ別書式　%%%%%% 
 
 %%% relatedフィールド出力
-\newbibmacro*{relatedfield}
+\newbibmacro*{relatedfield}%
 {\usebibmacro{isrelatedtype}{translationof}%
 \usebibmacro{isrelatedtype}{mvbook}%
 \usebibmacro{isrelatedtype}{reprintof}%
-}
+}%
 \newbibmacro*{isrelatedtype}[1]%
 {\iffieldequalstr{relatedtype}{#1}%
 {\ifthenelse{\boolean{japanese}}%
   {\usebibmacro{#1:japanese}}% 日本語の翻訳書の場合
   {\usebibmacro{#1:english}}%% 外国語の翻訳書の場合
-}{}}
+}{}}%
 
 %%% 4.2 欧文の文献 4.4 邦文の文献共通
 %% (1-3)単著・共著・編書
-\DeclareBibliographyDriver{book}
+\DeclareBibliographyDriver{book}%
 {\usebibmacro{begentry}%
 \iffieldundef{related}%
-  {\usebibmacro*{book}}
+  {\usebibmacro*{book}}%
   {\usebibmacro{relatedfield}}%
-}
+}%
 
 %% (4)編書論文など（共著内の論文を含む）
-\DeclareBibliographyDriver{inbook}
+\DeclareBibliographyDriver{inbook}%
 {\usebibmacro{begentry}%
 \iffieldundef{related}% relatedフィールドに値なし
-  {\usebibmacro*{inbook}}
+  {\usebibmacro*{inbook}}%
   {\usebibmacro{relatedfield}}%
-}
+}%
 
 %% (5)雑誌論文
-\DeclareBibliographyDriver{article}
+\DeclareBibliographyDriver{article}%
 {\usebibmacro{begentry}%
 \ifnameundef{author}{}% 著者情報がない場合は文献リストに記載しない
 {\iffieldundef{related}% relatedフィールドに値なし
-  {\usebibmacro*{article}}
+  {\usebibmacro*{article}}%
   {\usebibmacro{relatedfield}}}%
-}
+}%
 
 %%% 以上の3つで(6)翻訳、(7)初出情報などに対応
 
@@ -950,13 +952,13 @@ citetracker=true,
   \usebibmacro{begentry}%
   % 著者名
   \ifnameundef{author}{% 著者名が書かれていない場合は機関名を表示
-    \printlist{institution}
+    \printlist{institution}%
   }{%
-    \printnames{author}
+    \printnames{author}%
   }%
   \newunit%
   % 刊行年
-  \usebibmacro{date+extradate}
+  \usebibmacro{date+extradate}%
   \newunit%
   % 表題
   \usebibmacro{title}{jedkakko}{}%
@@ -966,30 +968,30 @@ citetracker=true,
   \iffieldundef{volume}{}{\printfield{volume}}%
   \iffieldundef{number}{}{\printfield[parens]{number}\addcolon\space}%
   % 出版社
-  \iflistundef{institution}{}{
-    \printlist{institution}
+  \iflistundef{institution}{}{%
+    \printlist{institution}%
   }%
   \usebibmacro{finentry}%
-}
+}%
 
 %% (10)修士論文や博士論文
 \DeclareBibliographyDriver{thesis}{%
   \usebibmacro{begentry}%
   % 著者名，授与年
-  \usebibmacro{author}
+  \usebibmacro{author}%
   \usebibmacro{date+extradate}%
   % 表題
   \usebibmacro{title}{jekakko}{}%
   % 大学名修士／博士論文
-  \usebibmacro{type+institution}
+  \usebibmacro{type+institution}%
   \usebibmacro{finentry}%
-}
+}%
 
 %% (10)学会報告原稿
 \DeclareBibliographyDriver{inproceedings}{%
   \usebibmacro{begentry}%
   % 著者名，授与年
-  \usebibmacro{author}
+  \usebibmacro{author}%
   \usebibmacro{date+extradate}%
   % 表題
   \usebibmacro{title}{jekakko}{}%
@@ -997,23 +999,23 @@ citetracker=true,
   \iffieldundef{type}{}{%
     \mkbibbrackets{\printfield{type}}%
     \newunit%
-  }
+  }%
   % 誌名／大会名
   \iffieldundef{booktitle}{}{%
     \printfield{booktitle}%
     \newunit%%
-  }
+  }%
   \iffieldundef{eventtitle}{}{%
     \printfield{eventtitle}%
     \newunit%%
-  }
+  }%
   % 引用ページ
   \iffieldundef{pages}{}{%
     \printfield{pages}%
     \newunit%
-  }
+  }%
   \usebibmacro{finentry}%
-}
+}%
 
 %%% 4.5 電子化された資料
 %% 4.5.1 電子書籍 → (1-3)単著・共著・編書（noteフィールドで対応）
@@ -1030,12 +1032,12 @@ citetracker=true,
   \newunit%
   % ウェブサイト名（不明な場合は省略）
   \printfield{eprinttype}%
-  \togglefalse{bbx:eprinttype}
+  \togglefalse{bbx:eprinttype}%
   % url
   \newunit%
   \usebibmacro{urldate+eprint/doi/url}%
-  \usebibmacro{finentry}
-}
+  \usebibmacro{finentry}%
+}%
 
 
 
@@ -1044,38 +1046,38 @@ citetracker=true,
 \DeclareBibliographyDriver{mvbook}{%
   \usebibmacro{begentry}%
   %著者名，刊行年
-  \usebibmacro{author/editor}
-  \usebibmacro{date+extradate}
-  \printtext[jedkakko]{
+  \usebibmacro{author/editor}%
+  \usebibmacro{date+extradate}%
+  \printtext[jedkakko]{%
     \iffieldundef{title}{%
       \printfield{series}%
     }{%
       \printfield{title}%
-      \setunit{\printdelim{subtitlepunct}}
+      \setunit{\printdelim{subtitlepunct}}%
       \printfield{subtitle}%
       \usebibmacro{volumes}%
-    }
-  }
+    }%
+  }%
   \printlist{publisher}%
   \usebibmacro{finentry}%
-}
+}%
 
 %% vi) 数巻にわたる書籍の特定の1巻
 \DeclareBibliographyDriver{incollection}{%
-  \usebibmacro{editor}
-  \usebibmacro{author}
-  \usebibmacro{date+extradate}
-  \printtext[jedkakko]{
-    \printfield{series}
-    \setunit{\addspace}
+  \usebibmacro{editor}%
+  \usebibmacro{author}%
+  \usebibmacro{date+extradate}%
+  \printtext[jedkakko]{%
+    \printfield{series}%
+    \setunit{\addspace}%
     \iffieldundef{volume}{}{\printfield{volume}}%
-    \setunit{\addspace}
-    \iffieldundef{number}{}{\printfield{number}}
-    \setunit{\addspace}
-    \printfield[titlecase]{title}
-    \setunit{\subtitlepunct}
-    \printfield[titlecase]{subtitle}
-  }
+    \setunit{\addspace}%
+    \iffieldundef{number}{}{\printfield{number}}%
+    \setunit{\addspace}%
+    \printfield[titlecase]{title}%
+    \setunit{\subtitlepunct}%
+    \printfield[titlecase]{subtitle}%
+  }%
   % 版数
   \ifthenelse{\boolean{japanese}}{}%
     {\printfield{edition}%
@@ -1086,8 +1088,8 @@ citetracker=true,
     \setunit*{\addcolon\space}}%
   % 出版社
   \printlist{publisher}%
-  \usebibmacro{finentry}
-}
+  \usebibmacro{finentry}%
+}%
 
 %% iv) 新聞記事および雑誌記事の引用
 \DeclareBibliographyDriver{misc}{%
@@ -1098,15 +1100,15 @@ citetracker=true,
   \printfield{title}%
   \iffieldundef{subtitle}{}{%
     \printfield{subtitle}%
-  }
+  }%
   % 掲載紙（誌）
-  \printfield{journaltitle}\addjspace
+  \printfield{journaltitle}\addjspace%
   % 発行日（朝刊・夕刊）
   \iffieldundef{howpublished}{%
   }{%
-    \printfield{howpublished}
-    \setunit*{\addcomma\addspace}
-  }
+    \printfield{howpublished}%
+    \setunit*{\addcomma\addspace}%
+  }%
   % 掲載ページ
   \printfield{pages}\adddot
   \usebibmacro{finentry}%
