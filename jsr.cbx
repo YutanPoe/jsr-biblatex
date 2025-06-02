@@ -58,9 +58,9 @@ sortcites=true,% 引用をymdでソートする
 
 %書籍タイトル関係
 \DeclareFieldFormat{citetitle}{『#1』}% 基本は和英関わらず二重鉤かっこ
-\DeclareFieldFormat
+\DeclareFieldFormat% 論文名などは言語ごとに判断
   [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
-  {citetitle}{「#1」}% 論文名などは鉤かっこ
+  {citetitle}{\ifthenelse{\boolean{japanese}}{\jq{#1}}{\eq{#1}}}%
 \DeclareFieldFormat
   [suppbook,suppcollection,suppperiodical]
   {citetitle}{#1}% なんかあった、たぶん使わない
