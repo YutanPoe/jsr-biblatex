@@ -281,7 +281,7 @@ citetracker=true,
   }%
 }%
 %%% ファーストネーム（イニシャル），ファミリーネームの順（reprintなど文献リストの先頭ではない部分に名前が登場する場合に備えて）
-\DeclareNameFormat{j:family-givem/e:given-family}%
+\DeclareNameFormat{j:family-given/e:given-family}%
 {\ifthenelse{\boolean{japanese}}%
   {\ifthenelse{\value{listcount}=\maxprtnames\AND\value{listcount}<\value{listtotal}}%
     {\space\ldots\space}%
@@ -316,7 +316,7 @@ citetracker=true,
 \DeclareNameAlias{origauthor}{default}%
 \DeclareNameAlias{bookauthor}{default}%
 
-\DeclareNameAlias{byeditor}{j:family-givem/e:given-family}%
+\DeclareNameAlias{byeditor}{j:family-given/e:given-family}%
 \DeclareNameAlias{byauthor}{byeditor}%
 \DeclareNameAlias{bytranslator}{byeditor}%
 
@@ -356,7 +356,7 @@ citetracker=true,
 \newbibmacro*{reversename}[1]{%
   \ifthenelse{\boolean{reversenamebool}}%
     {\printnames{#1}}%
-    {\DeclareNameAlias{#1}{given-family}%
+    {\DeclareNameAlias{#1}{j:family-given/e:given-family}%
     \printnames{#1}}}%
 
 %%% 先頭名前　%%%
