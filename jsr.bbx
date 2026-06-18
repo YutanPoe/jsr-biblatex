@@ -90,12 +90,10 @@ citetracker=true,
 
 % 引用されるごとの処理
 \AtEveryBibitem{%
-  % 日本語文献かどうかをチェック
-  \iflistundef{language}{}{%
-  \ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}{%
-    \setboolean{japanese}{true}%
-    }{}%
-  }%
+  % 日本語文献かどうかをチェック（必ず初期化する）
+  \iffieldequalstr{langid}{japanese}
+    {\setboolean{japanese}{true}}
+    {\setboolean{japanese}{false}}%
   % 氏名反転をOnに
   \setboolean{reversenamebool}{true}%
 }%
@@ -166,7 +164,7 @@ citetracker=true,
 }%
 % relatedフィールド間のデリム
 \DeclareDelimFormat{relatedpunct}%
-  {\ifthenelse{\boolean{japanese}}{\unspace}{\addspase}}%
+  {\ifthenelse{\boolean{japanese}}{\unspace}{\addspace}}%
 % おわりのデリム（後で削除する可能性あり）
   \DeclareDelimFormat{findelim}%
   {\ifthenelse{\boolean{japanese}}{\unspace{．}}{\addperiod}}%
@@ -337,10 +335,10 @@ citetracker=true,
 %%%%%%% 文献情報フォーマット・マクロ %%%%%%%
 % 日本語文献かどうかをチェック
 \newbibmacro{babelcheck}{%
-  \iflistundef{language}{%
+  \iffieldundef{langid}{%
     \selectlanguage{english}%
   }{%
-    \selectlanguage{\thefirstlistitem{language}}%
+    \selectlanguage{\thefield{langid}}%
   }%
 }%
 
@@ -833,7 +831,7 @@ citetracker=true,
     \setunit{\addspace}%
     \iffieldundef{volume}{}{\printfield{volume}}%
     \iffieldundef{number}{}{\printfield{number}}%
-    \setunit{\addspa}%
+    \setunit{\addspace}%
     \printfield[titlecase]{title}%
     \setunit{\subtitlepunct}%
     \printfield[titlecase]{subtitle}}%

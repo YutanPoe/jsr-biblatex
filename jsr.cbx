@@ -13,11 +13,9 @@ sortcites=true,% 引用をymdでソートする
 
 % 引用ごとに言語を判断して処理
 \AtEveryCitekey{%
-  \ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}{%
-      \setboolean{japanese}{true}%
-    }{%
-      \setboolean{japanese}{false}%
-    }%
+  \iffieldequalstr{langid}{japanese}
+    {\setboolean{japanese}{true}}
+    {\setboolean{japanese}{false}}%
   \global\boolfalse{cbx:warichu}%割注かどうかの判断%
 }%
 
@@ -105,7 +103,7 @@ sortcites=true,% 引用をymdでソートする
 
 % relatedフィールドまで遡ったときにlanguageを判断するために
 \newbibmacro*{isJPorEN}%
-  {\ifthenelse{\equal{\thefirstlistitem{language}}{japanese}}%
+  {\iffieldequalstr{langid}{japanese}%
     {\setboolean{japanese}{true}}%
     {\setboolean{japanese}{false}}%
   }%
@@ -328,19 +326,10 @@ sortcites=true,% 引用をymdでソートする
     }{%著者も編者もrelatedでリンクもされていない場合
       \usebibmacro{noauthorcite}%
     }{%
-      \ifnameundef{shortauthor}{%"NASA"のような略称の有無判定
-        \ifnameundef{origauthor}{%再販著者情報がない場合
-          \usebibmacro{cite:uniquename}%名前の出力
-        }{%
-          \printnames{origauthor}%再販著者情報がある場合、それを出力
-        }%
+      \ifnameundef{origauthor}{%再販著者情報がない場合
+        \usebibmacro{cite:uniquename}%名前の出力
       }{%
-        \cbx@apa@ifnamesaved{%
-          \printnames{shortauthor}%
-        }{%
-          \printnames[labelname]{author}%
-          \addspace\printnames[sabrackets]{shortauthor}%
-        }%
+        \printnames{origauthor}%再販著者情報がある場合、それを出力
       }%
       \setunit{\printdelim{nameyeardelim}}% authorとyearの間のデリム
       \usebibmacro{cite:plabelyear+extradate}% yearの出力
@@ -419,19 +408,10 @@ sortcites=true,% 引用をymdでソートする
         \savefield{namehash}{\cbx@lasthash}%
       }{%
         % Normal cite
-        \ifnameundef{shortauthor}{%
-          \ifnameundef{origauthor}{% 著者名 日本語訳の書籍の場合は，原著者の名前を原語表記
-            \usebibmacro{citecheck}%
-          }{%
-            \printnames{origauthor}% 再録の場合のオリジナル出力
-          }%
+        \ifnameundef{origauthor}{% 著者名 日本語訳の書籍の場合は，原著者の名前を原語表記
+          \usebibmacro{citecheck}%
         }{%
-          \cbx@apa@ifnamesaved{%
-            \printnames{shortauthor}%
-          }{%
-            \printnames[labelname]{author}%
-            \addspace\printnames[sabrackets]{shortauthor}%
-          }%
+          \printnames{origauthor}% 再録の場合のオリジナル出力
         }%
         \savefield{namehash}{\cbx@lasthash}%
       }%
