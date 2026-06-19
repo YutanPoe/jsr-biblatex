@@ -1,0 +1,57 @@
+\ProvidesFile{japanese.lbx}[2025/07/09 Japanese localization]
+
+\DeclareLanguageMapping{japanese}{japanese}
+
+\DeclareBibliographyStrings{%
+  inherit = {english}, % 英語をベースにして差分だけ定義
+  editor     = {{編集者}{編}},
+  editors    = {{編集者}{編}},
+  edition    = {{版}{版}},
+  translator = {{翻訳者}{訳}},
+  translators= {{翻訳者}{訳}},
+  volume     = {{巻}{巻}},
+  number     = {{号}{号}},
+  chapter    = {{章}{章}},
+  in         = {{所収}{所収}},
+  page       = {{ページ}{ページ}},
+  pages      = {{ページ}{ページ}},
+  urlseen    = {{アクセス日}{アクセス日}},
+  and        = {{、}{、}},
+  andothers  = {{他}{他}},
+  january    = {{1月}{1月}},
+  february   = {{2月}{2月}},
+  march      = {{3月}{3月}},
+  april      = {{4月}{4月}},
+  may        = {{5月}{5月}},
+  june       = {{6月}{6月}},
+  july       = {{7月}{7月}},
+  august     = {{8月}{8月}},
+  september  = {{9月}{9月}},
+  october    = {{10月}{10月}},
+  november   = {{11月}{11月}},
+  december   = {{12月}{12月}},
+  % 以下略
+}
+
+\DeclareBibliographyExtras{%
+  \protected\def\mkbibdateshort#1#2#3{%
+    \iffieldundef{#1}
+      {}
+      {\thefield{#1}%
+       \iffieldundef{#2}
+         {}
+         {/\thefield{#2}%
+          \iffieldundef{#3}
+            {}
+            {/\thefield{#3}}}}}%
+  \protected\def\mkbibdatelong#1#2#3{%
+    \iffieldundef{#1}
+      {}
+      {\thefield{#1}年%
+       \iffieldundef{#2}
+         {}
+         {\thefield{#2}月%
+          \iffieldundef{#3}
+            {}
+            {\thefield{#3}日}}}}%
+}

@@ -365,7 +365,7 @@ sortcites=true,% 引用をymdでソートする
   {\entrydata*{\thefield{related}}%
     {\usebibmacro{cite:reprintof}%
     \usebibmacro{cite:origyear}%
-    \printtext{\printdateextra}%
+    \printtext{\printlabeldateextra}%
     \setunit{\printdelim{transeq}}%
     }
   }{}%
@@ -374,7 +374,7 @@ sortcites=true,% 引用をymdでソートする
 \newbibmacro*{cite:origyear}%
 {\iffieldundef{origyear}{}%
   {\usebibmacro{cite:translationof}%
-  \printtext[brackets]{\printorigdate}%
+  \printtext[brackets]{\thefield{origyear}}%
   \setunit{\addthinspace}%
   }%
 }%

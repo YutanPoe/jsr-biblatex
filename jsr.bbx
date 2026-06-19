@@ -54,7 +54,7 @@ minbibnames=19,%
 mincrossrefs=999,%
 maxitems=999,%
 sorting=nymdt,%
-urldate=ymd,%
+%urldate=ymd,%
 dateabbrev=false,%
 %useorigauthor=true,%
 labeldateparts=true,
@@ -92,8 +92,9 @@ citetracker=true,
 \AtEveryBibitem{%
   % 日本語文献かどうかをチェック（必ず初期化する）
   \iffieldequalstr{langid}{japanese}
-    {\setboolean{japanese}{true}}
-    {\setboolean{japanese}{false}}%
+    {\setboolean{japanese}{true}\selectlanguage{japanese}}%
+    {\setboolean{japanese}{false}%
+    \iffieldundef{langid}{\selectlanguage{american}}{}}%
   % 氏名反転をOnに
   \setboolean{reversenamebool}{true}%
 }%
@@ -188,8 +189,10 @@ citetracker=true,
 % URL取得日
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{japanese}}%
-    {\thefield{urlyear}年\thefield{urlmonth}月\thefield{urlday}日取得}%
-    {Retrieved #1}}%
+    %{\thefield{urlyear}年\thefield{urlmonth}月\thefield{urlday}日取得}%
+    {\mkbibdatelong{urlyear}{urlmonth}{urlday}取得}%
+    {Retrieved\space\mkbibdatelong{urlyear}{urlmonth}{urlday}}%
+  }%
 
 %% 変更：すなおにそのまま
 \DeclareFieldFormat{pages}{\mkcomprange{#1}}%
@@ -335,11 +338,10 @@ citetracker=true,
 %%%%%%% 文献情報フォーマット・マクロ %%%%%%%
 % 日本語文献かどうかをチェック
 \newbibmacro{babelcheck}{%
-  \iffieldundef{langid}{%
-    \selectlanguage{english}%
-  }{%
-    \selectlanguage{\thefield{langid}}%
-  }%
+  \iffieldequalstr{langid}{japanese}%
+    {\setboolean{japanese}{true}\selectlanguage{japanese}}%
+    {\setboolean{japanese}{false}%
+    \iffieldundef{langid}{\selectlanguage{american}}{}}%
 }%
 
 %%% 出版年 %%%
@@ -585,7 +587,7 @@ citetracker=true,
 \newbibmacro*{urldate+eprint/doi/url}{%
   \iffieldundef{urlyear}{}{%
     \printtext[jeparens]{%
-      \printtext[urldate]{\printurldate}%
+      \printtext{\printurldate}%
       \newunit%
       \usebibmacro{eprint/doi/url}%
     }%
@@ -695,7 +697,7 @@ citetracker=true,
 
 %% origdate記入における再販情報 %%
 \newbibmacro*{originaldate}%
-  {\iffieldundef{origyear}{}{\printtext[brackets]{\printorigdate}\addthinspace}%
+  {\iffieldundef{origyear}{}{\printtext[brackets]{\thefield{origyear}}\addthinspace}%
 }%
 
 
@@ -785,6 +787,7 @@ citetracker=true,
   \usebibmacro{related:init}%
   \setboolean{japanese}{false}%
   \entrydata*{\thefield{related}}{%
+    \iffieldundef{langid}{\selectlanguage{american}}{}%
     \iffieldundef{journaltitle}%
       {\iffieldundef{booktitle}%
         {\usebibmacro{book}}%
@@ -792,6 +795,7 @@ citetracker=true,
       {\usebibmacro{article}}}%
   \setunit*{\printdelim{relatedpunct}}%
   \setboolean{japanese}{true}%
+  \selectlanguage{japanese}%
   \iffieldundef{journaltitle}%
     {\iffieldundef{booktitle}%
       {\printtext[jpparens]{\usebibmacro{book}}}%
