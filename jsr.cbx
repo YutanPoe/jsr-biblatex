@@ -35,21 +35,21 @@ sortcites=true,% 引用をymdでソートする
 \DeclareDelimFormat[textcite,parencite]{nameyeardelim}{\addspace}%著者名と出版年の区切りは半角スペース
 \DeclareDelimFormat{transeq}{\unspace=}%翻訳書の場合のイコール
 
-% parenciteのとき
-\DeclareDelimFormat[parencite]{multinamedelim}% 人の著者名の間
+% parenciteのときとtextciteのときを共通に
+\DeclareDelimFormat[parencite,textcite,citeauthor]{multinamedelim}% 人の著者名の間
   {\ifthenelse{\boolean{japanese}}{\unspace{・}}{\addcomma\space}}%
-\DeclareDelimFormat[parencite]{finalnamedelim}% 3人以上のときの著者名の間（つかわないと思う）
+\DeclareDelimFormat[parencite,textcite,citeauthor]{finalnamedelim}% 3人以上のときの著者名の間（つかわないと思う）
   {\ifthenelse{\boolean{japanese}}{\unspace{・}}%
     {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-\DeclareDelimFormat[parencite]{andothersdelim}% 3人以上のときの最後の文字
+\DeclareDelimFormat[parencite,textcite,citeauthor]{andothersdelim}% 3人以上のときの最後の文字
   {\ifthenelse{\boolean{japanese}}{\unspace{ほか}}{\addspace{et al.}}}%
 
 % textciteのとき（スタイルガイドに明確な定義はなし）
-\DeclareDelimFormat[textcite,citeauthor]{multinamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
-\DeclareDelimFormat[textcite,citeauthor]{finalnamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
+%\DeclareDelimFormat[textcite,citeauthor]{multinamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
+%\DeclareDelimFormat[textcite,citeauthor]{finalnamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
   %{\ifthenelse{\boolean{japanese}}{\unspace{・}}%
     %{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-\DeclareDelimFormat[textcite,citeauthor]{andothersdelim}{\unspace{ら}}% 3人以上のときの最後の文字
+%\DeclareDelimFormat[textcite,citeauthor]{andothersdelim}{\unspace{ら}}% 3人以上のときの最後の文字
 
 % FiledFormatの宣言
 % ================================================================================
