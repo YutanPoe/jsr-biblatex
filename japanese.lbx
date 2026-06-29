@@ -1,57 +1,640 @@
-\ProvidesFile{japanese.lbx}[2025/07/09 Japanese localization]
+\ProvidesFile{japanese.lbx}
+[\abx@lbxid]
 
-\DeclareLanguageMapping{japanese}{japanese}
-
-\DeclareBibliographyStrings{%
-  inherit = {english}, % 英語をベースにして差分だけ定義
-  editor     = {{編集者}{編}},
-  editors    = {{編集者}{編}},
-  edition    = {{版}{版}},
-  translator = {{翻訳者}{訳}},
-  translators= {{翻訳者}{訳}},
-  volume     = {{巻}{巻}},
-  number     = {{号}{号}},
-  chapter    = {{章}{章}},
-  in         = {{所収}{所収}},
-  page       = {{ページ}{ページ}},
-  pages      = {{ページ}{ページ}},
-  urlseen    = {{アクセス日}{アクセス日}},
-  and        = {{、}{、}},
-  andothers  = {{他}{他}},
-  january    = {{1月}{1月}},
-  february   = {{2月}{2月}},
-  march      = {{3月}{3月}},
-  april      = {{4月}{4月}},
-  may        = {{5月}{5月}},
-  june       = {{6月}{6月}},
-  july       = {{7月}{7月}},
-  august     = {{8月}{8月}},
-  september  = {{9月}{9月}},
-  october    = {{10月}{10月}},
-  november   = {{11月}{11月}},
-  december   = {{12月}{12月}},
-  % 以下略
-}
+\DeclareRedundantLanguages{japanese}{japanese}
 
 \DeclareBibliographyExtras{%
-  \protected\def\mkbibdateshort#1#2#3{%
-    \iffieldundef{#1}
-      {}
-      {\thefield{#1}%
-       \iffieldundef{#2}
-         {}
-         {/\thefield{#2}%
-          \iffieldundef{#3}
-            {}
-            {/\thefield{#3}}}}}%
+  \renewrobustcmd*{\bibdatesep}{/}%
+  \protected\def\bibrangedash{%
+    \textendash\penalty\hyphenpenalty}% breakable dash
+  \let\finalandcomma=\empty
+  \let\finalandsemicolon=\empty
+  \def\mkbibordinal{\mkbibjpord}%
+  \protected\def\mkbibjpord#1{\stripzeros{#1}}%
+  \protected\def\mkbibmascord{\mkbibjpord}%
+  \protected\def\mkbibfemord{\mkbibjpord}%
+  \protected\def\mkbibneutord{\mkbibjpord}%
   \protected\def\mkbibdatelong#1#2#3{%
-    \iffieldundef{#1}
-      {}
-      {\thefield{#1}年%
-       \iffieldundef{#2}
-         {}
-         {\thefield{#2}月%
-          \iffieldundef{#3}
-            {}
-            {\thefield{#3}日}}}}%
+    \iffieldundef{#1}{}
+      {\iffieldbibstring{#1}
+         {\bibstring{\thefield{#1}}}
+         {\dateeraprintpre{#1}\stripzeros{\thefield{#1}}年}}%
+    \iffieldundef{#2}{}
+      {\mkbibmonth{\thefield{#2}}}%
+    \iffieldundef{#3}{}
+      {\stripzeros{\thefield{#3}}日}}%
+  \protected\def\mkbibdateshort#1#2#3{%
+    \iffieldbibstring{#1}
+      {\bibstring{\thefield{#1}}}
+      {\dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+    \iffieldundef{#2}{}
+      {\bibdatesep%
+       \mkmonthzeros{\thefield{#2}}}%
+    \iffieldundef{#3}{}
+      {\bibdatesep%
+       \mkdayzeros{\thefield{#3}}}}%
+  \savecommand\mkbibordedition
+  \savecommand\mkbibordseries
+  \def\mkbibordedition{\mkbibjpord}%
+  \def\mkbibordseries{\mkbibjpord}%
+  \savecommand\mkdaterangecomp
+  \savecommand\mkdaterangecompextra
+  \savecommand\mkdaterangeterse
+  \savecommand\mkdaterangeterseextra
+  \protected\def\mkdaterangecomp{%
+    \lbx@us@mkdaterangetrunc@long{long}}%
+  \protected\def\mkdaterangeterse{%
+    \lbx@us@mkdaterangetrunc@short{short}}%
+  \protected\def\mkdaterangecompextra{%
+    \lbx@us@mkdaterangetruncextra@long{long}}%
+  \protected\def\mkdaterangeterseextra{%
+    \lbx@us@mkdaterangetruncextra@short{short}}%
+  \expandafter\protected\expandafter\def\csname mkbibtime24h\endcsname#1#2#3#4{%
+      \iffieldundef{#1}
+        {}
+        {\mktimezeros{\thefield{#1}}%
+         \iffieldundef{#2}{}{\bibtimesep}}%
+      \iffieldundef{#2}
+        {}
+        {\mktimezeros{\thefield{#2}}%
+         \iffieldundef{#3}{}{\bibtimesep}}%
+      \iffieldundef{#3}
+        {}
+        {\mktimezeros{\thefield{#3}}}%
+      \iffieldundef{#4}{}
+        {\bibtimezonesep
+         \mkbibtimezone{\thefield{#4}}}}%
+  \expandafter\protected\expandafter\def\csname mkbibtime12h\endcsname#1#2#3#4{%
+      \stripzeros{\mktimehh{\thefield{#1}}}\bibtimesep
+      \forcezerosmdt{\thefield{#2}}%
+      \iffieldundef{#3}{}
+        {\bibtimesep
+         \forcezerosmdt{\thefield{#3}}}%
+       \space
+       \ifnumless{\thefield{#1}}{12}
+         {\bibstring{am}}
+         {\bibstring{pm}}%
+      \iffieldundef{#4}{}
+       {\space\bibtimezonesep
+        \parentext{\mkbibtimezone{\thefield{#4}}}}}%
+  \protected\def\mkbibyeardivisiondateshort#1#2{%
+    \mkbibyeardivision{\thefield{#2}}%
+    \iffieldundef{#1}{}{\space}%
+    \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
+  \protected\def\mkbibyeardivisiondatelong#1#2{%
+    \mkbibyeardivision{\thefield{#2}}%
+    \iffieldundef{#1}{}{\space}%
+    \dateeraprintpre{#1}\mkyearzeros{\thefield{#1}}}%
 }
+
+\UndeclareBibliographyExtras{%
+  \restorecommand\mkbibordedition
+  \restorecommand\mkbibordseries
+  \restorecommand\mkdaterangecomp
+  \restorecommand\mkdaterangecompextra
+  \restorecommand\mkdaterangeterse
+  \restorecommand\mkdaterangeterseextra
+}
+
+\DeclareBibliographyStrings{%
+  bibliography     = {{参考文献}{参考文献}},
+  references       = {{参考文献}{参考文献}},
+  shorthands       = {{略語一覧}{略語}},
+  editor           = {{編者}{編}},
+  editors          = {{編者}{編}},
+  compiler         = {{編集者}{編集}},
+  compilers        = {{編集者}{編集}},
+  redactor         = {{校訂者}{校訂}},
+  redactors        = {{校訂者}{校訂}},
+  reviser          = {{改訂者}{改訂}},
+  revisers         = {{改訂者}{改訂}},
+  founder          = {{創設者}{創設}},
+  founders         = {{創設者}{創設}},
+  continuator      = {{継続者}{継続}},
+  continuators     = {{継続者}{継続}},
+  collaborator     = {{共著者}{共著}},
+  collaborators    = {{共著者}{共著}},
+  translator       = {{訳者}{訳}},
+  translators      = {{訳者}{訳}},
+  commentator      = {{注釈者}{注}},
+  commentators     = {{注釈者}{注}},
+  annotator        = {{注記者}{注記}},
+  annotators       = {{注記者}{注記}},
+  commentary       = {{注釈}{注}},
+  annotations      = {{注記}{注記}},
+  introduction     = {{序論}{序}},
+  foreword         = {{序文}{序文}},
+  afterword        = {{後記}{後記}},
+  editortr         = {{編訳者}{編訳}},
+  editorstr        = {{編訳者}{編訳}},
+  editorco         = {{編者・注釈者}{編・注}},
+  editorsco        = {{編者・注釈者}{編・注}},
+  editoran         = {{編者・注記者}{編・注記}},
+  editorsan        = {{編者・注記者}{編・注記}},
+  editorin         = {{編者・序論}{編・序}},
+  editorsin        = {{編者・序論}{編・序}},
+  editorfo         = {{編者・序文}{編・序文}},
+  editorsfo        = {{編者・序文}{編・序文}},
+  editoraf         = {{編者・後記}{編・後記}},
+  editorsaf        = {{編者・後記}{編・後記}},
+  editortrco       = {{編者・訳者・注釈者}{編・訳・注}},
+  editorstrco      = {{編者・訳者・注釈者}{編・訳・注}},
+  editortran       = {{編者・訳者・注記者}{編・訳・注記}},
+  editorstran      = {{編者・訳者・注記者}{編・訳・注記}},
+  editortrin       = {{編者・訳者・序論}{編・訳・序}},
+  editorstrin      = {{編者・訳者・序論}{編・訳・序}},
+  editortrfo       = {{編者・訳者・序文}{編・訳・序文}},
+  editorstrfo      = {{編者・訳者・序文}{編・訳・序文}},
+  editortraf       = {{編者・訳者・後記}{編・訳・後記}},
+  editorstraf      = {{編者・訳者・後記}{編・訳・後記}},
+  editorcoin       = {{編者・注釈者・序論}{編・注・序}},
+  editorscoin      = {{編者・注釈者・序論}{編・注・序}},
+  editorcofo       = {{編者・注釈者・序文}{編・注・序文}},
+  editorscofo      = {{編者・注釈者・序文}{編・注・序文}},
+  editorcoaf       = {{編者・注釈者・後記}{編・注・後記}},
+  editorscoaf      = {{編者・注釈者・後記}{編・注・後記}},
+  editoranin       = {{編者・注記者・序論}{編・注記・序}},
+  editorsanin      = {{編者・注記者・序論}{編・注記・序}},
+  editoranfo       = {{編者・注記者・序文}{編・注記・序文}},
+  editorsanfo      = {{編者・注記者・序文}{編・注記・序文}},
+  editoranaf       = {{編者・注記者・後記}{編・注記・後記}},
+  editorsanaf      = {{編者・注記者・後記}{編・注記・後記}},
+  editortrcoin     = {{編者・訳者・注釈者・序論}{編・訳・注・序}},
+  editorstrcoin    = {{編者・訳者・注釈者・序論}{編・訳・注・序}},
+  editortrcofo     = {{編者・訳者・注釈者・序文}{編・訳・注・序文}},
+  editorstrcofo    = {{編者・訳者・注釈者・序文}{編・訳・注・序文}},
+  editortrcoaf     = {{編者・訳者・注釈者・後記}{編・訳・注・後記}},
+  editorstrcoaf    = {{編者・訳者・注釈者・後記}{編・訳・注・後記}},
+  editortranin     = {{編者・訳者・注記者・序論}{編・訳・注記・序}},
+  editorstranin    = {{編者・訳者・注記者・序論}{編・訳・注記・序}},
+  editortranfo     = {{編者・訳者・注記者・序文}{編・訳・注記・序文}},
+  editorstranfo    = {{編者・訳者・注記者・序文}{編・訳・注記・序文}},
+  editortranaf     = {{編者・訳者・注記者・後記}{編・訳・注記・後記}},
+  editorstranaf    = {{編者・訳者・注記者・後記}{編・訳・注記・後記}},
+  translatorco     = {{訳者・注釈者}{訳・注}},
+  translatorsco    = {{訳者・注釈者}{訳・注}},
+  translatoran     = {{訳者・注記者}{訳・注記}},
+  translatorsan    = {{訳者・注記者}{訳・注記}},
+  translatorin     = {{翻訳・序論}{訳・序}},
+  translatorsin    = {{翻訳・序論}{訳・序}},
+  translatorfo     = {{翻訳・序文}{訳・序文}},
+  translatorsfo    = {{翻訳・序文}{訳・序文}},
+  translatoraf     = {{翻訳・後記}{訳・後記}},
+  translatorsaf    = {{翻訳・後記}{訳・後記}},
+  translatorcoin   = {{翻訳・注釈・序論}{訳・注・序}},
+  translatorscoin  = {{翻訳・注釈・序論}{訳・注・序}},
+  translatorcofo   = {{翻訳・注釈・序文}{訳・注・序文}},
+  translatorscofo  = {{翻訳・注釈・序文}{訳・注・序文}},
+  translatorcoaf   = {{翻訳・注釈・後記}{訳・注・後記}},
+  translatorscoaf  = {{翻訳・注釈・後記}{訳・注・後記}},
+  translatoranin   = {{翻訳・注記・序論}{訳・注記・序}},
+  translatorsanin  = {{翻訳・注記・序論}{訳・注記・序}},
+  translatoranfo   = {{翻訳・注記・序文}{訳・注記・序文}},
+  translatorsanfo  = {{翻訳・注記・序文}{訳・注記・序文}},
+  translatoranaf   = {{翻訳・注記・後記}{訳・注記・後記}},
+  translatorsanaf  = {{翻訳・注記・後記}{訳・注記・後記}},
+  organizer        = {{主催者}{主催}},
+  organizers       = {{主催者}{主催}},
+  byorganizer      = {{主催}{主催}},
+  byauthor         = {{著}{著}},
+  byeditor         = {{編}{編}},
+  bycompiler       = {{編集}{編集}},
+  byredactor       = {{校訂}{校訂}},
+  byreviser        = {{改訂}{改訂}},
+  byreviewer       = {{書評}{書評}},
+  byfounder        = {{創設}{創設}},
+  bycontinuator    = {{継続}{継続}},
+  bycollaborator   = {{共著}{共著}},
+  bytranslator     = {{\lbx@lfromlang 訳}{\lbx@sfromlang 訳}},
+  bycommentator    = {{注釈}{注}},
+  byannotator      = {{注記}{注記}},
+  withcommentator  = {{注釈付き}{注付き}},
+  withannotator    = {{注記付き}{注記付き}},
+  withintroduction = {{序論付き}{序付き}},
+  withforeword     = {{序文付き}{序文付き}},
+  withafterword    = {{後記付き}{後記付き}},
+  byeditortr       = {{編訳}{編訳}},
+  byeditorco       = {{編・注釈}{編・注}},
+  byeditoran       = {{編・注記}{編・注記}},
+  byeditorin       = {{編・序論}{編・序}},
+  byeditorfo       = {{編・序文}{編・序文}},
+  byeditoraf       = {{編・後記}{編・後記}},
+  byeditortrco     = {{編・訳・注釈}{編・訳・注}},
+  byeditortran     = {{編・訳・注記}{編・訳・注記}},
+  byeditortrin     = {{編・訳・序論}{編・訳・序}},
+  byeditortrfo     = {{編・訳・序文}{編・訳・序文}},
+  byeditortraf     = {{編・訳・後記}{編・訳・後記}},
+  byeditorcoin     = {{編・注釈・序論}{編・注・序}},
+  byeditorcofo     = {{編・注釈・序文}{編・注・序文}},
+  byeditorcoaf     = {{編・注釈・後記}{編・注・後記}},
+  byeditoranin     = {{編・注記・序論}{編・注記・序}},
+  byeditoranfo     = {{編・注記・序文}{編・注記・序文}},
+  byeditoranaf     = {{編・注記・後記}{編・注記・後記}},
+  byeditortrcoin   = {{編・訳・注釈・序論}{編・訳・注・序}},
+  byeditortrcofo   = {{編・訳・注釈・序文}{編・訳・注・序文}},
+  byeditortrcoaf   = {{編・訳・注釈・後記}{編・訳・注・後記}},
+  byeditortranin   = {{編・訳・注記・序論}{編・訳・注記・序}},
+  byeditortranfo   = {{編・訳・注記・序文}{編・訳・注記・序文}},
+  byeditortranaf   = {{編・訳・注記・後記}{編・訳・注記・後記}},
+  bytranslatorco   = {{\lbx@lfromlang 訳・注釈}{\lbx@sfromlang 訳・注}},
+  bytranslatoran   = {{\lbx@lfromlang 訳・注記}{\lbx@sfromlang 訳・注記}},
+  bytranslatorin   = {{\lbx@lfromlang 訳・序論}{\lbx@sfromlang 訳・序}},
+  bytranslatorfo   = {{\lbx@lfromlang 訳・序文}{\lbx@sfromlang 訳・序文}},
+  bytranslatoraf   = {{\lbx@lfromlang 訳・後記}{\lbx@sfromlang 訳・後記}},
+  bytranslatorcoin = {{\lbx@lfromlang 訳・注釈・序論}{\lbx@sfromlang 訳・注・序}},
+  bytranslatorcofo = {{\lbx@lfromlang 訳・注釈・序文}{\lbx@sfromlang 訳・注・序文}},
+  bytranslatorcoaf = {{\lbx@lfromlang 訳・注釈・後記}{\lbx@sfromlang 訳・注・後記}},
+  bytranslatoranin = {{\lbx@lfromlang 訳・注記・序論}{\lbx@sfromlang 訳・注記・序}},
+  bytranslatoranfo = {{\lbx@lfromlang 訳・注記・序文}{\lbx@sfromlang 訳・注記・序文}},
+  bytranslatoranaf = {{\lbx@lfromlang 訳・注記・後記}{\lbx@sfromlang 訳・注記・後記}},
+  and              = {{・}{・}},
+  andothers        = {{ほか}{ほか}},
+  andmore          = {{ほか}{ほか}},
+  volume           = {{巻}{巻}},
+  volumes          = {{巻}{巻}},
+  involumes        = {{全}{全}},
+  jourvol          = {{巻}{巻}},
+  jourser          = {{シリーズ}{シリーズ}},
+  book             = {{冊}{冊}},
+  part             = {{部}{部}},
+  issue            = {{号}{号}},
+  newseries        = {{新シリーズ}{新シリーズ}},
+  oldseries        = {{旧シリーズ}{旧シリーズ}},
+  edition          = {{版}{版}},
+  reprint          = {{復刻版}{復刻}},
+  reprintof        = {{復刻版}{復刻}},
+  reprintas        = {{復刻}{復刻}},
+  reprintfrom      = {{復刻}{復刻}},
+  translationof    = {{翻訳}{訳}},
+  translationas    = {{日本語訳}{和訳}},
+  translationfrom  = {{翻訳}{訳}},
+  reviewof         = {{書評}{書評}},
+  origpubas        = {{原著}{原著}},
+  origpubin        = {{初出}{初出}},
+  astitle          = {{として}{として}},
+  bypublisher      = {{発行}{発行}},
+  nodate           = {{日付なし}{n\adddotspace d\adddot}},
+  page             = {{頁}{p\adddot}},
+  pages            = {{頁}{pp\adddot}},
+  column           = {{欄}{欄}},
+  columns          = {{欄}{欄}},
+  line             = {{行}{行}},
+  lines            = {{行}{行}},
+  verse            = {{節}{節}},
+  verses           = {{節}{節}},
+  section          = {{節}{\S}},
+  sections         = {{節}{\S\S}},
+  paragraph        = {{段落}{段落}},
+  paragraphs       = {{段落}{段落}},
+  pagetotal        = {{頁}{p\adddot}},
+  pagetotals       = {{頁}{pp\adddot}},
+  columntotal      = {{欄}{欄}},
+  columntotals     = {{欄}{欄}},
+  linetotal        = {{行}{行}},
+  linetotals       = {{行}{行}},
+  versetotal       = {{節}{節}},
+  versetotals      = {{節}{節}},
+  sectiontotal     = {{節}{節}},
+  sectiontotals    = {{節}{節}},
+  paragraphtotal   = {{段落}{段落}},
+  paragraphtotals  = {{段落}{段落}},
+  in               = {{所収}{所収}},
+  inseries         = {{所収}{所収}},
+  ofseries         = {{収録}{収録}},
+  number           = {{号}{号}},
+  chapter          = {{章}{章}},
+  bathesis         = {{学士論文}{学士論文}},
+  mathesis         = {{修士論文}{修論}},
+  phdthesis        = {{博士論文}{博論}},
+  candthesis       = {{候補論文}{候補論文}},
+  resreport        = {{研究報告}{研究報告}},
+  techreport       = {{技術報告}{技術報告}},
+  software         = {{ソフトウェア}{ソフトウェア}},
+  datacd           = {{CD-ROM}{CD-ROM}},
+  audiocd          = {{オーディオCD}{オーディオCD}},
+  version          = {{バージョン}{ver\adddot}},
+  url              = {{URL}{URL}},
+  urlfrom          = {{入手先}{入手先}},
+  urlseen          = {{参照日}{参照日}},
+  inpreparation    = {{準備中}{準備中}},
+  submitted        = {{審査中}{審査中}},
+  forthcoming      = {{刊行予定}{刊行予定}},
+  inpress          = {{印刷中}{印刷中}},
+  prepublished     = {{事前公開}{事前公開}},
+  citedas          = {{引用名}{引用名}},
+  thiscite         = {{特に}{特に}},
+  seenote          = {{注を参照}{注参照}},
+  quotedin         = {{引用元}{引用元}},
+  idem             = {{同著者}{同著}},
+  idemsm           = {{同著者}{同著}},
+  idemsf           = {{同著者}{同著}},
+  idemsn           = {{同著者}{同著}},
+  idempm           = {{同著者}{同著}},
+  idempf           = {{同著者}{同著}},
+  idempn           = {{同著者}{同著}},
+  idempp           = {{同著者}{同著}},
+  ibidem           = {{同書}{同書}},
+  opcit            = {{前掲書}{前掲}},
+  loccit           = {{前掲箇所}{前掲箇所}},
+  confer           = {{参照}{参照}},
+  sequens          = {{以下}{以下}},
+  sequentes        = {{以下各頁}{以下各頁}},
+  passim           = {{随所}{随所}},
+  see              = {{参照}{参照}},
+  seealso          = {{も参照}{も参照}},
+  backrefpage      = {{引用頁}{引用p\adddot}},
+  backrefpages     = {{引用頁}{引用pp\adddot}},
+  january          = {{1月}{1月}},
+  february         = {{2月}{2月}},
+  march            = {{3月}{3月}},
+  april            = {{4月}{4月}},
+  may              = {{5月}{5月}},
+  june             = {{6月}{6月}},
+  july             = {{7月}{7月}},
+  august           = {{8月}{8月}},
+  september        = {{9月}{9月}},
+  october          = {{10月}{10月}},
+  november         = {{11月}{11月}},
+  december         = {{12月}{12月}},
+  langamerican     = {{アメリカ英語}{アメリカ英語}},
+  langbasque       = {{バスク語}{バスク語}},
+  langbrazilian    = {{ブラジル語}{ブラジル語}},
+  langbulgarian    = {{ブルガリア語}{ブルガリア語}},
+  langcatalan      = {{カタロニア語}{カタロニア語}},
+  langcroatian     = {{クロアチア語}{クロアチア語}},
+  langczech        = {{チェコ語}{チェコ語}},
+  langdanish       = {{デンマーク語}{デンマーク語}},
+  langdutch        = {{オランダ語}{オランダ語}},
+  langenglish      = {{英語}{英語}},
+  langestonian     = {{エストニア語}{エストニア語}},
+  langfinnish      = {{フィンランド語}{フィンランド語}},
+  langfrench       = {{フランス語}{フランス語}},
+  langgalician     = {{ガリシア語}{ガリシア語}},
+  langgerman       = {{ドイツ語}{ドイツ語}},
+  langgreek        = {{ギリシャ語}{ギリシャ語}},
+  langhungarian    = {{ハンガリー語}{ハンガリー語}},
+  langitalian      = {{イタリア語}{イタリア語}},
+  langjapanese     = {{日本語}{日本語}},
+  langlatin        = {{ラテン語}{ラテン語}},
+  langlatvian      = {{ラトビア語}{ラトビア語}},
+  langlithuanian   = {{リトアニア語}{リトアニア語}},
+  langmarathi      = {{マラーティー語}{マラーティー語}},
+  langnorwegian    = {{ノルウェー語}{ノルウェー語}},
+  langpolish       = {{ポーランド語}{ポーランド語}},
+  langportuguese   = {{ポルトガル語}{ポルトガル語}},
+  langromanian     = {{ルーマニア語}{ルーマニア語}},
+  langrussian      = {{ロシア語}{ロシア語}},
+  langserbian      = {{セルビア語}{セルビア語}},
+  langslovak       = {{スロバキア語}{スロバキア語}},
+  langslovene      = {{スロベニア語}{スロベニア語}},
+  langspanish      = {{スペイン語}{スペイン語}},
+  langswedish      = {{スウェーデン語}{スウェーデン語}},
+  langturkish      = {{トルコ語}{トルコ語}},
+  langukrainian    = {{ウクライナ語}{ウクライナ語}},
+  %langkorean       = {{韓国語}{韓国語}},
+  %langchinese      = {{中国語}{中国語}},
+  fromamerican     = {{アメリカ英語からの翻訳}{アメリカ英語訳}},
+  frombasque       = {{バスク語からの翻訳}{バスク語訳}},
+  frombrazilian    = {{ブラジル語からの翻訳}{ブラジル語訳}},
+  frombulgarian    = {{ブルガリア語からの翻訳}{ブルガリア語訳}},
+  fromcatalan      = {{カタロニア語からの翻訳}{カタロニア語訳}},
+  fromcroatian     = {{クロアチア語からの翻訳}{クロアチア語訳}},
+  fromczech        = {{チェコ語からの翻訳}{チェコ語訳}},
+  fromdanish       = {{デンマーク語からの翻訳}{デンマーク語訳}},
+  fromdutch        = {{オランダ語からの翻訳}{オランダ語訳}},
+  fromenglish      = {{英語からの翻訳}{英語訳}},
+  fromestonian     = {{エストニア語からの翻訳}{エストニア語訳}},
+  fromfinnish      = {{フィンランド語からの翻訳}{フィンランド語訳}},
+  fromfrench       = {{フランス語からの翻訳}{フランス語訳}},
+  fromgalician     = {{ガリシア語からの翻訳}{ガリシア語訳}},
+  fromgerman       = {{ドイツ語からの翻訳}{ドイツ語訳}},
+  fromgreek        = {{ギリシャ語からの翻訳}{ギリシャ語訳}},
+  fromhungarian    = {{ハンガリー語からの翻訳}{ハンガリー語訳}},
+  fromitalian      = {{イタリア語からの翻訳}{イタリア語訳}},
+  fromjapanese     = {{日本語からの翻訳}{日本語訳}},
+  fromlatin        = {{ラテン語からの翻訳}{ラテン語訳}},
+  fromlatvian      = {{ラトビア語からの翻訳}{ラトビア語訳}},
+  fromlithuanian   = {{リトアニア語からの翻訳}{リトアニア語訳}},
+  frommarathi      = {{マラーティー語からの翻訳}{マラーティー語訳}},
+  fromnorwegian    = {{ノルウェー語からの翻訳}{ノルウェー語訳}},
+  frompolish       = {{ポーランド語からの翻訳}{ポーランド語訳}},
+  fromportuguese   = {{ポルトガル語からの翻訳}{ポルトガル語訳}},
+  fromromanian     = {{ルーマニア語からの翻訳}{ルーマニア語訳}},
+  fromrussian      = {{ロシア語からの翻訳}{ロシア語訳}},
+  fromserbian      = {{セルビア語からの翻訳}{セルビア語訳}},
+  fromslovak       = {{スロバキア語からの翻訳}{スロバキア語訳}},
+  fromslovene      = {{スロベニア語からの翻訳}{スロベニア語訳}},
+  fromspanish      = {{スペイン語からの翻訳}{スペイン語訳}},
+  fromswedish      = {{スウェーデン語からの翻訳}{スウェーデン語訳}},
+  fromturkish      = {{トルコ語からの翻訳}{トルコ語訳}},
+  fromukrainian    = {{ウクライナ語からの翻訳}{ウクライナ語訳}},
+  %fromkorean       = {{韓国語からの翻訳}{韓国語訳}},
+  %fromchinese      = {{中国語からの翻訳}{中国語訳}},
+  countryde        = {{ドイツ}{DE}},
+  countryep        = {{欧州特許庁}{EP}},
+  countryeu        = {{欧州連合}{EU}},
+  countryfr        = {{フランス}{FR}},
+  countryuk        = {{イギリス}{GB}},
+  countryus        = {{アメリカ合衆国}{US}},
+  %countryjp        = {{日本}{JP}},
+  patent           = {{特許}{特許}},
+  patentde         = {{ドイツ特許}{ドイツ特許}},
+  patenteu         = {{欧州特許}{欧州特許}},
+  patentfr         = {{フランス特許}{フランス特許}},
+  patentuk         = {{英国特許}{英国特許}},
+  patentus         = {{米国特許}{米国特許}},
+  %patentjp         = {{日本国特許}{日本特許}},
+  patreq           = {{特許出願}{特許出願}},
+  patreqde         = {{ドイツ特許出願}{ドイツ特許出願}},
+  patreqeu         = {{欧州特許出願}{欧州特許出願}},
+  patreqfr         = {{フランス特許出願}{フランス特許出願}},
+  patrequk         = {{英国特許出願}{英国特許出願}},
+  patrequs         = {{米国特許出願}{米国特許出願}},
+  %patreqjp         = {{日本国特許出願}{日本特許出願}},
+  file             = {{ファイル}{ファイル}},
+  library          = {{図書館}{図書館}},
+  abstract         = {{要旨}{要旨}},
+  annotation       = {{注記}{注記}},
+  commonera        = {{西暦}{CE}},
+  beforecommonera  = {{紀元前}{BCE}},
+  annodomini       = {{西暦}{AD}},
+  beforechrist     = {{紀元前}{BC}},
+  circa            = {{頃}{頃}},
+  spring           = {{春}{春}},
+  summer           = {{夏}{夏}},
+  autumn           = {{秋}{秋}},
+  winter           = {{冬}{冬}},
+  springN          = {{春（北半球）}{春（北半球）}},
+  summerN          = {{夏（北半球）}{夏（北半球）}},
+  autumnN          = {{秋（北半球）}{秋（北半球）}},
+  winterN          = {{冬（北半球）}{冬（北半球）}},
+  springS          = {{春（南半球）}{春（南半球）}},
+  summerS          = {{夏（南半球）}{夏（南半球）}},
+  autumnS          = {{秋（南半球）}{秋（南半球）}},
+  winterS          = {{冬（南半球）}{冬（南半球）}},
+  Q1               = {{第1四半期}{Q1}},
+  Q2               = {{第2四半期}{Q2}},
+  Q3               = {{第3四半期}{Q3}},
+  Q4               = {{第4四半期}{Q4}},
+  QD1              = {{第1四期}{QD1}},
+  QD2              = {{第2四期}{QD2}},
+  QD3              = {{第3四期}{QD3}},
+  S1               = {{前期}{S1}},
+  S2               = {{後期}{S2}},
+  am               = {{午前}{午前}},
+  pm               = {{午後}{午後}},
+}
+
+\protected\gdef\lbx@us@mkdaterangetrunc@long#1#2{%
+  \blx@if@printanytimes{#2}
+    {\mkdaterangefull{#1}{#2}}
+    {\lbx@us@mkdaterangetrunc@long@i{#1}{#2}}}
+
+\protected\gdef\lbx@us@mkdaterangetrunc@long@i#1#2{%
+  \begingroup
+    \blx@metadateinfo{#2}%
+    \iffieldundef{#2year}
+      {\blx@nounit}
+      {\printtext[{#2date}]{%
+         \datecircaprint
+         \iffieldundef{#2yeardivision}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+             {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}%
+              \dateeraprint{#2year}}}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibyeardivisiondate#1}{}{#2yeardivision}}
+             {\csuse{mkbibyeardivisiondate#1}{#2year}{#2yeardivision}%
+              \dateeraprint{#2year}}}%
+         \dateuncertainprint
+         \iffieldundef{#2endyear}
+           {}
+           {\iffieldequalstr{#2endyear}{}
+             {\mbox{\bibdaterangesep}}
+             {\bibdaterangesep
+              \enddatecircaprint
+              \iffieldundef{#2endyeardivision}
+                {\ifdateyearsequal{#2}{#2end}
+                  {\iffieldsequal{#2month}{#2endmonth}
+                    {\csuse{mkbibdate#1}{#2endyear}{}{#2endday}}
+                    {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}
+                  {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}
+                {\csuse{mkbibyeardivisiondate#1}{#2endyear}{#2endyeardivision}}%
+              \enddateuncertainprint
+              \dateeraprint{#2endyear}}}}}%
+  \endgroup}
+
+\protected\gdef\lbx@us@mkdaterangetrunc@short#1#2{%
+  \blx@if@printanytimes{#2}
+    {\mkdaterangefull{#1}{#2}}
+    {\lbx@us@mkdaterangetrunc@short@i{#1}{#2}}}
+
+\protected\gdef\lbx@us@mkdaterangetrunc@short@i#1#2{%
+  \begingroup
+    \blx@metadateinfo{#2}%
+    \iffieldundef{#2year}
+      {\blx@nounit}
+      {\printtext[{#2date}]{%
+         \datecircaprint
+         \iffieldundef{#2yeardivision}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+             {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}%
+              \dateeraprint{#2year}}}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibyeardivisiondate#1}{}{#2yeardivision}}
+             {\csuse{mkbibyeardivisiondate#1}{#2year}{#2yeardivision}%
+              \dateeraprint{#2year}}}%
+         \dateuncertainprint
+         \iffieldundef{#2endyear}
+           {}
+           {\iffieldequalstr{#2endyear}{}
+              {\mbox{\bibdaterangesep}}
+              {\bibdaterangesep
+               \enddatecircaprint
+               \iffieldundef{#2endyeardivision}
+                 {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}
+                 {\csuse{mkbibyeardivisiondate#1}{#2endyear}{#2endyeardivision}}%
+               \enddateuncertainprint
+               \dateeraprint{#2endyear}}}}}%
+  \endgroup}
+
+\protected\gdef\lbx@us@mkdaterangetruncextra@long#1#2{%
+  \blx@if@printanytimes{#2}
+    {\mkdaterangefullextra{#1}{#2}}
+    {\lbx@us@mkdaterangetruncextra@long@i{#1}{#2}}}
+
+\protected\gdef\lbx@us@mkdaterangetruncextra@long@i#1#2{%
+  \begingroup
+    \blx@metadateinfo{#2}%
+    \iffieldundef{#2year}
+      {\blx@nounit}
+      {\printtext[{#2date}]{%
+         \datecircaprint
+         \iffieldundef{#2yeardivision}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+             {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}%
+              \dateeraprint{#2year}}}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibyeardivisiondate#1}{}{#2yeardivision}}
+             {\csuse{mkbibyeardivisiondate#1}{#2year}{#2yeardivision}%
+              \dateeraprint{#2year}}}%
+         \dateuncertainprint
+         \iffieldundef{#2endyear}
+           {\printfield{extradate}}
+           {\iffieldequalstr{#2endyear}{}
+              {\printfield{extradate}%
+               \mbox{\bibdaterangesep}}
+              {\bibdaterangesep
+               \enddatecircaprint
+               \iffieldundef{#2endyeardivision}
+                 {\ifdateyearsequal{#2}{#2end}
+                   {\iffieldsequal{#2month}{#2endmonth}
+                      {\csuse{mkbibdate#1}{#2endyear}{}{#2endday}}
+                      {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}
+                   {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}}
+                 {\csuse{mkbibyeardivisiondate#1}{#2endyear}{#2endyeardivision}}%
+               \printfield{extradate}%
+               \enddateuncertainprint
+               \dateeraprint{#2endyear}}}}}%
+  \endgroup}
+
+\protected\gdef\lbx@us@mkdaterangetruncextra@short#1#2{%
+  \blx@if@printanytimes{#2}
+    {\mkdaterangefullextra{#1}{#2}}
+    {\lbx@us@mkdaterangetruncextra@short@i{#1}{#2}}}
+
+\protected\gdef\lbx@us@mkdaterangetruncextra@short@i#1#2{%
+  \begingroup
+    \blx@metadateinfo{#2}%
+    \iffieldundef{#2year}
+      {\blx@nounit}
+      {\printtext[{#2date}]{%
+         \datecircaprint
+         \iffieldundef{#2yeardivision}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibdate#1}{}{#2month}{#2day}}
+             {\csuse{mkbibdate#1}{#2year}{#2month}{#2day}%
+              \dateeraprint{#2year}}}
+           {\ifdateyearsequal{#2}{#2end}
+             {\csuse{mkbibyeardivisiondate#1}{}{#2yeardivision}}
+             {\csuse{mkbibyeardivisiondate#1}{#2year}{#2yeardivision}%
+              \dateeraprint{#2year}}}%
+         \dateuncertainprint
+         \iffieldundef{#2endyear}
+           {\printfield{extradate}}
+           {\iffieldequalstr{#2endyear}{}
+              {\printfield{extradate}%
+            \mbox{\bibdaterangesep}}
+           {\bibdaterangesep
+            \enddatecircaprint
+            \iffieldundef{#2endyeardivision}
+              {\csuse{mkbibdate#1}{#2endyear}{#2endmonth}{#2endday}}
+              {\csuse{mkbibyeardivisiondate#1}{#2endyear}{#2endyeardivision}}%
+            \printfield{extradate}%
+            \enddateuncertainprint
+            \dateeraprint{#2endyear}}}}}%
+  \endgroup}
+
+\endinput
