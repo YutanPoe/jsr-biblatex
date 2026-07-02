@@ -196,8 +196,8 @@ citetracker=true,
 
 %% 変更：すなおにそのまま
 \DeclareFieldFormat{pages}{\mkcomprange{#1}}%
-\DeclareFieldFormat{url}{\url{#1}}%
-\DeclareFieldFormat{doi}{\url{https://doi.org/#1}}%
+\DeclareFieldFormat{url}{\texttt{\url{#1}}}%
+\DeclareFieldFormat{doi}{\texttt{\url{https://doi.org/#1}}}%
 \DeclareFieldFormat{version}{#1}%
 \DeclareFieldFormat{title}{#1}%
 \DeclareFieldFormat{subtitle}{#1}%
