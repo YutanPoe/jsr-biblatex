@@ -9,6 +9,9 @@
 % フォーマットコマンドなどの作成
 % ------------------------------------------------------------------
 
+% Declare the language mapping suffix
+%\DeclareLanguageMappingSuffix{-jsr}
+
 %%% ソート順番の定義
 \DeclareSortingTemplate{nymdt}{%
   \sort{%
@@ -434,7 +437,7 @@ citetracker=true,
     %\usebibmacro{ed-eds:editor}%
     \usebibmacro{#1}%
     \setunit{\printdelim{titledelim}}}%
-  \usebibmacro{bbx:byeditorx}}%
+  \usebibmacro{bbx:byeditorx}{#1}}%
 
 \newbibmacro*{bbx:byeditorx}[1]{%
   \ifnameundef{editora}{}%
@@ -518,8 +521,8 @@ citetracker=true,
      \usebibmacro{#1}%
      \clearname{translator}%
      \setunit{\printdelim{nameyeardelim}}}%
-    %
-  \usebibmacro{date+extradate}}
+    %\usebibmacro{date+extradate}
+  }%
 
 %%% 翻訳者のタイプ %%%
 %\newbibmacro*{translatortype}%
@@ -779,8 +782,7 @@ citetracker=true,
   % 編集者名
   \usebibmacro{byeditor}%
   % 共著者名
-  \ifnameundef{bookauthor}{}%
-    {\printnames{bookauthor}}%
+  \usebibmacro{bybookauthor}%%
   % 編書・共著誌名
   \usebibmacro{title}{jedkakko}{book}%
   %\setunit{\printdelim{titledelim}}%
