@@ -25,24 +25,4 @@
   %% URL取得日（bbxのurldateフィールドフォーマットから\bibstring{urlseen}で参照）
   urlseen          = {{取得}{取得}},
 }
-\DeclareBibliographyExtras{%
-
-  \savecommand\newunitpunct%
-  \savecommand\finentrypunct%
-  \savecommand\bibnamedelimd%
-  \savecommand\subtitlepunct%
-  \renewcommand*{\newunitpunct}{\unspace{，}}%
-  \renewcommand*{\subtitlepunct}{------}%
-  \renewcommand*{\finentrypunct}{\unspace{．}}%
-  \renewcommand*{\bibnamedelimd}{\unspace}%
-}
-
-\UndeclareBibliographyExtras{%
-  \restorecommand\newunitpunct%
-  \restorecommand\subtitlepunct%
-  \restorecommand\finentrypunct%
-  \restorecommand\bibnamedelimd%
-}%
-
-
 \endinput%

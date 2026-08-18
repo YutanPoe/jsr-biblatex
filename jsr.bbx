@@ -10,7 +10,7 @@
 % ------------------------------------------------------------------
 
 % Declare the language mapping suffix
-%\DeclareLanguageMappingSuffix{-jsr}
+\DeclareLanguageMappingSuffix{-jsr}
 
 %%% ソート順番の定義
 \DeclareSortingTemplate{nymdt}{%
@@ -51,7 +51,7 @@
 %%% オプションの設定
 \ExecuteBibliographyOptions{%
 autocite=inline,%
-date=iso,%
+%date=comp,%
 maxbibnames=99,%
 minbibnames=19,%
 mincrossrefs=999,%
@@ -203,8 +203,7 @@ citetracker=true,
 \DeclareFieldFormat{jedkakko}%
   {\ifthenelse{\boolean{CJK}}{『#1』}{\emph{#1}}}%
 % かっこ
-\DeclareFieldFormat{jekakko}%
-  {\ifthenelse{\boolean{CJK}}{\foreigntextquote{japanese}{#1}}{\mkbibquote{#1}}}%
+\DeclareFieldFormat{jekakko}{\mkbibquote{#1}}%
 % URL取得日
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{CJK}}%
@@ -212,6 +211,8 @@ citetracker=true,
     {\mkbibdatelong{urlyear}{urlmonth}{urlday}取得}%
     {Retrieved\space\mkbibdatelong{urlyear}{urlmonth}{urlday}}%
   }%
+
+\DeclareFieldFormat[article]{date}{\mkbibdatelong{year}{month}{day}}%
 
 %% 変更：すなおにそのまま
 \DeclareFieldFormat{pages}{\mkcomprange{#1}}%
@@ -642,28 +643,35 @@ citetracker=true,
   }{%
     \printfield{volume}\printfield[parens]{number}%
   }%
-  \setunit{\addcolon\space}%
 }%
 
-\newbibmacro*{pages}%
-  {\iffieldundef{pages}{}%
-    {\iffieldequalstr{type}{newspaper}%
-      {\setunit{\unspace}%
+\newbibmacro*{pages}{%
+  \iffieldundef{pages}{}{%
+    \iffieldequalstr{type}{newspaper}{%
+      \setunit{\unspace}%
       \printfield{issue}%
       \newunit%
       \printfield{version}%
       \newunit%
-      \printtext{\printfield{pages}面}}%
-      {\printfield{pages}\newunit}}}%
+      \printtext{\printfield{pages}面}%
+    }{%
+      \printfield{pages}%
+      \newunit%
+    }
+  }
+}%
 
 %% 巻数・引用ページ表示マクロ %%%
 \newbibmacro*{vol+pages}{%
-  \iffieldundef{howpublished}%
-    {\usebibmacro{volume+issues}\usebibmacro{pages}}%
-    {\printtext{\ifthenelse{\boolean{CJK}}%
+  \iffieldundef{howpublished}{%
+    \usebibmacro{volume+issues}%
+    \setunit{\addcolon\space}%
+    \usebibmacro{pages}%
+  }{%
+    \printtext{\ifthenelse{\boolean{CJK}}%
       {\addspace}%
       {\adddot}%
-    Advance online publication%
+    \printfield{howpublished}%
     }%
   }%
 }%
@@ -760,7 +768,8 @@ citetracker=true,
   %\iflistundef{publisher}{}%
   \printlist{publisher}%
   \setunit*{\printdelim{jecomma}}%
-  \usebibmacro{yyyymmdd}%
+  %\usebibmacro{yyyymmdd}%
+  \iffieldundef{type}{}{\printdate\newunit}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
   % doi,url,database
@@ -982,14 +991,13 @@ citetracker=true,
   \newunit%
   % 刊行年
   \usebibmacro{date+extradate}%
-  \newunit%
   % 表題
   \usebibmacro{title}{jedkakko}{}%
   % 研究のタイプ（科研費の課題番号など）
-  \iffieldundef{type}{}{\printfield{type}\newunit}%
+  \printfield{type}
+  \newunit%
   % 巻号
-  \iffieldundef{volume}{}{\printfield{volume}}%
-  \iffieldundef{number}{}{\printfield[parens]{number}\addcolon\space}%
+  \usebibmacro{volume+issues}%
   % 出版社
   \iflistundef{institution}{}{%
     \printlist{institution}%
