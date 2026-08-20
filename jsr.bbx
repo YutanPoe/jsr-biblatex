@@ -86,14 +86,15 @@ citetracker=true,
 \newboolean{CJK}%
 \setboolean{CJK}{false}%
 
-\newbibmacro*{checkCJK}{%
+\newbibmacro*{checkLang}{%CJKの判断と、langidがない場合はとりあえずamericanにする処理
   \ifboolexpr{%
     test {\iffieldequalstr{langid}{japanese}}
     or
     test {\iffieldequalstr{langid}{chinese}}
     or
     test {\iffieldequalstr{langid}{korean}}
-  }{\setboolean{CJK}{true}}{\setboolean{CJK}{false}}}%
+  }{\setboolean{CJK}{true}}{\setboolean{CJK}{false}}%
+  \iffieldundef{langid}{\selectlanguage{american}}{}}%
 
 %%% 氏名反転用変数 %%%
 % Offにすると名前-名字の順になる。日本語は常に名字-名前になっているので関係なし。
@@ -110,8 +111,7 @@ citetracker=true,
   %\iffieldequalstr{langid}{japanese}
     %{\setboolean{japanese}{true}\selectlanguage{japanese}}%
     %{\setboolean{japanese}{false}%
-  \usebibmacro{checkCJK}%
-  \iffieldundef{langid}{\selectlanguage{american}}{}
+  \usebibmacro{checkLang}%
   % 氏名反転をOnに
   \setboolean{reversenamebool}{true}%
 }%
@@ -130,7 +130,7 @@ citetracker=true,
 \renewcommand*{\newunitpunct}%基本の区切り文字
   {\ifthenelse{\boolean{CJK}}{\unspace{，}}{\addcomma\space}}%
 \renewcommand*{\labelnamepunct}{\addperiod\space}%
-%\newcommand*{\jecomma}%基本の区切り文字（setunit用）
+%\newcommand*{\fhcomma}%基本の区切り文字（setunit用）
 %  {\ifthenelse{\boolean{CJK}}{\unspace{，}}{\addcomma\space}}%
 \renewcommand*{\subtitlepunct}%
   {\ifthenelse{\boolean{CJK}}%
@@ -147,13 +147,13 @@ citetracker=true,
 
 %% デリム定義変更
 % 基本の区切り文字
-\DeclareDelimFormat{jecomma}%
+\DeclareDelimFormat{fhcomma}%
   {\ifthenelse{\boolean{CJK}}{\unspace{，}}{\addcomma\space}}%
-\DeclareDelimFormat{jecolon}{\ifthenelse{\boolean{CJK}}{\unspace{：}}{\addcolon\space}}%
-\DeclareDelimFormat{jesemicolon}{\ifthenelse{\boolean{CJK}}{\unspace{；}}{\addsemicolon\space}}%
+\DeclareDelimFormat{fhcolon}{\ifthenelse{\boolean{CJK}}{\unspace{：}}{\addcolon\space}}%
+\DeclareDelimFormat{fhsemicolon}{\ifthenelse{\boolean{CJK}}{\unspace{；}}{\addsemicolon\space}}%
 % 名前とXXフィールド
-\DeclareDelimAlias[bib,biblist]{nameyeardelim}{jecomma}%
-\DeclareDelimAlias[bib,biblist]{datetitledelim}{jecomma}%
+\DeclareDelimAlias[bib,biblist]{nameyeardelim}{fhcomma}%
+\DeclareDelimAlias[bib,biblist]{datetitledelim}{fhcomma}%
 % 名前とタイプ
 \DeclareDelimFormat{authortypedelim}%
   {\ifthenelse{\boolean{CJK}}{\unspace}{\addspace}}%
@@ -184,26 +184,29 @@ citetracker=true,
 \DeclareDelimFormat{relatedpunct}%
   {\ifthenelse{\boolean{CJK}}{\unspace}{\addspace}}%
 % おわりのデリム（後で削除する可能性あり）
-  \DeclareDelimFormat{findelim}%
+\DeclareDelimFormat{findelim}%
   {\ifthenelse{\boolean{CJK}}{\unspace{．}}{\addperiod}}%
 % ダブルクォーテーション内部にコンマを挿入するための
 \DeclareQuotePunctuation{,}%
 \DefineBibliographyExtras{english}{%langidがenglishでもブルクォーテーション内部にコンマを挿入する
-  \uspunctuation
+  \uspunctuation%
 }
 %%% フィールドの定義
 %% 追加
 % 全角かっこ包み込み
-%\DeclareFieldFormat{jpparens}{\unspace{（}\unspace#1\unspace{）}\unspace}%
-\DeclareFieldFormat{jpparens}{\mkbibjpparens{#1}}%
+%\DeclareFieldFormat{fparens}{\unspace{（}\unspace#1\unspace{）}\unspace}%
+\DeclareFieldFormat{fparens}{\mkbibfparens{#1}}%
 % 全角or半角かっこ包み込み
-\DeclareFieldFormat{jeparens}%
-  {\ifthenelse{\boolean{CJK}}{\mkbibjpparens{#1}}{\mkbibparens{#1}}}%
-% 二重かっこ（booktitle）
-\DeclareFieldFormat{jedkakko}%
+\DeclareFieldFormat{fhparens}%
+  {\ifthenelse{\boolean{CJK}}{\mkbibfparens{#1}}{\mkbibparens{#1}}}%
+% 全角かっこ包み込み/なし 再録処理専用
+\DeclareFieldFormat{fnparens}%
+  {\ifthenelse{\boolean{CJK}}{\mkbibfparens{#1}}{#1}}%
+% 二重かぎかっこ（booktitle）
+\DeclareFieldFormat{fhdkakko}%
   {\ifthenelse{\boolean{CJK}}{『#1』}{\emph{#1}}}%
-% かっこ
-\DeclareFieldFormat{jekakko}{\mkbibquote{#1}}%
+% かぎかっこ
+\DeclareFieldFormat{fhkakko}{\mkbibquote{#1}}%
 % URL取得日
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{CJK}}%
@@ -327,11 +330,11 @@ citetracker=true,
 \renewbibmacro{in:}{}%
 
 %%% vol, volsを削除
-\DefineBibliographyStrings{english}{volume={}}%
-\DefineBibliographyStrings{english}{volumes={}}%
+%\DefineBibliographyStrings{english}{volume={}}%
+%\DefineBibliographyStrings{english}{volumes={}}%
 
 %%% 翻訳の際に表示される trans. ofを削除
-\DefineBibliographyStrings{english}{translationof={}}%
+%\DefineBibliographyStrings{english}{translationof={}}%
 
 
 %%%%%%% 文献情報フォーマット・マクロ %%%%%%%
@@ -597,7 +600,7 @@ citetracker=true,
 %%% 電子書籍の原著情報 %%%
 \newbibmacro*{eprintbook}{%
   \iffieldundef{note}{}{%
-    \printtext[jeparens]{%
+    \printtext[fhparens]{%
       \printfield{note}%
     }%
     \newunit%
@@ -608,7 +611,7 @@ citetracker=true,
 % 表示マクロ
 \newbibmacro*{urldate+eprint/doi/url}{%
   \iffieldundef{urlyear}{}{%
-    \printtext[jeparens]{%
+    \printtext[fhparens]{%
       \printtext{\printurldate}%
       \newunit%
       \usebibmacro{eprint/doi/url}%
@@ -680,14 +683,14 @@ citetracker=true,
 \newbibmacro*{volume:book}%
   {\iffieldundef{volume}{}%
     {\ifthenelse{\boolean{CJK}}%
-      {\unspace\printtext[jpparens]{\strfield{volume}}}%
+      {\unspace\printtext[fparens]{\strfield{volume}}}%
       {\addspace\printtext[parens]{\strfield{volume}}}}}%
 
 %%% 書籍の Vol. の処理（複数冊）%%%
 \newbibmacro*{volumes}%
   {\iffieldundef{volumes}{}%
     {\ifthenelse{\boolean{CJK}}%
-      {\unspace\printtext[jpparens]{\strfield{volumes}}}%
+      {\unspace\printtext[fparens]{\strfield{volumes}}}%
       {\addspace\printtext[parens]{\strfield{volumes}}}}}%
 
 %%% 新聞 %%%
@@ -738,7 +741,7 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
   % 表題
-  \usebibmacro{title}{jedkakko}{}%
+  \usebibmacro{title}{fhdkakko}{}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}%
   % 版数
@@ -761,13 +764,13 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
   % 表題
-  \usebibmacro{title}{jekakko}{}%
+  \usebibmacro{title}{fhkakko}{}%
   % 誌名
-  \usebibmacro{title}{jedkakko}{journal}%
+  \usebibmacro{title}{fhdkakko}{journal}%
   % 出版社
   %\iflistundef{publisher}{}%
   \printlist{publisher}%
-  \setunit*{\printdelim{jecomma}}%
+  \setunit*{\printdelim{fhcomma}}%
   %\usebibmacro{yyyymmdd}%
   \iffieldundef{type}{}{\printdate\newunit}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
@@ -787,13 +790,13 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{jekakko}{}%
+  \usebibmacro{title}{fhkakko}{}%
   % 編集者名
   \usebibmacro{byeditor}%
   % 共著者名
   \usebibmacro{bybookauthor}%%
   % 編書・共著誌名
-  \usebibmacro{title}{jedkakko}{book}%
+  \usebibmacro{title}{fhdkakko}{book}%
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}%
@@ -803,7 +806,7 @@ citetracker=true,
     \setunit*{\addcolon\space}}%
   % 出版社
   \printlist{publisher}%
-  \setunit*{\printdelim{jecomma}}%
+  \setunit*{\printdelim{fhcomma}}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
   \printdelim{findelim}%
@@ -814,9 +817,8 @@ citetracker=true,
 %%% 翻訳書（日本語訳）%%%
 \newbibmacro*{translationof:japanese}{%
   \usebibmacro{related:init}%
-  \setboolean{CJK}{false}%
   \entrydata*{\thefield{related}}{%
-    \iffieldundef{langid}{\selectlanguage{american}}{}%
+    \usebibmacro{checkLang}%
     \iffieldundef{journaltitle}%
       {\iffieldundef{booktitle}%
         {\usebibmacro{book}}%
@@ -824,32 +826,17 @@ citetracker=true,
       {\usebibmacro{article}}}%
   \setunit*{\printdelim{relatedpunct}}%
   \setboolean{reversenamebool}{false} % 先頭の引用が終了したのでfalseに
-  \setboolean{CJK}{true}%
-  \selectlanguage{japanese}%
+  \usebibmacro{checkLang}%
   \iffieldundef{journaltitle}%
     {\iffieldundef{booktitle}%
-      {\printtext[jpparens]{\usebibmacro{book}}}%
-      {\printtext[jpparens]{\usebibmacro{inbook}}}}%
-    {\printtext[jpparens]{\usebibmacro{article}}}%
+      {\printtext[fhparens]{\usebibmacro{book}}}%
+      {\printtext[fhparens]{\usebibmacro{inbook}}}}%
+    {\printtext[fhparens]{\usebibmacro{article}}}%
 }%
 
-%%% 翻訳書（英語訳）%%%
+%%% 翻訳書（英語訳） -> 日本語と同じ処理%%%
 \newbibmacro*{translationof:english}{%
-  \usebibmacro{related:init}%
-  \setboolean{CJK}{false}%
-  \entrydata*{\thefield{related}}{%
-    \iffieldundef{journaltitle}%
-      {\iffieldundef{booktitle}%
-        {\usebibmacro{book}}%
-        {\usebibmacro{inbook}}}%
-      {\usebibmacro{article}}}%
-  \setunit*{\printdelim{relatedpunct}}%
-  \setboolean{reversenamebool}{false}%
-  \iffieldundef{journaltitle}%
-  {\iffieldundef{booktitle}%
-    {\printtext[parens]{\usebibmacro{book}}}%
-    {\printtext[parens]{\usebibmacro{inbook}}}}%
-  {\printtext[parens]{\usebibmacro{article}}}%
+  \usebibmacro{translationof:japanese}%
 }%
 
 %%% シリーズ（日本語書籍）%%%
@@ -859,7 +846,7 @@ citetracker=true,
     {\usebibmacro{author/editor}}%
   \usebibmacro{author/editor}%
   \usebibmacro{date+extradate}%
-  \printtext[jedkakko]%
+  \printtext[fhdkakko]%
     {\entrydata*{\thefield{related}}%
     {\printfield{series}}%
     \setunit{\addspace}%
@@ -900,9 +887,9 @@ citetracker=true,
     {\usebibmacro{article}}}%
 \setunit*{\printdelim{relatedpunct}}%
 \setboolean{relatedbool}{true}%
-\printtext[jpparens]
-  {\printtext{再録}%
-  \setunit*{\printdelim{jecolon}}%
+\printtext[fparens]
+  {\bibstring{reprintin}%
+  \setunit*{\printdelim{fhcolon}}%
   \iffieldundef{journaltitle}%
     {\iffieldundef{booktitle}%
       {\usebibmacro{book}}%
@@ -924,8 +911,8 @@ citetracker=true,
 \setunit*{\printdelim{relatedpunct}}%
 \setboolean{reversenamebool}{false}%
 \setboolean{relatedbool}{true}%
-\printtext{Reprinted in}%
-\setunit*{\printdelim{jecolon}}%
+\bibstring{reprintin}%
+\setunit*{\printdelim{fhcolon}}%
 \iffieldundef{journaltitle}%
   {\iffieldundef{booktitle}%
     {\usebibmacro{book}}%
@@ -992,7 +979,7 @@ citetracker=true,
   % 刊行年
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{jedkakko}{}%
+  \usebibmacro{title}{fhdkakko}{}%
   % 研究のタイプ（科研費の課題番号など）
   \printfield{type}
   \newunit%
@@ -1012,7 +999,7 @@ citetracker=true,
   \usebibmacro{author}%
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{jekakko}{}%
+  \usebibmacro{title}{fhkakko}{}%
   % 大学名修士／博士論文
   \usebibmacro{type+institution}%
   \usebibmacro{finentry}%
@@ -1025,7 +1012,7 @@ citetracker=true,
   \usebibmacro{author}%
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{jekakko}{}%
+  \usebibmacro{title}{fhkakko}{}%
   % 発表形式（英文のみ）
   \iffieldundef{type}{}{%
     \mkbibbrackets{\printfield{type}}%
@@ -1059,7 +1046,7 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
   % 表題
-  \usebibmacro{title}{jekakko}{}%
+  \usebibmacro{title}{fhkakko}{}%
   \newunit%
   % ウェブサイト名（不明な場合は省略）
   \printfield{eprinttype}%
@@ -1079,7 +1066,7 @@ citetracker=true,
   %著者名，刊行年
   \usebibmacro{author/editor}%
   \usebibmacro{date+extradate}%
-  \printtext[jedkakko]{%
+  \printtext[fhdkakko]{%
     \iffieldundef{title}{%
       \printfield{series}%
     }{%
@@ -1098,7 +1085,7 @@ citetracker=true,
   \usebibmacro{editor}%
   \usebibmacro{author}%
   \usebibmacro{date+extradate}%
-  \printtext[jedkakko]{%
+  \printtext[fhdkakko]{%
     \printfield{series}%
     \setunit{\addspace}%
     \iffieldundef{volume}{}{\printfield{volume}}%

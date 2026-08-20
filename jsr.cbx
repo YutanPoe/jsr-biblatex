@@ -16,7 +16,7 @@ sortcites=true,% 引用をymdでソートする
   %\iffieldequalstr{langid}{japanese}
     %{\setboolean{japanese}{true}}
     %{\setboolean{japanese}{false}}%
-  \usebibmacro{checkCJK}%
+  \usebibmacro{checkLang}%
   \global\boolfalse{cbx:warichu}%割注かどうかの判断%
 }%
 
@@ -79,7 +79,7 @@ sortcites=true,% 引用をymdでソートする
 %全角丸かっこ関連
 \newcommand{\jpparenopen}{\unspace（}%全角丸かっこ開き
 \newcommand{\jpparenclose}{\unspace）}%全角丸かっこ閉じ
-\newcommand{\mkbibjpparens}[1]{\unspace{（}#1\unspace{）}}%全角丸かっこ
+\newcommand{\mkbibfparens}[1]{\unspace{（}#1\unspace{）}}%全角丸かっこ
 
 % 複数citesコマンドを並べたときの区切り文字（文書全体で変更）
 \renewcommand*{\textcitedelim}{%
@@ -101,14 +101,6 @@ sortcites=true,% 引用をymdでソートする
     }{\printtext{，}}%
   }%
 }
-
-% relatedフィールドまで遡ったときにlanguageを判断するために
-\newbibmacro*{isJPorEN}%
-  {\iffieldequalstr{langid}{japanese}%
-    {\setboolean{japanese}{true}}%
-    {\setboolean{japanese}{false}}%
-  }%
-
 
 %%==========新しい変数の定義==========
 \newbool{cbx:samename}%
@@ -226,7 +218,7 @@ sortcites=true,% 引用をymdでソートする
       \printnames{labelname}%
     }{%
       \entrydata*{\thefield{related}}{%
-        \usebibmacro{checkCJK}%%
+        \usebibmacro{checkLang}%%
         \usebibmacro{cite:uniquename}%
       }%
     }%
@@ -344,10 +336,10 @@ sortcites=true,% 引用をymdでソートする
 \newbibmacro*{noauthorcite}%
   {\iffieldundef{title}{}%
     {%タイトルを挿入したい場合はコメントアウトを削除する
-      %\usebibmacro{title}{jekakko}{}%
+      %\usebibmacro{title}{fhkakko}{}%
     }%
   % 誌名
-  \usebibmacro{title}{jedkakko}{journal}%
+  \usebibmacro{title}{fhdkakko}{journal}%
   \usebibmacro{yyyymmdd}%
   \usebibmacro{vol+pages}}
 
@@ -424,7 +416,7 @@ sortcites=true,% 引用をymdでソートする
       \printnames{labelname}%
     }{%
       \entrydata*{\thefield{related}}{%
-        \usebibmacro{checkCJK}%%
+        \usebibmacro{checkLang}%%
         \usebibmacro{cite:author}%
       }%
     }%
@@ -432,7 +424,7 @@ sortcites=true,% 引用をymdでソートする
 }%
 %%parenciteのかっこを全角に設定
 %%% \DeclareCiteCommand{〈command〉}[〈wrapper〉]{〈precode〉}{〈loopcode〉}{〈sepcode〉}{〈postcode〉}
-\DeclareCiteCommand{\parencite}[\mkbibjpparens]{%
+\DeclareCiteCommand{\parencite}[\mkbibfparens]{%
   \usebibmacro{cite:init}%
   \usebibmacro{prenote}%
 }{% loopcode
@@ -453,7 +445,7 @@ sortcites=true,% 引用をymdでソートする
   {}
   {\usebibmacro{postnote}}
 
-\DeclareCiteCommand*{\parencite}[\mkbibjpparens]%
+\DeclareCiteCommand*{\parencite}[\mkbibfparens]%
   {%\jpparenopen%
   \usebibmacro{cite:init}%
   \usebibmacro{prenote}}%
@@ -463,6 +455,6 @@ sortcites=true,% 引用をymdでソートする
   {\usebibmacro{postnote}}%
   %\jpparenclose}%
 
-\DeclareMultiCiteCommand{\parencites}[\mkbibjpparens]{\parencite}
+\DeclareMultiCiteCommand{\parencites}[\mkbibfparens]{\parencite}
   {\setunit{\multicitedelim}}
 \endinput

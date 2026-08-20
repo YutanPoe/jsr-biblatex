@@ -4,6 +4,8 @@
 \InheritBibliographyExtras{japanese}
 \InheritBibliographyStrings{japanese}
 
+\NewBibliographyString{reprintin}
+
 \DeclareBibliographyStrings{%
   %% 文献リスト見出し（bbxの\defbibheadingと対応）
   bibliography     = {{文献}{文献}},
@@ -20,8 +22,8 @@
   nodate           = {{n.d.}{n.d.}},
   forthcoming      = {{近刊}{近刊}},
   %% 再録（bbxのreprintof:japaneseマクロから\bibstring{reprintfrom}で参照）
-  %% コロンはjecolonデリムで別途追加するためここには含めない
-  reprintfrom      = {{再録}{再録}},
+  %% コロンはfhcolonデリムで別途追加するためここには含めない
+  reprintin        = {{再録}{再録}},
   %% URL取得日（bbxのurldateフィールドフォーマットから\bibstring{urlseen}で参照）
   urlseen          = {{取得}{取得}},
 }
