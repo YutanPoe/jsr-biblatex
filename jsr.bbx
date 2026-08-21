@@ -194,11 +194,16 @@ citetracker=true,
 %%% フィールドの定義
 %% 追加
 % 全角かっこ包み込み
+% 全角・半角の丸カッコを言語（CJK）に応じて自動で切り替える新規コマンド
+\newrobustcmd*{\mkbibfhparens}[1]{%
+  \ifthenelse{\boolean{CJK}}
+    {\mkbibfparens{#1}}
+    {\mkbibparens{#1}}%
+}
 %\DeclareFieldFormat{fparens}{\unspace{（}\unspace#1\unspace{）}\unspace}%
 \DeclareFieldFormat{fparens}{\mkbibfparens{#1}}%
 % 全角or半角かっこ包み込み
-\DeclareFieldFormat{fhparens}%
-  {\ifthenelse{\boolean{CJK}}{\mkbibfparens{#1}}{\mkbibparens{#1}}}%
+\DeclareFieldFormat{fhparens}{\mkbibfhparens{#1}}
 % 全角かっこ包み込み/なし 再録処理専用
 \DeclareFieldFormat{fnparens}%
   {\ifthenelse{\boolean{CJK}}{\mkbibfparens{#1}}{#1}}%
@@ -216,6 +221,24 @@ citetracker=true,
   }%
 
 \DeclareFieldFormat[article]{date}{\mkbibdatelong{year}{month}{day}}%
+
+
+%%% ==================================================================
+%%% タイプ別の装飾（フォーマット）定義
+%%% ==================================================================
+
+% デフォルト（該当する relatedtype のフォーマットが定義されていない場合）
+\DeclareFieldFormat{related:default}{\mkbibfhparens{#1}}
+
+% 翻訳書（translationof）用：
+\DeclareFieldFormat{related:translationof}{\mkbibfhparens{#1}}
+
+% 再録（reprintof）用：
+\DeclareFieldFormat{related:reprintof}{%
+  \ifthenelse{\boolean{CJK}}
+    {\mkbibfparens{\bibstring{reprintin}\printdelim{fhcolon}#1}}
+    {\bibstring{reprintin}\printdelim{fhcolon}#1}%
+}
 
 %% 変更：すなおにそのまま
 \DeclareFieldFormat{pages}{\mkcomprange{#1}}%
@@ -754,7 +777,7 @@ citetracker=true,
     \setunit*{\addcolon\space}}%
   % 出版社
   \printlist{publisher}%
-  \usebibmacro{finentry}%
+  \printdelim{findelim}%
 }%
 
 %%% 雑誌 %%%
@@ -812,35 +835,49 @@ citetracker=true,
   \printdelim{findelim}%
 }%
 
-%%% 翻訳書（origauthor使用の場合） %%%->削除
 
-%%% 翻訳書（日本語訳）%%%
-\newbibmacro*{translationof:japanese}{%
+
+%%% relatedフィールド出力
+\newbibmacro*{relatedfield}{%
+  \usebibmacro{isrelatedtype}{translationof}%
+  \usebibmacro{isrelatedtype}{mvbook}%
+  \usebibmacro{isrelatedtype}{reprintof}%
+}%
+
+\newbibmacro*{isrelatedtype}[1]{%
+  \iffieldequalstr{relatedtype}{#1}%
+    {\usebibmacro{related:#1}}{}}%
+
+%% relatedフィールドで使用する文献出力マクロ %%
+\newbibmacro*{book/inbook/article}{
+  \iffieldundef{journaltitle}%
+    {\iffieldundef{booktitle}%
+      {\usebibmacro{book}}%
+      {\usebibmacro{inbook}}}%
+    {\usebibmacro{article}}%
+}
+
+%% relatedtypeに該当するものがない場合のdefault。 準備だけで未使用 %%
+\renewbibmacro*{related:default}{%
+  \usebibmacro{related:translationof}}
+
+
+%%% 翻訳書 %%%
+\newbibmacro*{related:translationof}{%
   \usebibmacro{related:init}%
   \entrydata*{\thefield{related}}{%
     \usebibmacro{checkLang}%
-    \iffieldundef{journaltitle}%
-      {\iffieldundef{booktitle}%
-        {\usebibmacro{book}}%
-        {\usebibmacro{inbook}}}%
-      {\usebibmacro{article}}}%
+    \usebibmacro{book/inbook/article}}%
   \setunit*{\printdelim{relatedpunct}}%
-  \setboolean{reversenamebool}{false} % 先頭の引用が終了したのでfalseに
+  \setboolean{reversenamebool}{false}% 先頭の引用が終了したのでfalseに
   \usebibmacro{checkLang}%
-  \iffieldundef{journaltitle}%
-    {\iffieldundef{booktitle}%
-      {\printtext[fhparens]{\usebibmacro{book}}}%
-      {\printtext[fhparens]{\usebibmacro{inbook}}}}%
-    {\printtext[fhparens]{\usebibmacro{article}}}%
+  \printtext[fhparens]{%
+    \usebibmacro{book/inbook/article}%
+  }%
 }%
 
-%%% 翻訳書（英語訳） -> 日本語と同じ処理%%%
-\newbibmacro*{translationof:english}{%
-  \usebibmacro{translationof:japanese}%
-}%
-
-%%% シリーズ（日本語書籍）%%%
-\newbibmacro*{mvbook:japanese}{%
+%%% シリーズ %%%
+\newbibmacro*{related:mvbook}{%
   \usebibmacro{related:init}%
   \entrydata*{\thefield{related}}%
     {\usebibmacro{author/editor}}%
@@ -869,98 +906,56 @@ citetracker=true,
   \usebibmacro{finentry}%
 }%
 
-%%% シリーズ（英語書籍）%%%
-\newbibmacro*{mvbook:english}{%
-  %暫定的に日本語と同じ処理
-  \usebibmacro{mvbook:japanese}%
-}%
-
-%%% 再録（日本語書籍）%%%
-\newbibmacro*{reprintof:japanese}%
-{\usebibmacro{related:init}%
-\setboolean{CJK}{true}%
-\entrydata*{\thefield{related}}%
-  {\iffieldundef{journaltitle}%
-    {\iffieldundef{booktitle}%
-      {\usebibmacro{book}}%
-      {\usebibmacro{inbook}}}%
-    {\usebibmacro{article}}}%
-\setunit*{\printdelim{relatedpunct}}%
-\setboolean{relatedbool}{true}%
-\printtext[fparens]
-  {\bibstring{reprintin}%
-  \setunit*{\printdelim{fhcolon}}%
-  \iffieldundef{journaltitle}%
-    {\iffieldundef{booktitle}%
-      {\usebibmacro{book}}%
-      {\usebibmacro{inbook}}}%
-    {\usebibmacro{article}}}%
-\setboolean{relatedbool}{false}%
-}%
-
-%%% 再録（英語書籍）%%%
-\newbibmacro*{reprintof:english}%
-{\usebibmacro{related:init}%
-\setboolean{CJK}{false}%
-\entrydata*{\thefield{related}}%
-  {\iffieldundef{journaltitle}%
-    {\iffieldundef{booktitle}%
-      {\usebibmacro{book}}%
-      {\usebibmacro{inbook}}}%
-    {\usebibmacro{article}}}%
-\setunit*{\printdelim{relatedpunct}}%
-\setboolean{reversenamebool}{false}%
-\setboolean{relatedbool}{true}%
-\bibstring{reprintin}%
-\setunit*{\printdelim{fhcolon}}%
-\iffieldundef{journaltitle}%
-  {\iffieldundef{booktitle}%
-    {\usebibmacro{book}}%
-    {\usebibmacro{inbook}}}%
-  {\usebibmacro{article}}%
-\setboolean{relatedbool}{false}%
+%%% 再録 %%%
+\newbibmacro*{related:reprintof}{%
+  \usebibmacro{related:init}%
+  \entrydata*{\thefield{related}}{%
+    \usebibmacro{checkLang}%
+    \usebibmacro{book/inbook/article}}%
+  \setunit*{\printdelim{relatedpunct}}%
+  \setboolean{reversenamebool}{false}%先頭の引用が終了したのでfalseに
+  \setboolean{relatedbool}{true}%同一著者のことが多いので、samedashにならないように抑制
+  \usebibmacro{checkLang}%
+  \printtext[fnparens]{%
+    \bibstring{reprintin}%
+    \setunit*{\printdelim{fhcolon}}%
+    \usebibmacro{book/inbook/article}}%
+  \setboolean{relatedbool}{false}%
 }%
 
 
 %%%%%% 文献タイプ別書式　%%%%%% 
 
-%%% relatedフィールド出力
-\newbibmacro*{relatedfield}%
-{\usebibmacro{isrelatedtype}{translationof}%
-\usebibmacro{isrelatedtype}{mvbook}%
-\usebibmacro{isrelatedtype}{reprintof}%
-}%
-\newbibmacro*{isrelatedtype}[1]%
-{\iffieldequalstr{relatedtype}{#1}%
-{\ifthenelse{\boolean{CJK}}%
-  {\usebibmacro{#1:japanese}}% 日本語の翻訳書の場合
-  {\usebibmacro{#1:english}}%% 外国語の翻訳書の場合
-}{}}%
-
 %%% 4.2 欧文の文献 4.4 邦文の文献共通
 %% (1-3)単著・共著・編書
-\DeclareBibliographyDriver{book}%
-{\usebibmacro{begentry}%
-\iffieldundef{related}%
-  {\usebibmacro*{book}}%
-  {\usebibmacro{relatedfield}}%
+\DeclareBibliographyDriver{book}{%
+  \usebibmacro{begentry}%
+  \iffieldundef{related}%
+    {\usebibmacro*{book}}%
+    {\usebibmacro{relatedfield}}%
+  \nopunct%
+  %\usebibmacro{finentry}%
 }%
 
 %% (4)編書論文など（共著内の論文を含む）
-\DeclareBibliographyDriver{inbook}%
-{\usebibmacro{begentry}%
-\iffieldundef{related}% relatedフィールドに値なし
-  {\usebibmacro*{inbook}}%
-  {\usebibmacro{relatedfield}}%
+\DeclareBibliographyDriver{inbook}{%
+  \usebibmacro{begentry}%
+  \iffieldundef{related}% relatedフィールドに値なし
+    {\usebibmacro*{inbook}}%
+    {\usebibmacro{relatedfield}}%
+  \nopunct%
+  %\usebibmacro{finentry}%
 }%
 
 %% (5)雑誌論文
-\DeclareBibliographyDriver{article}%
-{\usebibmacro{begentry}%
-\ifnameundef{author}{}% 著者情報がない場合は文献リストに記載しない
-{\iffieldundef{related}% relatedフィールドに値なし
-  {\usebibmacro*{article}}%
-  {\usebibmacro{relatedfield}}}%
+\DeclareBibliographyDriver{article}{%
+  \usebibmacro{begentry}%
+  \ifnameundef{author}{}% 著者情報がない場合は文献リストに記載しない
+  {\iffieldundef{related}% relatedフィールドに値なし
+    {\usebibmacro*{article}}%
+    {\usebibmacro{relatedfield}}}%
+  \nopunct%
+  %\usebibmacro{finentry}%
 }%
 
 %%% 以上の3つで(6)翻訳、(7)初出情報などに対応

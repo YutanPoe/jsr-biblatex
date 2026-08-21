@@ -77,8 +77,8 @@ sortcites=true,% 引用をymdでソートする
 % ================================================================================
 
 %全角丸かっこ関連
-\newcommand{\jpparenopen}{\unspace（}%全角丸かっこ開き
-\newcommand{\jpparenclose}{\unspace）}%全角丸かっこ閉じ
+\newcommand{\fparenopen}{\unspace（}%全角丸かっこ開き
+\newcommand{\fparenclose}{\unspace）}%全角丸かっこ閉じ
 \newcommand{\mkbibfparens}[1]{\unspace{（}#1\unspace{）}}%全角丸かっこ
 
 % 複数citesコマンドを並べたときの区切り文字（文書全体で変更）
@@ -261,7 +261,7 @@ sortcites=true,% 引用をymdでソートする
     \usebibmacro{cite:plabelyear+extradate}%
   }{%引用開始
     \ifbool{cbx:parens}{% parenが開いていれば
-      \jpparenclose% 全角閉じ丸かっこを挿入し
+      \fparenclose% 全角閉じ丸かっこを挿入し
       \global\boolfalse{cbx:parens}% cbx:parensをfalseにする
     }{}%
     \setunit{\textcitedelim}% 複数引用時のデリムの追加
@@ -273,7 +273,7 @@ sortcites=true,% 引用をymdでソートする
     \setunit{%
       \global\booltrue{cbx:parens}% cbx:parensでparenをopenの状態に
       \printdelim{nameyeardelim}% 著者名と出版年の区切り
-      \jpparenopen% 全角開き丸かっこを挿入
+      \fparenopen% 全角開き丸かっこを挿入
     }%「prenote」の処理
     \ifnumequal{\value{citecount}}{1}{%
       \usebibmacro{prenote}%
@@ -293,12 +293,12 @@ sortcites=true,% 引用をymdでソートする
   {\setunit{}%
    \printtext{%
      \ifbool{cbx:parens}%
-       {\jpparenclose%
+       {\fparenclose%
        \global\boolfalse{cbx:parens}}%
        {}}}%
   {\setunit{%
      \ifbool{cbx:parens}%
-       {\jpparenclose%
+       {\fparenclose%
        \global\boolfalse{cbx:parens}}%
        {}%
      \textcitedelim}}}%
@@ -446,14 +446,14 @@ sortcites=true,% 引用をymdでソートする
   {\usebibmacro{postnote}}
 
 \DeclareCiteCommand*{\parencite}[\mkbibfparens]%
-  {%\jpparenopen%
+  {%\fparenopen%
   \usebibmacro{cite:init}%
   \usebibmacro{prenote}}%
   {\usebibmacro{citeindex}%
   \usebibmacro{cite}}%
   {}%
   {\usebibmacro{postnote}}%
-  %\jpparenclose}%
+  %\fparenclose}%
 
 \DeclareMultiCiteCommand{\parencites}[\mkbibfparens]{\parencite}
   {\setunit{\multicitedelim}}
