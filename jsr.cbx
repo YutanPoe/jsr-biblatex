@@ -9,14 +9,12 @@ mincitenames=1,% あたりまえ体操
 uniquelist=minyear,% 発行年が違えば著者名を追跡して曖昧さを判断しない
 uniquename=full,% 同年の同じ名字の著作があった場合、英語はイニシャルを、日本語は名前を表示させる
 sortcites=true,% 引用をymdでソートする
+giveninits=false,% givenをイニシャルにしない
 }
 
 % 引用ごとに言語を判断して処理
 \AtEveryCitekey{%
-  %\iffieldequalstr{langid}{japanese}
-    %{\setboolean{japanese}{true}}
-    %{\setboolean{japanese}{false}}%
-  \usebibmacro{checkLang}%
+  \usebibmacro{checkLang}%言語の判定
   \global\boolfalse{cbx:warichu}%割注かどうかの判断%
 }%
 
@@ -24,9 +22,6 @@ sortcites=true,% 引用をymdでソートする
 % ================================================================================
 % 表現の調整パート
 % ================================================================================
-
-% et alが重複して表示されないようにする
-\DefineBibliographyStrings{english}{andothers={}}
 
 
 % デリムの調整
@@ -39,11 +34,10 @@ sortcites=true,% 引用をymdでソートする
 % parenciteのときとtextciteのときを共通に
 \DeclareDelimFormat[parencite,textcite,citeauthor]{multinamedelim}% 人の著者名の間
   {\ifthenelse{\boolean{CJK}}{\unspace{・}}{\addcomma\space}}%
-\DeclareDelimFormat[parencite,textcite,citeauthor]{finalnamedelim}% 3人以上のときの著者名の間（つかわないと思う）
-  {\ifthenelse{\boolean{CJK}}{\unspace{・}}%
-    {\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
+\DeclareDelimFormat[parencite,textcite,citeauthor]{finalnamedelim}%
+  {\addhnspace\bibstring{and}\addhnspace}%
 \DeclareDelimFormat[parencite,textcite,citeauthor]{andothersdelim}% 3人以上のときの最後の文字
-  {\ifthenelse{\boolean{CJK}}{\unspace{ほか}}{\addspace{et al.}}}%
+  {\addhnspace}%
 
 % textciteのとき（スタイルガイドに明確な定義はなし）
 %\DeclareDelimFormat[textcite,citeauthor]{multinamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
@@ -59,7 +53,7 @@ sortcites=true,% 引用をymdでソートする
 \DeclareFieldFormat{citetitle}{『#1』}% 基本は和英関わらず二重鉤かっこ
 \DeclareFieldFormat% 論文名などは言語ごとに判断
   [article,inbook,incollection,inproceedings,patent,thesis,unpublished]
-  {citetitle}{\ifthenelse{\boolean{CJK}}{\foreigntextquote{japanese}{#1}}{\mkbibquote{#1}}}%
+  {citetitle}{\mkbibquote{#1}}%
 \DeclareFieldFormat
   [suppbook,suppcollection,suppperiodical]
   {citetitle}{#1}% なんかあった、たぶん使わない
@@ -83,14 +77,14 @@ sortcites=true,% 引用をymdでソートする
 
 % 複数citesコマンドを並べたときの区切り文字（文書全体で変更）
 \renewcommand*{\textcitedelim}{%
-  \iftoggle{bbx:engmode}{%
-    \iffinalcitedelim{%
-      \ifnumgreater{\value{textcitetotal}}{2}
-        {\iftextcitepunct{\finalandsemicolon}{\finalandcomma}}{}%
-      \addspace\bibstring{and}}%
-      {\iftextcitepunct{\addsemicolon}{\addcomma}}%
-    \space%
-  }{%
+%  \iftoggle{bbx:engmode}{%
+%    \iffinalcitedelim{%
+%      \ifnumgreater{\value{textcitetotal}}{2}
+%        {\iftextcitepunct{\finalandsemicolon}{\finalandcomma}}{}%
+%      \addspace\bibstring{and}}%
+%      {\iftextcitepunct{\addsemicolon}{\addcomma}}%
+%    \space%
+%  }{%
     \iffinalcitedelim{%
       \ifnumequal{\value{textcitetotal}}{2}{%
         \printtext{と}%
@@ -99,7 +93,7 @@ sortcites=true,% 引用をymdでソートする
         \iffinalcitedelim{\printtext{および}}{}%
       }%
     }{\printtext{，}}%
-  }%
+%  }%
 }
 
 %%==========新しい変数の定義==========
@@ -117,7 +111,7 @@ sortcites=true,% 引用をymdでソートする
       \ifnumgreater{\value{liststop}}{1}%
         {\finalandcomma}%
         {}}%
-    \printdelim{andothersdelim}}%
+      \printdelim{andothersdelim}\bibstring{andothers}}
 {}}%
 
 %labelnameをuniquenameをつかって出力するときの名前フォーマット
@@ -125,7 +119,7 @@ sortcites=true,% 引用をymdでソートする
   \ifthenelse{\value{listcount}>1\OR\ifuniqueprimaryauthor}%
     {\setcounter{uniquename}{0}}%
     {}%
-  \ifthenelse{\boolean{CJK}}{% 日本語の場合
+  \ifthenelse{\boolean{CJK}}{% CJKの場合
     \ifcase\value{uniquename}%
       {\usebibmacro{name:#1}%通常（佐藤）、フルネーム出力の場合はフルネーム
         {\namepartfamily}{\namepartgiven}{\relax}{\relax}}% 
@@ -137,18 +131,19 @@ sortcites=true,% 引用をymdでソートする
         {\namepartfamily}{\namepartgiven}{\relax}{\relax}}% 
     \fi%
   }{%
-    \ifcase\value{uniquename}% 日本語以外の場合
+    \ifgiveninits{\def\cbx@tempa{\namepartgiveni}}{\def\cbx@tempa{\namepartgiven}}%
+    \ifcase\value{uniquename}% CJK以外の場合
       \ifuseprefix% familyで特定できる場合、フルネームのときはgiveni
         {\usebibmacro{name:#2}%
-          {\namepartfamily}{\namepartgiveni}{\namepartprefix}{\relax}}%
+          {\namepartfamily}{\cbx@tempa}{\namepartprefix}{\relax}}%
         {\usebibmacro{name:#2}%
-          {\namepartfamily}{\namepartgiveni}{\relax}{\relax}}%
+          {\namepartfamily}{\cbx@tempa}{\relax}{\relax}}%
     \or%
       \ifuseprefix% giveniで特定できる場合
         {\usebibmacro{name:#3}%
-          {\namepartfamily}{\namepartgiveni}{\namepartprefix}{\relax}}%
+          {\namepartfamily}{\cbx@tempa}{\namepartprefix}{\relax}}%
         {\usebibmacro{name:#3}%
-          {\namepartfamily}{\namepartgiveni}{\relax}{\relax}}%
+          {\namepartfamily}{\cbx@tempa}{\relax}{\relax}}%
     \or%
       \ifuseprefix% givenをつかってフルネーム表記
         {\usebibmacro{name:#3}%
