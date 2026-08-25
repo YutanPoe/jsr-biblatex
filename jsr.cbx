@@ -16,7 +16,44 @@ giveninits=false,% givenをイニシャルにしない
 \AtEveryCitekey{%
   \usebibmacro{checkLang}%言語の判定
   \global\boolfalse{cbx:warichu}%割注かどうかの判断%
+  \csundef{cbx:relatedloop}%related循環参照防止リストを引用キーごとにリセット
 }%
+
+% ================================================================================
+% related循環参照防止（standard.bbx の \ifrelatedloop 相当を引用処理用に用意）
+% ================================================================================
+%
+% 【設計方針】
+%  ・cite:uniquename / check:samename / save:namehash / cite:author は，
+%    related を「途切れるまで」辿って最果ての著者名・namehashを求める。
+%  ・cite:reprintof / cite:translationof は，related を辿りながら
+%    relatedtype に応じた書式（角カッコの原著年，"=" 連結の翻訳年）で
+%    出版年を積み上げていく。
+%  ・いずれも「related 先へ降下する」という操作を繰り返すため，
+%    自己参照・相互参照があると無限ループになる。bbx 側と同様に，
+%    訪問済み entrykey を cbx:relatedloop リストに記録し，再訪を検出したら
+%    そこで探索を打ち切る（＝そのエントリの情報をそのまま採用する）。
+
+% 現在のエントリ（entrykey / clonesourcekey）が既に訪問済みか判定
+\def\ifcbxrelatedloop{%
+  \ifboolexpr{ test {\xifinlistcs{\strfield{entrykey}}{cbx:relatedloop}}
+    or test {\xifinlistcs{\strfield{clonesourcekey}}{cbx:relatedloop}} }}
+
+% related 先へ安全に降下する共通マクロ
+%  #1 : 降下後（related 先のエントリコンテキスト）で実行するコード
+%  related が未定義，または循環を検出した場合は何もしない
+%  （＝呼び出し元は「その場で処理を打ち切る」分岐を別途用意すること）
+\newbibmacro*{cbx:descend}[1]{%
+  \ifboolexpr{ test {\iffieldundef{related}} or test {\ifcbxrelatedloop} }%
+    {}%
+    {\listcsxadd{cbx:relatedloop}{\strfield{entrykey}}%
+     \iffieldundef{clonesourcekey}
+       {}
+       {\listcsxadd{cbx:relatedloop}{\strfield{clonesourcekey}}}%
+     \entrydata*{\thefield{related}}{%
+       \usebibmacro{checkLang}%
+       #1}}}%
+
 
 
 % ================================================================================
@@ -169,7 +206,8 @@ giveninits=false,% givenをイニシャルにしない
   {\usebibmacro{apply:uniquename}%
     {family-given}%
     {given-family}%
-    {given-family}}%
+    {given-family}%
+    \iffieldundef{shortauthor}{}{\printname[fhparen]{shorauthor}}}%
 
 \DeclareNameAlias{translator}{labelname}
 \DeclareNameAlias{origauthor}{labelname}
@@ -192,9 +230,10 @@ giveninits=false,% givenをイニシャルにしない
 }%
 
 %%% 曖昧さを考慮したlabelnameとed-edsを、
-%%% relatedが途切れるまで追跡して出力する
+%%% relatedが途切れるまで（または循環を検出するまで）追跡して出力する
 \newbibmacro*{cite:uniquename}{%
-  \iffieldundef{related}{%
+  \ifboolexpr{ test {\iffieldundef{related}} or test {\ifcbxrelatedloop} }{%
+    %基底ケース：relatedなし，または循環検出のためここで打ち切る
     \unspace%
     \ifbool{cbx:warichu}%
       {\printnames[labelname:parencite]{labelname}}%
@@ -208,42 +247,35 @@ giveninits=false,% givenをイニシャルにしない
       \midsentence\usebibmacro{editorstrg}}%
     {}%
   }{%
-    \iffieldequalstr{relatedtype}{mvbook}{%
-      \unspace%
-      \printnames{labelname}%
-    }{%
-      \entrydata*{\thefield{related}}{%
-        \usebibmacro{checkLang}%%
-        \usebibmacro{cite:uniquename}%
-      }%
-    }%
+    \usebibmacro{cbx:descend}{\usebibmacro{cite:uniquename}}%
   }%
+  \csundef{cbx:relatedloop}%
 }%
 
-%% namehashが同じかどうかをrelatedが途切れるまで遡って判断する
+%% namehashが同じかどうかをrelatedが途切れるまで（または循環を検出するまで）遡って判断する
 \newbibmacro*{check:samename}{%
-  \iffieldundef{related}{%
+  \ifboolexpr{ test {\iffieldundef{related}} or test {\ifcbxrelatedloop} }{%
+    \csundef{cbx:relatedloop}%
     \iffieldequals{namehash}{\cbx@lasthash}{%
       \global\booltrue{cbx:samename}%
     }{%
       \global\boolfalse{cbx:samename}%
     }%
   }{%
-    \entrydata*{\thefield{related}}{%
-      \usebibmacro*{check:samename}%
-    }%
+    \usebibmacro{cbx:descend}{\usebibmacro*{check:samename}}%
   }%
+  \csundef{cbx:relatedloop}%
 }%
 
-%% namehashをrelatedが途切れるまで遡って保存する
+%% namehashをrelatedが途切れるまで（または循環を検出するまで）遡って保存する
 \newbibmacro{save:namehash}{%
-  \iffieldundef{related}{% namehashの保存
-    \savefield{namehash}{\cbx@lasthash}% relatedが設定されていない場合は素直にnamehashを保存
+  \ifboolexpr{ test {\iffieldundef{related}} or test {\ifcbxrelatedloop} }{% namehashの保存
+    \savefield{namehash}{\cbx@lasthash}% relatedが設定されていない，または循環検出の場合は素直にnamehashを保存
+    \csundef{cbx:relatedloop}%
   }{% relatedが設定されている場合は設定先のnamehashを遡って保存
-    \entrydata*{\thefield{related}}{%
-      \usebibmacro{save:namehash}%
-    }%
+    \usebibmacro{cbx:descend}{\usebibmacro{save:namehash}}%
   }%
+  \csundef{cbx:relatedloop}%
 }%
 
 %%% author et al.(year: pages) %%%
@@ -342,21 +374,21 @@ giveninits=false,% givenをイニシャルにしない
 % relatedtypeがreprintofの場合の処理
 \newbibmacro*{cite:reprintof}%
 {\iffieldequalstr{relatedtype}{reprintof}%
-  {\entrydata*{\thefield{related}}%
-    {\usebibmacro{cite:translationof}%
-    \printtext[brackets]{\printdateextra}\space}%
-  }{}%
+  {\usebibmacro{cbx:descend}{%
+    \usebibmacro{cite:translationof}%
+    \printtext[brackets]{\printdateextra}\space}}%
+  {}%
 }%
 % relatedtypeがtranslationofの場合の処理
 \newbibmacro*{cite:translationof}%
 {\iffieldequalstr{relatedtype}{translationof}%
-  {\entrydata*{\thefield{related}}%
-    {\usebibmacro{cite:reprintof}%
+  {\usebibmacro{cbx:descend}{%
+    \usebibmacro{cite:reprintof}%
     \usebibmacro{cite:origyear}%
     \printtext{\printlabeldateextra}%
     \setunit{\printdelim{transeq}}%
-    }
-  }{}%
+    }}%
+  {}%
 }%
 % 再販情報のみ（origyear記載）があった場合の処理
 \newbibmacro*{cite:origyear}%
@@ -383,7 +415,7 @@ giveninits=false,% givenをイニシャルにしない
 
 % citeauthorの場合の処理 apa.cbxのものを修正
 \newbibmacro*{cite:author}{%
-  \iffieldundef{related}{%
+  \ifboolexpr{ test {\iffieldundef{related}} or test {\ifcbxrelatedloop} }{%
     \iffieldequals{namehash}{\cbx@lasthash}{%
       % Multiple cites in one command
       \setunit{\compcitedelim}%
@@ -406,15 +438,7 @@ giveninits=false,% givenをイニシャルにしない
     }%
     \setunit{\multicitedelim}%
   }{%
-    \iffieldequalstr{relatedtype}{mvbook}{%
-      \unspace%
-      \printnames{labelname}%
-    }{%
-      \entrydata*{\thefield{related}}{%
-        \usebibmacro{checkLang}%%
-        \usebibmacro{cite:author}%
-      }%
-    }%
+    \usebibmacro{cbx:descend}{\usebibmacro{cite:author}}%
   }%
 }%
 %%parenciteのかっこを全角に設定
