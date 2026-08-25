@@ -489,15 +489,13 @@ citetracker=true,
 %%% 巻号 %%%
 %% 巻号設定 %%
 % volume(number)が基本
-% numberだけある場合、それをそのまま出力
+% numberだけある場合なにもしない
 \newbibmacro*{volume+issues}{%
   \ifboolexpr{%
     test {\iffieldundef{volume}}%
     and
     not test {\iffieldundef{number}}%
-  }{%
-    \printfield{number}%
-  }{%
+  }{}{%
     \printfield{volume}\printfield[parens]{number}%
   }%
 }%
@@ -569,6 +567,17 @@ citetracker=true,
     \printlist{institution}%
   }%
 }%
+
+\newbibmacro*{location+institution}{%
+  \ifthenelse{\boolean{CJK}}{}{
+  \printlist{location}%
+  \iflistundef{institution}
+    {\setunit*{\addcomma\space}}
+    {\setunit*{\addcolon\space}}%
+  \printlist{institution}%
+  \setunit*{\addcomma\space}%
+  \usebibmacro{date}%
+  \newunit}}
 
 %%% 学会開催地 %%%
 \newbibmacro*{location}{%
@@ -665,7 +674,7 @@ citetracker=true,
   \printlist{publisher}%
   \setunit*{\printdelim{fhcomma}}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
-  \usebibmacro{vol+pages}%
+  \usebibmacro{pages}%
   \printdelim{findelim}%
 }%
 
@@ -688,10 +697,6 @@ citetracker=true,
 %                         （bbx:relatedloop リストに entrykey を積む）を
 %                         流用し，自己参照・相互参照による無限ループを防ぐ。
 %
-%  relatedtype=mvbook（多巻シリーズ）は書式・処理内容が本質的に異なる
-%  （本体の後ろに巻情報を続けるだけで，原典を先出しする構造ではない）ため，
-%  従来どおり別マクロ \related:mvbook として維持し，本ディスパッチの
-%  対象外とする．
 
 % relatedtype ごとのフィールドフォーマット定義
 % （#1 には「メインエントリ（訳書・再録編著書）側」の内容が渡される）
@@ -718,12 +723,6 @@ citetracker=true,
 }
 
 %%% relatedフィールドのディスパッチ入口 %%%
-%  mvbook のみ従来どおりの専用マクロへ．それ以外はすべて汎用 related へ．
-\newbibmacro*{relatedfield}{%
-  \usebibmacro{related:init}%
-  \iffieldequalstr{relatedtype}{mvbook}%
-    {\usebibmacro{related:mvbook}}%
-    {\usebibmacro{related}}}%
 
 %%% related先（原典）を，循環参照を検出しながらレンダリングする %%%
 \newbibmacro*{related:entry}{%
@@ -740,7 +739,8 @@ citetracker=true,
 %%% 汎用 related 出力マクロ（renewbibmacro） %%%
 %  ①原典（related先）をフルレンダリング → ②区切り →
 %  ③メインエントリ側を relatedtype に応じた fieldformat でラップ
-\renewbibmacro*{related}{%
+\newbibmacro*{relatedfield}{%
+  \usebibmacro{related:init}%
   \ifboolexpr{ test {\iffieldundef{related}} or test {\ifrelatedloop} }
     {}%
     {% ① 原典（related先）
@@ -760,46 +760,6 @@ citetracker=true,
        \usebibmacro{book/incollection/article}}%
      \setboolean{relatedbool}{false}}}%
 
-%% relatedtype に応じた default（未定義の relatedtype のフォールバック） %%
-\renewbibmacro*{related:default}{%
-  \usebibmacro{related}}
-
-%%% シリーズ（多巻もの）― 従来どおり専用処理を維持（循環参照ガードのみ追加） %%%
-\newbibmacro*{related:mvbook}{%
-  \ifrelatedloop%
-    {}%
-    {\listcsxadd{bbx:relatedloop}{\strfield{entrykey}}%
-     \iffieldundef{clonesourcekey}
-       {}
-       {\listcsxadd{bbx:relatedloop}{\strfield{clonesourcekey}}}%
-     \entrydata*{\thefield{related}}%
-       {\usebibmacro{author/editor}}}%
-  \usebibmacro{author/editor}%
-  \usebibmacro{date+extradate}%
-  \printtext[fhdkakko]%
-    {\entrydata*{\thefield{related}}%
-    {\printfield{series}}%
-    \setunit{\addspace}%
-    \iffieldundef{volume}{}{\printfield{volume}}%
-    \iffieldundef{number}{}{\printfield{number}}%
-    \setunit{\addspace}%
-    \printfield[titlecase]{title}%
-    \setunit{\subtitlepunct}%
-    \printfield[titlecase]{subtitle}}%
-  % 版数
-  \ifthenelse{\boolean{CJK}}{}%
-    {\printfield{edition}%
-    \newunit}%
-  % 出版都市名
-  \ifthenelse{\boolean{CJK}}{}%
-    {\printlist{location}%
-    \setunit*{\addcolon\space}}%
-  % 出版社
-  \printlist{publisher}%
-  \usebibmacro{finentry}%
-}%
-
-
 %%%%%% 文献タイプ別書式　%%%%%% 
 
 %%% 4.2 欧文の文献 4.4 邦文の文献共通
@@ -812,8 +772,11 @@ citetracker=true,
   \nopunct%
   %\usebibmacro{finentry}%
 }%
+%% 論文集など。authorがおらずedtorがいる場合がこちらになる。
+\DeclareBibliographyAlias{collection}{book}%
 
 %% (4)編書論文など（共著内の論文を含む）
+%% biblatexではこのあたりを厳密に分けている。incollectionは著者がいない論文集(collection)のなかの一論文。
 \DeclareBibliographyDriver{incollection}{%
   \usebibmacro{begentry}%
   \iffieldundef{related}% relatedフィールドに値なし
@@ -822,7 +785,7 @@ citetracker=true,
   \nopunct%
   %\usebibmacro{finentry}%
 }%
-
+%% 全集など同じ著者の作品が集められているものの中の一つ。基本的にはauthorとbookauthorが同じ。
 \DeclareBibliographyAlias{inbook}{incollection}%
 
 %% (5)雑誌論文
@@ -839,29 +802,44 @@ citetracker=true,
 %%% 以上の3つで(6)翻訳、(7)初出情報などに対応
 
 
-%% (8)調査報告書, (9)政府刊行物など
+%% (8)調査報告書, (9)政府刊行物など（紙媒体・オンライン取得の両方に対応）
 \DeclareBibliographyDriver{report}{%
   \usebibmacro{begentry}%
-  % 著者名
-  \ifnameundef{author}{% 著者名が書かれていない場合は機関名を表示
-    \printlist{institution}%
+  % 編集機関名（著者名があればそちらを優先，なければinstitutionフィールドで代替）
+  \ifnameundef{author}{%
+    \iflistundef{institution}{}{\printlist{institution}}%
   }{%
-    \printnames{author}%
+    \usebibmacro{author}%
   }%
   \newunit%
   % 刊行年
   \usebibmacro{date+extradate}%
-  % 表題
-  \usebibmacro{title}{fhdkakko}{}%
-  % 研究のタイプ（科研費の課題番号など）
-  \printfield{type}
   \newunit%
-  % 巻号
-  \usebibmacro{volume+issues}%
-  % 出版社
-  \iflistundef{institution}{}{%
-    \printlist{institution}%
+  % 表題
+  \iffieldequalstr{type}{onlinereport}
+    {\usebibmacro{title}{fhkakko}{}}%
+    {\usebibmacro{title}{fhdkakko}{}}%
+  % 研究の種別（科研費の課題番号など。(8)調査報告書向け）
+  \iffieldundef{series}{}{%
+    \setunit*{\addhnspace}%
+    \printlist{series}%研究課題
+    \setunit*{\addhnspace}%
+    \usebibmacro{volume+issues}%研究番号
   }%
+  % 発行元
+  %  ・発行元が「国立印刷局」（旧・大蔵省印刷局）である場合，
+  %  ・編集機関名（上記の author／institution）と発行元が同一である場合，
+  %  のいずれも，bibファイル側で publisher フィールドを空にしておけば
+  %  発行元の記載が自動的に省略される（社会学評論スタイルガイド 4.5・(9)参照）。
+  \iflistundef{publisher}{}{%
+    \setunit*{\addhnspace}%
+    \printlist{publisher}%
+  }%
+  \newunit%
+  \usebibmacro{location+institution}%
+  % 取得日・URL（オンラインで取得した場合のみ出力。urldate/urlが未指定なら何も出力しない）
+  \newunit%
+  \usebibmacro{urldate+eprint/doi/url}%
   \usebibmacro{finentry}%
 }%
 
