@@ -5,3 +5,5 @@
 \DeclareDatamodelEntryfields{translatora}
 \DeclareDatamodelFields[type=field,datatype=literal]{translatortype}
 \DeclareDatamodelFields[type=field,datatype=literal]{translatoratype}
+\DeclareDatamodelFields[type=field, datatype=literal, label=true]{webpagetitle}
+\DeclareDatamodelEntryfields{webpagetitle}
