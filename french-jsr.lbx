@@ -1,0 +1,18 @@
+\ProvidesFile{french-jsr.lbx}[\abx@lbxid]
+
+%% french.lbx を継承
+\InheritBibliographyExtras{french}
+\InheritBibliographyStrings{french}
+
+\NewBibliographyString{reprintin}
+
+\DeclareBibliographyStrings{%
+  reprintin = {{Reprinted in}{Reprinted in}},%
+  volume    = {{}{}},%
+  volumes   = {{}{}},%
+  translationof = {{}{}},%
+}
+
+\DeclareBibliographyExtras{%Family Nameのスモールキャピタル(Petites capitales)を解除するが、本当にこれでよいのだろうか…
+  \restorecommand\mkbibnamefamily
+}
