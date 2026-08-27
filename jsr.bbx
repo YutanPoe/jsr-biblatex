@@ -212,7 +212,7 @@ citetracker=true,
 \DeclareFieldFormat{subtitle}{#1}%
 \DeclareFieldAlias{booktitle}{title}%
 \DeclareFieldAlias{booksubtitle}{subtitle}%
-\DeclareFieldAlias{journaltitle}{title}%
+\DeclareFieldAlias{journaltitle}{fhdkakko}%journaltitleのみnumberの扱いが異るためこちらで指定
 \DeclareFieldAlias{journalsubtitle}{subtitle}%
 \DeclareFieldAlias{series}{title}%
 \DeclareFieldFormat[article]{date}{\mkbibdatelong{year}{month}{day}}%雑誌記事や新聞記事における日付はlong表示
@@ -437,19 +437,108 @@ citetracker=true,
       {\thefield{#1type}}}}}%
 
 %%% 書籍タイトル %%%
-\renewbibmacro*{title}[2]{%
-  \ifboolexpr{%
-    test {\iffieldundef{#2title}}%
-    and
-    test {\iffieldundef{#2subtitle}}%
-  }{}{%
-    \printtext[#1]{%
-      \printfield[titlecase]{#2title}%
-      \setunit{\subtitlepunct}%
-      \printfield[titlecase]{#2subtitle}%
+
+\renewbibmacro*{series+number}{%
+  \printfield{series}%
+  \setunit*{\addspace}%
+  \printfield{number}}
+
+\newbibmacro*{volume+part}{%
+  \printfield{volume}%
+  \setunit*{\addspace}%
+  \printfield{part}}
+
+\newbibmacro*{fhdtitle}[1]{%
+  \printtext[fhdkakko]{%
+    \usebibmacro{series+number}%
+    \setunit*{\addspace}%
+    \usebibmacro{printtitle}{#1}%
+  }%
+  \setunit{\printdelim{titledelim}}%
+}%
+
+%一重鍵かっこタイトル出力
+\renewbibmacro*{title}{%一重鍵かっこの
+  \ifboolexpr{ test {\iffieldundef{title}} and test {\iffieldundef{subtitle}} }
+    {}{%
+    \printtext[fhkakko]{%
+      \usebibmacro{printtitle}{}%
+      \iffieldundef{titleaddon}%
+        {}%
+        {\setunit{\addspace\printfield{titleaddon}}}%
+    }%
+    \setunit{\printdelim{titledelim}}}}%
+
+% 雑誌名の出力。ここではnumberがあったとしても誌名に出力させない。
+\renewbibmacro*{journal}{%
+  \ifboolexpr{ test {\iffieldundef{journaltitle}} and test {\iffieldundef{journalsubtitle}} }
+    {}{%
+    \printtext[journaltitle]{%
+      \usebibmacro{printtitle}{journal}%
+      \iffieldundef{journaltitleaddon}%
+        {}%
+        {\printfield{journaltitleaddon}}%
     }%
     \setunit{\printdelim{titledelim}}%
-  }}%
+  }%
+}%
+
+% タイトル出力の本体マクロ。引数には何のタイトルを出力するのか(main, book)が入る
+\newbibmacro*{printtitle}[1]{%
+  \printfield[titlecase]{#1title}%
+  \setunit*{\subtitlepunct}%
+  \printfield[titlecase]{#1subtitle}%
+}%
+
+%% book, collectionがmvであったときのためのmaintitleの処理
+\renewbibmacro*{maintitle+title}{%
+  \iffieldsequal{maintitle}{title}{%
+    \clearfield{maintitle}%
+    \clearfield{mainsubtitle}%
+    \clearfield{maintitleaddon}%
+  }{}%
+  \ifboolexpr{%
+    ( test {\iffieldundef{maintitle}} and test {\iffieldundef{mainsubtitle}} )
+    and
+    ( test {\iffieldundef{title}} and test {\iffieldundef{subtitle}} )
+    }{}{%
+    \printtext[fhdkakko]{%
+      \usebibmacro*{printtitle}{main}%
+      \setunit*{\addspace}%
+      \iffieldundef{volume}{}{%
+        \usebibmacro{volume+part}%
+      }%
+      \iffieldundef{series}{}{%
+        \usebibmacro{series+number}%
+      }%
+      \setunit*{\addspace}%
+      \usebibmacro*{printtitle}{}%
+    }%
+    \setunit{\printdelim{titledelim}}%
+  }%
+}%
+%% inbook, incollectionがbooktitleもmaintitleも得た場合の処理
+\renewbibmacro*{maintitle+booktitle}{%%
+  \ifboolexpr{%
+    ( test {\iffieldundef{maintitle}} and test {\iffieldundef{mainsubtitle}} )
+    and
+    ( test {\iffieldundef{booktitle}} and test {\iffieldundef{booksubtitle}} )
+  }{}{%
+    \printtext[fhdkakko]{%
+      \usebibmacro*{printtitle}{main}%
+      \setunit*{\addspace}%
+      \iffieldundef{volume}{}{%
+        \usebibmacro{volume+part}%
+      }%
+      \iffieldundef{series}{}{%
+        \usebibmacro{series+number}%
+      }%
+      \setunit*{\addspace}%
+      \usebibmacro*{printtitle}{book}%
+    }%
+    \setunit{\printdelim{titledelim}}%
+  }%
+}%
 
 %%% 電子書籍の原著情報 %%%
 \newbibmacro*{eprintbook}{%
@@ -607,7 +696,8 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
   % 表題
-  \usebibmacro{title}{fhdkakko}{}%
+  %\usebibmacro{title}{fhdkakko}{}%
+  \usebibmacro{maintitle+title}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}%
   % 版数
@@ -630,9 +720,9 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
   % 表題
-  \usebibmacro{title}{fhkakko}{}%
+  \usebibmacro{title}%
   % 誌名
-  \usebibmacro{title}{fhdkakko}{journal}%
+  \usebibmacro{journal}%
   % 出版社
   %\iflistundef{publisher}{}%
   \printlist{publisher}%
@@ -656,13 +746,14 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{fhkakko}{}%
+  \usebibmacro{title}%
   % 編集者名
   \usebibmacro{byeditor}%
   % 共著者名
   \usebibmacro{bybookauthor}%%
   % 編書・共著誌名
-  \usebibmacro{title}{fhdkakko}{book}%
+  %\usebibmacro{title}{fhdkakko}{book}%
+  \usebibmacro{maintitle+booktitle}%
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}%
@@ -817,8 +908,8 @@ citetracker=true,
   \newunit%
   % 表題
   \iffieldequalstr{type}{onlinereport}
-    {\usebibmacro{title}{fhkakko}{}}%
-    {\usebibmacro{title}{fhdkakko}{}}%
+    {\usebibmacro{title}}%
+    {\usebibmacro{maintitle+title}}%
   % 研究の種別（科研費の課題番号など。(8)調査報告書向け）
   \iffieldundef{series}{}{%
     \setunit*{\addhnspace}%
@@ -850,7 +941,7 @@ citetracker=true,
   \usebibmacro{author}%
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{fhkakko}{}%
+  \usebibmacro{title}%
   % 大学名修士／博士論文
   \usebibmacro{type+institution}%
   \usebibmacro{finentry}%
@@ -863,7 +954,7 @@ citetracker=true,
   \usebibmacro{author}%
   \usebibmacro{date+extradate}%
   % 表題
-  \usebibmacro{title}{fhkakko}{}%
+  \usebibmacro{title}%
   % 発表形式（英文のみ）
   \iffieldundef{type}{}{%
     \mkbibbrackets{\printfield{type}}%
@@ -897,7 +988,7 @@ citetracker=true,
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
   % 表題
-  \usebibmacro{title}{fhkakko}{}%
+  \usebibmacro{title}%
   \newunit%
   % ウェブサイト名（不明な場合は省略）
   \printfield{eprinttype}%
