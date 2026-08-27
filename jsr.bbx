@@ -927,6 +927,9 @@ citetracker=true,
     \printlist{publisher}%
   }%
   \newunit%
+  % ウェブサイト名（不明な場合は省略）
+  \printfield{webpagetitle}%
+  \newunit%
   \usebibmacro{location+institution}%
   % 取得日・URL（オンラインで取得した場合のみ出力。urldate/urlが未指定なら何も出力しない）
   \newunit%
@@ -991,8 +994,7 @@ citetracker=true,
   \usebibmacro{title}%
   \newunit%
   % ウェブサイト名（不明な場合は省略）
-  \printfield{eprinttype}%
-  \togglefalse{bbx:eprinttype}%
+  \printfield{webpagetitle}%
   % url
   \newunit%
   \usebibmacro{urldate+eprint/doi/url}%
