@@ -62,6 +62,8 @@ labeldateparts=true,
 giveninits=false,
 citecounter=true,
 citetracker=true,
+autolang=other,%
+language=auto,%
 }%
 
 %%% ぶら下がりインデント幅 %%%
@@ -216,6 +218,10 @@ citetracker=true,
 \DeclareFieldAlias{journalsubtitle}{subtitle}%
 \DeclareFieldAlias{series}{title}%
 \DeclareFieldFormat[article]{date}{\mkbibdatelong{year}{month}{day}}%雑誌記事や新聞記事における日付はlong表示
+\DeclareFieldFormat{volume}
+  {\ifthenelse{\boolean{CJK}}{\bibstring{prenumber}#1\bibstring{volume}}{\bibstring{volume}\addspace#1}}%雑誌記事や新聞記事における日付はlong表示
+\DeclareFieldFormat[article]{volume}{#1}%雑誌記事や新聞記事における日付はlong表示
+
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{CJK}}%
     {\mkbibdatelong{urlyear}{urlmonth}{urlday}取得}%
@@ -486,7 +492,7 @@ citetracker=true,
 % タイトル出力の本体マクロ。引数には何のタイトルを出力するのか(main, book)が入る
 \newbibmacro*{printtitle}[1]{%
   \printfield[titlecase]{#1title}%
-  \setunit*{\subtitlepunct}%
+  \setunit{\subtitlepunct}%
   \printfield[titlecase]{#1subtitle}%
 }%
 
@@ -503,16 +509,21 @@ citetracker=true,
     ( test {\iffieldundef{title}} and test {\iffieldundef{subtitle}} )
     }{}{%
     \printtext[fhdkakko]{%
-      \usebibmacro*{printtitle}{main}%
-      \setunit*{\addspace}%
+      \iffieldundef{maintitle}{}{%
+        \usebibmacro*{printtitle}{main}%
+        \setunit{\addspace}%
+      }%
       \iffieldundef{volume}{}{%
         \usebibmacro{volume+part}%
+        \setunit{\addspace}%
       }%
       \iffieldundef{series}{}{%
         \usebibmacro{series+number}%
+        \setunit{\addspace}%
       }%
-      \setunit*{\addspace}%
-      \usebibmacro*{printtitle}{}%
+      \iffieldundef{title}{}{%
+        \usebibmacro*{printtitle}{}%
+      }%
     }%
     \setunit{\printdelim{titledelim}}%
   }%
@@ -525,16 +536,21 @@ citetracker=true,
     ( test {\iffieldundef{booktitle}} and test {\iffieldundef{booksubtitle}} )
   }{}{%
     \printtext[fhdkakko]{%
-      \usebibmacro*{printtitle}{main}%
-      \setunit*{\addspace}%
+      \iffieldundef{maintitle}{}{%
+        \usebibmacro*{printtitle}{main}%
+        \setunit{\addspace}%
+      }%
       \iffieldundef{volume}{}{%
         \usebibmacro{volume+part}%
+        \setunit{\addspace}%
       }%
       \iffieldundef{series}{}{%
         \usebibmacro{series+number}%
+        \setunit{\addspace}%
       }%
-      \setunit*{\addspace}%
-      \usebibmacro*{printtitle}{book}%
+      \iffieldundef{title}{}{%
+        \usebibmacro*{printtitle}{}%
+      }%
     }%
     \setunit{\printdelim{titledelim}}%
   }%

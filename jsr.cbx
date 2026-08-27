@@ -10,6 +10,8 @@ uniquelist=minyear,% 発行年が違えば著者名を追跡して曖昧さを�
 uniquename=full,% 同年の同じ名字の著作があった場合、英語はイニシャルを、日本語は名前を表示させる
 sortcites=true,% 引用をymdでソートする
 giveninits=false,% givenをイニシャルにしない
+autolang=other,%
+language=auto,%
 }
 
 % 引用ごとに言語を判断して処理
@@ -73,15 +75,15 @@ giveninits=false,% givenをイニシャルにしない
   {\ifthenelse{\boolean{CJK}}{\unspace{・}}{\addcomma\space}}%
 \DeclareDelimFormat[parencite,textcite,citeauthor]{finalnamedelim}%
   {\addhnspace\bibstring{and}\addhnspace}%
-\DeclareDelimFormat[parencite,textcite,citeauthor]{andothersdelim}% 3人以上のときの最後の文字
-  {\addhnspace}%
+\DeclareDelimFormat[parencite]{andothersdelim}% 3人以上のときの最後の文字
+  {\addhnspace\bibstring{andothers}}%
 
 % textciteのとき（スタイルガイドに明確な定義はなし）
 %\DeclareDelimFormat[textcite,citeauthor]{multinamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
 %\DeclareDelimFormat[textcite,citeauthor]{finalnamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
   %{\ifthenelse{\boolean{japanese}}{\unspace{・}}%
     %{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-%\DeclareDelimFormat[textcite,citeauthor]{andothersdelim}{\unspace{ら}}% 3人以上のときの最後の文字
+\DeclareDelimFormat[textcite,citeauthor]{andothersdelim}{\unspace{ら}}% 3人以上のときの最後の文字
 
 % FiledFormatの宣言
 % ================================================================================
@@ -148,7 +150,7 @@ giveninits=false,% givenをイニシャルにしない
       \ifnumgreater{\value{liststop}}{1}%
         {\finalandcomma}%
         {}}%
-      \printdelim{andothersdelim}\bibstring{andothers}}
+      \printdelim{andothersdelim}}
 {}}%
 
 %labelnameをuniquenameをつかって出力するときの名前フォーマット
