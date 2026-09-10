@@ -221,6 +221,8 @@ language=auto,%
 \DeclareFieldFormat{volume}
   {\ifthenelse{\boolean{CJK}}{\bibstring{prenumber}#1\bibstring{volume}}{\bibstring{volume}\addspace#1}}%雑誌記事や新聞記事における日付はlong表示
 \DeclareFieldFormat[article]{volume}{#1}%雑誌記事や新聞記事における日付はlong表示
+\DeclareFieldFormat{part}
+  {\ifthenelse{\boolean{CJK}}{\addspace#1}{.#1}}% physical part of a logical volume
 
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{CJK}}%
@@ -451,7 +453,6 @@ language=auto,%
 
 \newbibmacro*{volume+part}{%
   \printfield{volume}%
-  \setunit*{\addspace}%
   \printfield{part}}
 
 \newbibmacro*{fhdtitle}[1]{%
