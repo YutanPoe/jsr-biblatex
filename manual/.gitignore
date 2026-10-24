@@ -8,3 +8,8 @@
 *.out
 *.biber.log
 *-ex*.tmp
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.xdv
+*.bak
