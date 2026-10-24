@@ -101,3 +101,74 @@ biblatex のマニュアル（1 Introduction／2 Database Guide／3 User Guide�
 2. 等幅：JuliaMono を入れるか（biblatex と同じ。TeX Live に入っていない場合がある），代替で済ませるか。
 3. マニュアルの言語：日本語のみ（推奨）か，英語の概要を付けるか（README に英語の短い説明を付ける，など）。
 4. 第8章「内部の仕組み」を載せるか（CLAUDE.md と重なる）。
+
+---
+
+## 追補（2026-10-24）：モックアップ（手順1）の評価と，biblatex.pdf の表記に合わせた修正
+
+モックアップ（`manual/chapters/smoke.tex`）を biblatex.pdf（3.22。p. 13 エントリ型，p. 38 bib の例，p. 109 引用コマンド，p. 166 フィールド）と見比べた。
+
+### A. biblatex.pdf の表記（調べた結果）
+1. **段落**：段落頭の字下げはない。段落の間は少し空ける。
+2. **コマンド**（`ltxsyntax`）：書式の行（`\parencite[⟨prenote⟩][⟨postnote⟩]{⟨key⟩}`）は，コマンド名が左の余白から始まり，引数が本文側へ続く。変種は行を重ねる（`\parencite`／`\Parencite`）。**説明は空行のあとの別の段落**で，本文の左端から始まる。原稿では `\cmditem` の行のあとに必ず空行を置いている（biblatex.tex 4591-4594 行）。
+3. **フィールド・エントリ型**：項目名を左の余白に出し，1行目に「field (string)」，説明は次の段落（本文の左端から。字下げなし）。エントリ型は説明の後に「Required fields:」「Optional fields:」を段落として並べ，間を少し空ける。
+4. **コード例には余白の見出しを付けない。** 地の文で導き（「…such as:」），枠に入れ，続く地の文で結果を述べる（「This entry will be printed as «…»」）。見出しの代わりに文章がつなぐ。
+5. **枠は2種類**：
+   - **bib の例**：`lstlisting[style=bibtex]`。白地，細い黒の枠，本文の幅いっぱい。
+   - **LaTeX の例**：`ltxexample`。薄い青の地（boxfill），灰色の枠（boxframe）。
+   - 地の色で「bib か LaTeX か」を見分けられる。
+
+### B. モックアップの問題と修正方針
+
+| # | 問題 | 修正 |
+|---|---|---|
+| B1 | `\parencite` の説明が書式と同じ行に続く | 原稿の約束：`\cmditem` の行のあとに空行を置く（biblatex と同じ）。`build.sh` の検査で「`\cmditem` の行の後ろに文字が続く」原稿を警告する |
+| B2 | 段落頭が1字下がる。fieldlist の説明も下がって見える | `\parindent=0pt`，`\parskip=.5\baselineskip plus .1\baselineskip`。リストの中も `\listparindent=0pt`。jlreq の行送りとずれないか（行取り）を確認する |
+| B3 | 1.2 の「ひな形」の見出しが節見出しの横に並ぶ | 書式の例では `marglist` を使わない（節見出しの直後にリストの見出しが来ると，見出しの行に並んでしまう） |
+| B4 | 記入例が bib ファイル全体（約1ページ）で，出力と離れる。ファイル先頭の `% 名前の書き方` まで出る | **1つの例＝1エントリ**（訳書など，まとめて1項目になるものは関係するエントリだけ）。bib ファイルからキーを指定してそのエントリだけを抜き出して表示する（`jsrdoc.lua` で抜き出す） |
+| B5 | 出力を `marglist` の中で組んだため，1件目が見出しの行に乗り，2件目以降が字下げされる | 出力はリスト環境に入れない。文献リストと同じぶら下げ（2zw）で，本文の左端から組む |
+| B6 | bib の例が LaTeX の例と同じ薄い青の地 | bib は白地・細い黒枠（`style=bibtex` 相当），LaTeX は `ltxexample`（薄い青の地）に分ける |
+
+### C. 書式の例（`bibexample`）の組み方（改訂）
+各エントリ型の節は，次の順に組む。
+
+1. **説明**（地の文）と，その型で使うフィールドの `fieldlist`。
+2. **ひな形**：地の文で導く（「記入のひな形は次のとおりです：」）→ bib の枠。
+   - 記入する箇所は `⟨書名⟩` のように，`\prm` と同じ山括弧＋イタリックで示す（listings の `moredelim` で `<…>` を変換）。
+   - 注意書き（`※ …`）は等幅でない本文書体・灰色にして，記入する文字と見分ける。
+3. **例**（ケースごとに繰り返す）：
+   - 地の文で導く（「共著の場合：」「訳者がいる場合：」）。
+   - **bib の枠**（そのケースのエントリだけ）。
+   - **出力**：枠の直後に，本文の左端から，文献リストと同じぶら下げ（2zw）・`\small` で組む。出力であることは，左に spot 色の細い縦線（2pt）と左余白の小さな「出力」の文字で示す。「出力」の文字は，出力の1行目のベースラインにそろえる（`\llap` で置く。リスト環境は使わない）。
+   - 必要なら，出力の後に地の文で注記する（「書名と副題は——でつながります」）。
+4. 文献注の例は，表（コマンド／出力）にまとめる（今の草稿の形を続ける。表も実際に組んだ出力）。
+
+コマンド案：
+```
+\bibexample{aoki2015}               % 1エントリ：bib の枠＋出力
+\bibexample{fromm1941,fromm1951}    % 関係するエントリをまとめて：bib の枠（並べる）＋出力（1項目）
+\begin{bibtemplate} … \end{bibtemplate}   % ひな形（地の文で導いてから置く）
+```
+- 出力は `\printbibliography` を，キーで絞る `\defbibcheck`（指定したキーと，その複製（clonesourcekey）だけを通す）で出す。keywords による出し分けは，ファイル単位なので使わない。
+- 枠と出力のあいだは `\smallskip`，例と例のあいだは `\medskip`。枠と出力が別のページに分かれないようにする（`\nopagebreak`，または全体を `minipage` に入れずに `\needspace`）。
+
+### D. 検収の基準に追加
+8. `\cmditem` の行の後ろに説明が続く原稿がない（`build.sh` で検査）。
+9. 本文・リストの中で段落頭の字下げがない。
+10. 書式の例で，bib の枠とその出力が同じページにある。
+11. 「出力」の文字が，出力の1行目のベースラインとそろっている（差 1pt 以内）。
+
+### E. 試作で確かめたこと（2026-10-24，`docs/proposals/2026-10-24-manual-proto.tex`）
+上の C を試作で確かめた。組み方は試作に合わせる（C と食い違う点は E を優先）。
+
+1. **出力の絞り込みは refsection で行う。** 例ごとに `\begin{refsection}\nocite{<keys>}\printbibliography[heading=none]\end{refsection}`。
+   - `\defbibcheck` で entrykey を比べる方式は動かなかった（`check=` を付けると Empty bibliography になり，チェックも呼ばれなかった）。
+   - refsection だと，訳書だけを指定した例（`\bibexample{hale1985}`）でも，原典の複製が代表になって実際と同じ形で出る。jsr の仕組みは refsection ごとに働くので，そのまま使える。
+   - キーを比べる場合，biblatex の entrykey は detokenize されている（catcode 12）。文字列として比べるときは `\detokenize` をそろえる。
+2. **「出力」の文字**は，`begentry` を一時的に再定義し，最初の項目で `\marginpar`（`\reversemarginpar`，幅＝`\marglistwidth`，間隔＝`\marglistsep`）として置く。1行目のベースラインにそろう。
+3. **段落の間隔（`\parskip`）は listings の各行に入ってしまう**（枠の中の行間が空く）。listings の中だけ 0 にする：`\lst@AddToHook{EveryPar}{\parskip\z@skip}`（`Init` だけでは足りない）。
+4. 1エントリの抜き出しは Lua で行う（`2026-10-24-manual-proto-ex.lua`）。`@type{key,` から，行頭の `}` まで。
+5. ひな形の記入箇所 `<…>` は，listings の `moredelim=[s][\itshape\rmfamily]{<}{>}` でイタリックにした（山括弧は残る）。`※` 以降は `moredelim=[l][\color{gray}\rmfamily\footnotesize]{※}`。
+6. 残った課題：
+   - `\cmditem` を2行重ねると，行の間が詰まりすぎる（`\parskip=0` と ltxsyntax の組み合わせ）。biblatex.pdf（p. 109）と同じ行送りにする。
+   - bib の枠と出力が別のページに分かれることがある（D-10 の検収で確かめる）。

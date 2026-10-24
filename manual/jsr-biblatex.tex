@@ -1,0 +1,24 @@
+%% jsr-biblatex マニュアル
+%% 組版：sh manual/build.sh（lualatex → biber → lualatex ×2。体裁と検査は jsrdoc.sty、jsrdoc.lua、check.py）
+\documentclass[a4paper,10pt,oneside,line_length=37zw,number_of_lines=40]{jlreq}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage{jsrdoc}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\bibexamplefiles{names,book,volumes,article,news,chapter,trans,ebook,report,thesis,web}
+
+\title{jsr-biblatex\\[.5\zh]社会学評論スタイルガイド準拠\\[.2\zh]Bib\LaTeX スタイル マニュアル}
+\author{Takuya MASUDA}
+\date{v1.0\quad 2026年10月24日}
+
+\begin{document}
+\maketitle
+\nocite{*}
+\clearpage
+\tableofcontents
+\clearpage
+
+\input{chapters/smoke}
+
+\end{document}

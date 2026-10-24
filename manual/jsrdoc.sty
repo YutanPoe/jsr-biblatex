@@ -1,0 +1,253 @@
+%% jsrdoc.sty --- jsr-biblatex マニュアルの体裁（biblatex のマニュアルにそろえる）
+%%
+%% Copyright (C) 2026 Takuya MASUDA
+%%
+%% This work may be distributed and/or modified under the conditions of
+%% the LaTeX Project Public License, either version 1.3c of this license
+%% or (at your option) any later version.
+%%
+%% Parts of this file (the localised list environments) are adapted from
+%% btxdockit.sty and ltxdockit.sty, Copyright (C) 2006-2011 Philipp Lehman,
+%% distributed under the LaTeX Project Public License 1.3.  This file has
+%% been renamed (jsrdoc.sty) as the LPPL requires for modified versions.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{jsrdoc}[2026/10/24 v1.0 jsr-biblatex manual support]
+
+\RequirePackage{etoolbox}
+\PassOptionsToPackage{unicode,pdfencoding=unicode}{hyperref}
+
+%%% 書体 -------------------------------------------------------------------
+%% 和文：原ノ味明朝／原ノ味角ゴシック。欧文：Libertinus。等幅：JuliaMono（なければ Latin Modern Mono）
+\RequirePackage[haranoaji]{luatexja-preset}
+\RequirePackage{fontspec}
+\setmainfont{Libertinus Serif}
+\setsansfont{Libertinus Sans}
+\IfFontExistsTF{JuliaMono-Regular.ttf}
+  {\setmonofont{JuliaMono-Regular.ttf}[Scale=0.8,BoldFont=JuliaMono-Bold.ttf,%
+     ItalicFont=JuliaMono-RegularItalic.ttf,BoldItalicFont=JuliaMono-BoldItalic.ttf]}
+  {\setmonofont{Latin Modern Mono}[Scale=0.9]}
+
+%%% ltxdockit／btxdockit -----------------------------------------------------
+%% クラス（ltxdockit.cls）は使わない。パッケージの環境だけを借りる
+\RequirePackage{btxdockit}
+\RequirePackage{booktabs,array,tabularx}
+
+%% ltxdockit.cfg の書体設定（クラスだけが読み込むので，ここに写す）
+\renewcommand*{\marglistfont}{\spotcolor\sffamily\small}
+\renewcommand*{\optionlistfont}{\spotcolor\sffamily\displayverbfont}
+\renewcommand*{\ltxsyntaxlabelfont}{\spotcolor\displayverbfont}
+\renewcommand*{\changeloglabelfont}{\spotcolor\sffamily\bfseries}
+\renewcommand*{\margnotefont}{\sffamily\small}
+
+\hypersetup{colorlinks,linkcolor=spot,urlcolor=spot,citecolor=spot,%
+  bookmarksnumbered,bookmarksopen,bookmarksopenlevel=1,%
+  pdftitle={jsr-biblatex マニュアル},%
+  pdfauthor={Takuya MASUDA},%
+  pdfsubject={社会学評論スタイルガイド（第3版）に準拠した biblatex スタイル},%
+  pdfkeywords={biblatex, LuaLaTeX, 社会学評論}}
+
+%% 見出し：ゴシック＋spot 色
+\ModifyHeading{section}{font=\sffamily\gtfamily\bfseries\spotcolor\Large}
+\ModifyHeading{subsection}{font=\sffamily\gtfamily\bfseries\spotcolor\large}
+\ModifyHeading{subsubsection}{font=\sffamily\gtfamily\bfseries\spotcolor\normalsize}
+
+%%% 英語の見出しの日本語化 ---------------------------------------------------
+%% （btxdockit.sty、ltxdockit.sty の該当の定義を写して，文字列だけを替える）
+\renewenvironment*{fieldlist}
+  {\list{}{%
+     \setlength{\labelwidth}{\marglistwidth}%
+     \setlength{\labelsep}{\marglistsep}%
+     \setlength{\leftmargin}{0pt}%
+     \renewcommand*{\makelabel}[1]{\hss\marglistfont##1}}%
+   \def\fielditem##1##2{%
+     \item[##1]%
+     \ltd@pdfbookmark{##1}{##1}%
+     フィールド（##2）\par\nobreak
+     \vspace{\itemsep}}%
+   \def\listitem##1##2{%
+     \item[##1]%
+     \ltd@pdfbookmark{##1}{##1}%
+     リスト（##2）\par\nobreak
+     \vspace{\itemsep}}}
+  {\endlist}
+
+\renewenvironment*{typelist}
+  {\list{}{%
+     \setlength{\labelwidth}{\marglistwidth}%
+     \setlength{\labelsep}{\marglistsep}%
+     \setlength{\leftmargin}{0pt}%
+     \renewcommand*{\makelabel}[1]{\hss\marglistfont##1}}%
+   \def\typeitem##1{%
+     \item[{##1}]%
+     \ltd@pdfbookmark{##1}{##1}}%
+   \def\reqitem{%
+     \par\begingroup\itemsep0.5\itemsep\item
+     必須：\btd@fieldloop}
+   \def\optitem{%
+     \par\begingroup\itemsep0.5\itemsep\item
+     任意：\btd@fieldloop}}
+  {\endlist}
+
+\def\ltd@option@i#1#2#3#4[#5]{%
+  \item[#2]%
+  \ltd@pdfbookmark{#1}{#1}%
+  \begingroup\raggedright
+  \ltd@textverb{=}%
+  \settowidth\@tempdimb{\ltd@textverb{=}}%
+  \@tempdima=\dimexpr\linewidth-\@tempdimb\relax
+  \ifblank{#4}
+    {}
+    {\settowidth\@tempdimb{既定：#4}%
+     \@tempdima=\dimexpr\@tempdima-\@tempdimb-2em\relax}%
+  \parbox[t]{\@tempdima}{\raggedright #3}%
+  \ifblank{#4}
+    {}
+    {\hfill 既定：#4}%
+  \ifblank{#5}
+    {}
+    {\marginpar{\margnotefont #5}}%
+  \par\endgroup
+  \nobreak\vspace{\itemsep}}
+
+\def\ltd@option@ii#1#2#3#4[#5]{%
+  \item[#2]%
+  \ltd@pdfbookmark{#1}{#1}%
+  \begingroup\raggedright
+  \ltd@textverb{=}%
+  \settowidth\@tempdimb{{\optionlistfont#2}\ltd@textverb{=}}%
+  \@tempdima=\dimexpr\linewidth-\@tempdimb\relax
+  \ifblank{#4}
+    {}
+    {\settowidth\@tempdimb{既定：#4}%
+     \@tempdima=\dimexpr\@tempdima-\@tempdimb-2em\relax}%
+  \parbox[t]{\@tempdima}{\raggedright #3}%
+  \ifblank{#4}
+    {}
+    {\hfill 既定：#4}%
+  \ifblank{#5}
+    {}
+    {\marginpar{\margnotefont #5}}%
+  \par\endgroup
+  \nobreak\vspace{\itemsep}}
+
+%%% 段落（biblatex のマニュアルと同じ：字下げなし，段落の間を少し空ける）---------------
+\AtBeginDocument{%
+  \setlength{\parindent}{0pt}%
+  \setlength{\parskip}{.5\baselineskip plus .1\baselineskip}%
+  % 段落の先頭行・末尾行だけがページに取り残されないようにする（導きの文と例が離れるのを防ぐ）
+  \clubpenalty=10000 \widowpenalty=10000 \displaywidowpenalty=10000 %
+  % リストの中でも段落の間を同じだけ空ける（\parsep）。jlreq の既定は 0 で，説明の段落が項目の行に詰まる
+  \g@addto@macro\@listI{\parsep=.5\baselineskip plus .1\baselineskip\relax}%
+  \let\@listi\@listI
+  % listings の環境の上下の空き（ltxexample の aboveskip＝1.5\lstenvsep）。読み込み時は 0 になっている
+  \setlength{\lstenvsep}{.4\baselineskip}}
+
+%% \cmditem を重ねたとき，2行目以降が詰まらないようにする（ltxdockit の定義の itemsep だけを替える）。
+%% 同じ段落に続く項目は，\parskip（＝リストの \parsep）を打ち消して，通常の行送りで並べる。
+%% 説明は，空行のあとの別の段落として書く（\cmditem の行のあとに空行を置く。build.sh が検査する）
+\def\ltd@cmditem@ii#1#2{%
+  \ltd@itemsave
+  \ifhmode
+    \itemsep-\parsep
+  \else
+    \ltd@itembreak
+  \fi
+  \item[#1]%
+  \ltd@itemrest
+  \ifblank{#2}{}{\ltd@pdfbookmark{#2}{#1}}%
+  \begingroup
+  \ltd@syntaxsetup
+  \ltxsyntaxfont
+  \let\@tempa\@empty
+  \ltd@parseargs}
+
+%%% コード例（listings） -----------------------------------------------------
+%% bib の例：白地，細い黒の枠（biblatex の style=bibtex にならう）。
+%% LaTeX の例は ltxdockit の ltxexample（薄い青の地）をそのまま使う。地の色で見分けられる。
+\lstdefinestyle{jsrbib}{%
+  basicstyle=\displayverbfont\small\setlength{\parskip}{0pt},
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{black},
+  framesep=3pt,
+  xleftmargin=3.4pt,
+  xrightmargin=3.4pt,
+  aboveskip=.6\baselineskip,
+  belowskip=.3\baselineskip,
+  columns=flexible,
+  keepspaces=true,
+  basewidth=0.5em,
+  breaklines=true,
+  showstringspaces=false,
+  % ひな形の記入箇所 <…> は山括弧つきのイタリック，※ 以降は注意書き（灰色の本文書体）
+  moredelim=[s][\itshape\rmfamily]{<}{>},
+  moredelim=[l][\color{gray}\rmfamily\footnotesize]{※}}
+%% listings の各行に \parskip が入らないようにする（Init だけでは足りない）
+\lst@AddToHook{Init}{\parskip\z@skip}
+\lst@AddToHook{EveryLine}{\parskip\z@skip}
+\lst@AddToHook{EveryPar}{\parskip\z@skip}
+
+%%% 書式の例：ひな形，例（bib の枠＋出力） ---------------------------------------
+%% ひな形は，地の文で導いてから置く：\begin{bibtemplate} … \end{bibtemplate}
+\lstnewenvironment{bibtemplate}[1][]
+  {\setlength{\parskip}{0pt}\lstset{style=jsrbib,#1}}
+  {}
+
+%% 例：\bibexample{<キー>} または \bibexample{<キー>,<キー>}（関係するエントリをまとめて）
+%%  1. examples/*.bib から，指定したキーのエントリだけを Lua（jsrdoc.extract）で抜き出して bib の枠に入れる
+%%  2. 枠の直後に，同じキーだけの文献リストを組む。例ごとに refsection を分ける
+%%     （訳書だけを指定しても，原典の複製が代表になって実際と同じ形で出る）
+%%  3. 出力は，文献リストと同じぶら下げ（2zw）・\small。左に spot 色の細い縦線と，左余白に「出力」の文字
+%%  枠と出力は 1 つの箱（vbox）に入れるので，別のページに分かれない
+\newcommand*{\jsr@exfiles}{}
+\newcommand*{\bibexamplefiles}[1]{%
+  \renewcommand*{\jsr@exfiles}{#1}%
+  \forcsvlist{\jsr@exfile}{#1}}
+\newcommand*{\jsr@exfile}[1]{\addbibresource{examples/#1.bib}}
+\newcounter{jsrex}
+\newsavebox{\jsr@outbox}
+\newdimen\jsr@fb
+\newcommand*{\jsr@first}{0}
+%% 出力用の文献リスト環境：リストを使わず，文献リストと同じぶら下げ（2zw）の段落にする
+\newcommand*{\jsr@exbegin}{\begingroup\small\raggedright\setlength{\parskip}{0pt}\setlength{\parindent}{0pt}\gdef\jsr@first{1}}
+\newcommand*{\jsr@exend}{\par\endgroup}
+\newcommand*{\jsr@exitem}{%
+  \ifdefstring{\jsr@first}{1}{\gdef\jsr@first{0}}{\par\vskip.3\baselineskip}%
+  \noindent\hangindent=2\zw\hangafter=1\relax}
+\AtEndPreamble{\defbibenvironment{jsrex}{\jsr@exbegin}{\jsr@exend}{\jsr@exitem}}% biblatex を読み込んだあとに定義する
+\newcommand*{\bibexample}[1]{%
+  \stepcounter{jsrex}%
+  \directlua{jsrdoc.extract("\jsr@exfiles", "\luaescapestring{#1}", "\jobname-ex\thejsrex.tmp")}%
+  \par\nopagebreak\medskip % 導きの文（直前の段落）と例を別のページに分けない
+  \noindent\vbox{\hsize=\linewidth\relax\parindent=0pt\relax
+    \lstinputlisting[style=jsrbib]{\jobname-ex\thejsrex.tmp}%
+    \par\smallskip
+    % 出力：縦線と「出力」の文字を，出力の 1 行目のベースラインにそろえる（その位置は Lua で測る）
+    % \savebox は内容を \hbox で包むので，縦組みの箱のまま持つ \setbox を使う
+    \setbox\jsr@outbox\vbox{\hsize=\linewidth\relax\parindent=0pt\relax
+      \begin{refsection}\nocite{#1}%
+      \printbibliography[heading=none,env=jsrex]%
+      \end{refsection}}%
+    \jsr@fb=\directlua{tex.sprint(jsrdoc.firstbaseline(\number\jsr@outbox))}sp\relax
+    \noindent\hbox to \linewidth{%
+      \hbox to 0pt{\hss\raisebox{\dimexpr\ht\jsr@outbox-\jsr@fb\relax}[0pt][0pt]{\marglistfont 出力}\hspace{\marglistsep}}%
+      \hbox to 0pt{\hss{\color{spot}\vrule width 2pt height\ht\jsr@outbox depth\dp\jsr@outbox}\hspace{4pt}}%
+      \usebox{\jsr@outbox}\hss}}%
+  \par\medskip}
+
+%%% 文中の表記（biblatex のマニュアルと同じ名前） ---------------------------
+%% \bibfield，\bibtype，\cmd，\opt，\prm，\sty，\file は btxdockit／ltxdockit のものを使う
+
+%%% 検査用：ページごとの内容の左端・右端をログに出す（manual/build.sh が読む。Lua は jsrdoc.lua） ---
+\directlua{dofile(kpse.find_file("jsrdoc.lua"))}
+\AddToHook{shipout/before}{%
+  \directlua{jsrdoc.measure(tex.box[\number\ShipoutBox], \the\value{page})}}
+\AtBeginDocument{%
+  \directlua{jsrdoc.geometry(\number\dimexpr\paperwidth\relax, \number\dimexpr\textwidth\relax,
+    \number\dimexpr 1in+\oddsidemargin\relax, \number\dimexpr 1in+\evensidemargin\relax,
+    \number\dimexpr\marglistwidth\relax, \number\dimexpr\parindent\relax)}}
+
+%% PDF の検査（check.py）のため，オブジェクトを圧縮しない（PDF が少し大きくなる）
+\pdfvariable objcompresslevel=0
+
+\endinput
