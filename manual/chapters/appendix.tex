@@ -1,0 +1,16 @@
+\appendix
+\section{更新履歴}\label{sec:changelog}
+\begin{changelog}
+\begin{release}{v1.0}{2026-10-24}
+\item 初めての公開版。biblatex-jpa（芝田征司氏）を元に，社会学評論スタイルガイド（第3版）に準拠するように改変した。
+\item 訳書・再録・再刊を，原典の項目に添えて出す方式にした。
+\item 新聞・雑誌記事を \bibfield{entrysubtype}（\texttt{newspaper}／\texttt{magazine}）で判定するようにした。朝刊・夕刊は \bibfield{issue}，版・地域版は \bibfield{note}。
+\item 電子書籍の紙媒体の情報を \bibfield{origdate}，\bibfield{origpublisher}，\bibfield{origlocation} で書くようにした。
+\item 調査報告書（\bibtype{report}），学位論文，学会報告を整備した。報告書所収の論文は \bibfield{crossref} で書く。
+\item コンピュータファイル（\bibtype{dataset}，MRDF）の専用ドライバを追加した。
+\item オプション \opt{doi}，\opt{firstfull} を追加した。
+\item ウェブサイト名は \bibfield{titleaddon}，オンラインの報告書は \bibtype{online} で書くようにした（旧形式は読み替えて警告を出す）。
+\item 回帰テスト（\file{tests/}）を追加した。
+\item このマニュアルを書いた。
+\end{release}
+\end{changelog}

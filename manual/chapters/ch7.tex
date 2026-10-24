@@ -1,0 +1,27 @@
+\section{制約と未解決の点}\label{sec:limits}
+\subsection{動作の前提}
+\begin{itemize}
+\item \textbf{バックエンドは biber}です。BibTeX（\texttt{backend=bibtex}）では動きません。
+\item \textbf{エンジンは LuaLaTeX，XeLaTeX，upLaTeX のいずれか}です。カタカナ書きの外国人名の判定が Unicode を前提にしています。pdfLaTeX では使えません。このマニュアルは LuaLaTeX で組んでいます。
+\item 確認した環境は，TeX Live 2026（biblatex 3.22，biber 2.23 beta）です。前の版は TeX Live 2023（biblatex 3.19，biber 2.19）で確認しましたが，この版での再確認はしていません。
+\item \bibfield{langid} が文書に読み込まれていない言語（french など）の欧文は，american の規則で組みます（\ref{sec:cautions} 節）。
+\end{itemize}
+
+\subsection{biblatex の内部への依存}
+原典を代表にする方式（訳書・再録を原典の項目に添える仕組み）と，言語の判定は，biblatex・babel（polyglossia）の内部名に依存しています（第\ref{sec:internals}章）。biblatex や babel の更新で，組版が壊れたり，訳書の項目が単独で出たりすることがあります。更新したあとは，\file{tests/run-tests.sh} を流して確かめてください。
+
+\subsection{スタイルが扱わないこと}
+\begin{itemize}
+\item \textbf{欧文タイトルの大文字化}：スタイルガイドの規則（英語は冠詞・前置詞を除いて語頭を大文字，など）は，データ側で書きます。スタイルは変換しません。
+\item \textbf{\cmd{footcite}}：biblatex の既定のままです。スタイルガイドの文献注は割注ですので，\cmd{parencite} と \cmd{textcite} を使ってください。
+\item \textbf{その他の外国語文献}（スタイルガイド 4.3）：「欧文の文献」と「邦文の文献」を参考に，投稿者の責任で書きます。
+\item \textbf{文献リストと文献注の対応の確認}：本文で引用していない文献は，\bibtype{nocite} しない限り載りません。スタイルガイド 4.1 の「リストにあげた文献には，本文に対応する文献注がなければならない」は，この仕組みで満たされます。
+\end{itemize}
+
+\subsection{未解決の点}
+\begin{itemize}
+\item \bibfield{date} に終了年のない範囲（\texttt{1956-}）を書くと，年が解釈されず n.d. になります。
+\item 欧文の報告書を \bibfield{crossref} で指した所収論文の書式は，テストしていません。
+\item 署名のない新聞記事は，文献リストに載りません（スタイルガイド 3.7 の文献注だけです）。
+\item texmf にインストールしたスタイルと作業コピーの二重管理（\file{TEXINPUTS} で作業コピーを優先して読み込んでいます）。
+\end{itemize}

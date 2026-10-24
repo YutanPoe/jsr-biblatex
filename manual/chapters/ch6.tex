@@ -1,0 +1,60 @@
+\section{旧い書き方からの移行}\label{sec:migrate}
+このスタイルの前の版で書いた bib（や，ほかのスタイル用に書いた bib）を，現在の書き方に直すための対応表です。書き方を変えたのは，bib を biblatex の標準のデータモデルで書けるようにし，このスタイル固有の目印に頼らないためです。各エントリは，単独で完結した正しい書誌として書きます。
+
+\begin{center}\small
+\begin{tabular}{@{}L{.25\textwidth}L{.30\textwidth}L{.30\textwidth}@{}}
+\toprule
+\textbf{旧い書き方} & \textbf{現在の書き方} & \textbf{旧い書き方の扱い} \\
+\midrule
+\bibfield{webpagetitle}（ウェブサイト名・ブログ名） & \bibfield{titleaddon} & 読み替えて組む。警告を出す \\
+\bibtype{report} ＋ \texttt{type = \{onlinereport\}}（オンラインの報告書） & \bibtype{online}（\bibfield{institution} は \bibfield{organization}） & 読み替えて組む。警告を出す \\
+\bibtype{article} ＋ \texttt{type = \{newspaper\}}／\texttt{\{magazine\}} & \bibfield{entrysubtype} \texttt{= \{newspaper\}}／\texttt{\{magazine\}} & 当面そのまま読める \\
+新聞の版・地域版を \bibfield{version} に書く & \bibfield{note} に書く（朝刊・夕刊は \bibfield{issue}） & 読まなくなった（出力に出ない） \\
+電子書籍の紙媒体の情報を \bibfield{note} に書く & \bibfield{origdate}，\bibfield{origpublisher}（欧文は \bibfield{origlocation}）。\bibfield{note} はフォーマット（Kindle 版など） & 読み方が変わった（\bibfield{note} が末尾の括弧に出る） \\
+訳書・再録を単独の項目として書く（\bibfield{skipbib}，\bibfield{sortyear} などの目印を付ける） & 原典のエントリを書き，\bibfield{related} ＋ \bibfield{relatedtype} でつなぐ。原典がなければ \bibfield{origdate} & 目印は不要 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{警告が出たとき}
+組版のログに次の警告が出たら，対応する書き方を直してください。
+
+\begin{itemize}
+\item \texttt{jsr: entry '…' uses deprecated 'webpagetitle'}：
+\bibfield{webpagetitle} を \bibfield{titleaddon} に書き換えます。
+\item \texttt{jsr: entry '…' uses deprecated 'type=onlinereport'}：
+\bibtype{report} を \bibtype{online} に，\bibfield{type} を削除し，\bibfield{institution} を \bibfield{organization} に書き換えます。\bibfield{url} と \bibfield{urldate} は，そのまま使えます。
+\item \texttt{jsr: entry '…' has no sortname}：
+和文の著者・編者がいるのに \bibfield{sortname} がありません。ヘボン式のローマ字で書き足します（\ref{sec:cautions} 節）。移行とは関係なく，並び順が決まらなくなるので，直してください。
+\end{itemize}
+
+読み替えは当面のものです。次の版で警告を外す予定ですので，早めに新しい書き方に直してください。
+
+\subsection{書き換えの例}
+\noindent{\sffamily\bfseries ウェブサイト名}\par\nopagebreak
+\begin{bibtemplate}
+% 旧
+webpagetitle = {架空学会ホームページ},
+% 新
+titleaddon   = {架空学会ホームページ},
+\end{bibtemplate}
+
+\noindent{\sffamily\bfseries 新聞の版}\par\nopagebreak
+\begin{bibtemplate}
+% 旧
+type    = {newspaper},
+version = {第3版，東京都版},
+% 新
+entrysubtype = {newspaper},
+note         = {第3版，東京都版},
+\end{bibtemplate}
+
+\noindent{\sffamily\bfseries 電子書籍}\par\nopagebreak
+\begin{bibtemplate}
+% 旧（note に紙媒体の情報を書いていた）
+note          = {2005，架空放送出版協会刊},
+% 新
+origdate      = {2005},
+origpublisher = {架空放送出版協会},
+note          = {Kindle版},     ※ フォーマットがあるときだけ
+\end{bibtemplate}

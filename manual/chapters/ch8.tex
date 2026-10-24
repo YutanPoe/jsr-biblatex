@@ -1,0 +1,29 @@
+\section{内部の仕組み}\label{sec:internals}
+この章は，スタイルを改造・保守する人のための短い説明です。利用者は読まなくてかまいません。詳しくは，リポジトリの \file{CLAUDE.md} と \file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx} にあります。
+
+\subsection{原典を代表にする方式}
+訳書・再録（\bibfield{related} ＋ \bibfield{relatedtype} が \texttt{translationof} または \texttt{reprintof}）は，単独の項目にせず，原典の項目に添えて出します。原典が引用されていないときは，biber が作る原典の複製（clone）が代表になります。
+
+\begin{itemize}
+\item \cmd{DeclareStyleSourcemap} で，related のオプションと並べ替えの役割（\bibfield{jsrsortrole}）を付けます。
+\item \cmd{AtDataInput}（\cmd{jsr@datainput}）で，読み込んだ項目に添え物の印を付けます。
+\item \cmd{blx@bbl@enddlist} の直前に \cmd{jsr@finishlist} を差し込み，添え物を印刷リストから除いて，extradate（a，b）を振り直します。
+\item 添え物は，\texttt{jsr:work}，\cmd{jsr@printattach}，\texttt{jsr:attachbody} で出します。
+\end{itemize}
+\texttt{blx@dlist@entry@…}，\texttt{blx@data@…}，\cmd{blx@bbl@enddlist} は biblatex の内部名です。biblatex を更新して壊れたら，まずここを疑ってください。
+
+\subsection{sortname の印}
+\bibfield{sortname} は bbl に書き出されません（biber が並べ替えにだけ使います）。TeX 側で有無を調べたいときは，sourcemap で印のフィールド（\bibfield{jsrnosortname}，\bibfield{jsrsortrole}。\file{jsr.dbx} で宣言）を付けます。
+
+\subsection{旧形式の読み替え}
+\bibfield{webpagetitle} と \texttt{type=onlinereport} は，sourcemap で読み替えます。このとき，警告用の印（\bibfield{jsrlegacy}）を付けておき，組版時に警告を出します。
+
+\subsection{言語の判定}
+\bibfield{langid} が読み込まれているかは，プリアンブル終了時の言語一覧（\cmd{jsr@doclangs}）で判定します。babel の \cmd{bbl@loaded}，\cmd{bbl@ini@loaded}，polyglossia の \cmd{xpg@bloaded}，\cmd{xpg@loaded} を読むので，これらの内部名が変わったら壊れます。一覧にない言語の項目は，\bibfield{langid} を消して american で組みます。
+
+\subsection{実装上の注意}
+\begin{itemize}
+\item \cmd{savebox} の中で \cmd{printnames} を使うとき（発行元の判定，カタカナ名の判定）は，\cmd{jsr@savepunct}／\cmd{jsr@restorepunct} で句読点の状態を退避します。しないと，保留中の区切りが消えます。
+\item ループで \cmd{do} を使い回すと，入れ子で壊れます。新しいループには専用のハンドラを使います。
+\item リストが空になりうる箇所では，etoolbox のループの代わりに \cmd{jsr@forlistcs}／\cmd{jsr@dolistcs} を使います。未定義のリストを渡すと，\cmd{relax} が項目として処理されるためです。
+\end{itemize}

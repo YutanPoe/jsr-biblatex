@@ -104,7 +104,7 @@ Bourdieu, Pierre, 1983, “Vous avez dit ‘populaire’?,” Actes de la recher
 ————, 1989, La noblesse d'état: Grandes écoles et esprit de corps, Paris: Les Editions de Minuit. (Lauretta Clough, trans., 1996, The State Nobility: Elite Schools in the Field of Power, Oxford: Polity Press.)
 Broadbent, Jeffrey, 1998, Environmental Politics in Japan: Networks of Power and Protest, New York: Cambridge University Press.
 Cohen, Jean L. and Andrew Arato, 1981, Test Book on Civil Society, Cambridge: Test Press.
-# 4.2(7) 欧文の編書論文でも，所収書の版を出す
+# 4.2(4) 欧文の編書論文でも，所収書の版を出す
 Cole, Anna, 2009, “Test Chapter,” Ben Dale ed., Big Book, 2nd ed., London: Test Press, 1-20.
 # 4.5.3 ブログ（欧文）
 DeLong, Brad, 2007, “Thomas Piketty and Emmanuel Saez Give Their Current View on American Income Inequality,” The Brad DeLong Blog, January 7, 2007, (Retrieved January 9, 2007, http://econ161.berkeley.edu/movable_type).

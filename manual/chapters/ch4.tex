@@ -4,7 +4,7 @@
 どの例も，先に「ひな形」（\texttt{<\ >} の部分に値を入れます。\texttt{※} 以下は注意書きです），次に実際の記入例，その下に「出力」の順です。ひな形に示したフィールドのうち，必須でないものは省いてかまいません（必須・任意の一覧は\ref{sec:types}節）。どの例にも \bibfield{langid} を書きます。和文の著者・編者には \bibfield{sortname} も書きます。
 
 \subsection{書籍}\label{sec:book}
-単著・共著・編著の書籍は \bibtype{book}，編者だけで著者のいない本は \bibtype{collection} です（スタイルガイド 4.4(1) に対応します）。著者が複数のときは，\texttt{and} でつなぎます。
+単著・共著・編著の書籍は \bibtype{book}，編者だけで著者のいない本は \bibtype{collection} です（スタイルガイド 4.2(1)〜(3)，4.4(1)〜(3) に対応します）。著者が複数のときは，\texttt{and} でつなぎます。
 
 \begin{bibtemplate}
 @book{<キー>,
@@ -85,7 +85,7 @@
 \bibexample{lewis2001}
 
 \subsection{編書論文}\label{sec:incollection}
-編書・論文集の中の1つの章・論文は \bibtype{incollection} です。雑誌論文との違い（\bibtype{article} と使い分ける理由）は\ref{sec:artcoll}節，所収書の情報を1か所にまとめる \bibfield{crossref} は\ref{sec:crossref}節を見てください。
+編書・論文集の中の1つの章・論文は \bibtype{incollection} です（スタイルガイド 4.2(4)，4.4(4) に対応します）。雑誌論文との違い（\bibtype{article} と使い分ける理由）は\ref{sec:artcoll}節，所収書の情報を1か所にまとめる \bibfield{crossref} は\ref{sec:crossref}節を見てください。
 
 \begin{bibtemplate}
 @incollection{<キー>,
@@ -112,7 +112,7 @@
 \bibexample{fox2013}
 
 \subsection{雑誌論文}\label{sec:article}
-雑誌・紀要・年報などの論文は \bibtype{article} です。巻（\bibfield{volume}）・号（\bibfield{number}）・ページを書きます。
+雑誌・紀要・年報などの論文は \bibtype{article} です。巻（\bibfield{volume}）・号（\bibfield{number}）・ページを書きます（スタイルガイド 4.2(5)，4.4(5)，4.5.2 に対応します）。
 
 \begin{bibtemplate}
 @article{<キー>,
@@ -218,12 +218,12 @@
 
 \bibexample{beck1998}
 
-英訳された文献も同じです。
+英訳された文献（スタイルガイド 4.2(6)）も同じです。
 
 \bibexample{beck1992}
 
 \paragraph{再録}
-論文集に再録された論文などは，再録のエントリを \bibfield{relatedtype} \texttt{= \{reprintof\}} で書きます（スタイルガイド 4.2(8) に対応します）。著者名と論文名が重なるときは，重複が省かれます。
+論文集に再録された論文などは，再録のエントリを \bibfield{relatedtype} \texttt{= \{reprintof\}} で書きます（スタイルガイド 4.4(7)，欧文は 4.2(8) に対応します）。著者名と論文名が重なるときは，重複が省かれます。
 
 \bibexample{ito1990}
 
@@ -232,7 +232,7 @@
 \bibexample{ito1974,ito1990}
 
 \paragraph{再刊}
-同じ書籍の再刊（原典が書籍）：
+同じ書籍の再刊（原典が書籍。スタイルガイド 4.2(7) の「初版の出版年」の書き方です）：
 
 \bibexample{hirose2000}
 
@@ -404,5 +404,3 @@
 欧文：
 
 \bibexample{gallup1976}
-
-\section{旧い書き方からの移行}\label{sec:migrate}
