@@ -165,6 +165,17 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \setboolean{reversenamebool}{true}%氏名反転をOnに
 }%
 
+% 新聞・雑誌の記事か。標準の entrysubtype（newspaper／magazine）で判定する。
+% 互換のため type=newspaper／magazine も受け付ける（2026-10-24 決定）。
+\newcommand*{\jsr@ifnewspaper}{%
+  \ifboolexpr{ test {\iffieldequalstr{entrysubtype}{newspaper}}
+                or test {\iffieldequalstr{type}{newspaper}} }}
+\newcommand*{\jsr@ifnewsmag}{%
+  \ifboolexpr{ test {\iffieldequalstr{entrysubtype}{newspaper}}
+                or test {\iffieldequalstr{entrysubtype}{magazine}}
+                or test {\iffieldequalstr{type}{newspaper}}
+                or test {\iffieldequalstr{type}{magazine}} }}
+
 % 和文（CJK）の文献で，著者・編者がいるのに sortname がないときは警告を出す。
 % ローマ字は自動では作れないので，漢字のコード順で並び，ローマ字順の並びから外れる（書き忘れの検出だけ行う）。
 \newcommand*{\jsr@chksortname}{%
@@ -807,21 +818,42 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     {\printfield{volume}\printfield[parens]{number}}%
 }%
 
+% 欧文の新聞のページの接頭辞（p. A1，pp. A1-A3）。biblatex の \mkpageprefix は A1 のような数字でないページには付けないので，
+% ページが範囲か（\bibrangedash を含むか）を調べて自前で付ける。
+\def\jsr@pgprefix{%
+  \edef\jsr@tmppages{\thefield{pages}}%
+  \expandafter\jsr@pgprefix@i\jsr@tmppages\bibrangedash\relax\@nil}
+\def\jsr@pgprefix@i#1\bibrangedash#2\@nil{%
+  \ifx\relax#2\relax\bibstring{page}\else\bibstring{pages}\fi\ppspace}
+
+% 新聞：和文は 朝刊・夕刊（issue），版・地域版（note），ページ＋「面」。欧文は p. A1（ASA）
 \newbibmacro*{pages}{%
   \iffieldundef{pages}{}{%
-    \iffieldequalstr{type}{newspaper}{%
-      \setunit{\unspace}%
-      \printfield{issue}%
-      \newunit%
-      \printfield{version}%
-      \newunit%
-      \printtext{\printfield{pages}面}%
+    \jsr@ifnewspaper{%
+      \ifthenelse{\boolean{CJK}}{%
+        \setunit{\unspace}%
+        \printfield{issue}%
+        \newunit%
+        \printfield{note}%
+        \newunit%
+        \printtext{\printfield{pages}面}%
+      }{%
+        \setunit{\addcomma\space}%
+        \printtext{\jsr@pgprefix\printfield{pages}}%
+      }%
     }{%
       \printfield{pages}%
       \newunit%
     }
   }
 }%
+
+% 新聞・雑誌の日付。和文は 1958年8月10日，欧文は November 3（年は著者の後に出している。ASA）
+\newbibmacro*{news:date}{%
+  \ifthenelse{\boolean{CJK}}
+    {\printdate}
+    {\printtext{\mkbibmonth{\thefield{month}}%
+       \iffieldundef{day}{}{\addspace\stripzeros{\thefield{day}}}}}}
 
 %% 巻数・引用ページ表示マクロ %%%
 \newbibmacro*{vol+pages}{%
@@ -1054,7 +1086,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \ifthenelse{\boolean{CJK}}{\printlist{publisher}}{}%
   \setunit*{\printdelim{fhcomma}}%
   %\usebibmacro{yyyymmdd}%
-  \iffieldundef{type}{}{\printdate\newunit}%
+  \jsr@ifnewsmag{\usebibmacro{news:date}\newunit}{}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
   % doi,url,database

@@ -60,3 +60,10 @@
 - テスト：電子書籍（和文の紙媒体情報つき、Kindle版、CD-ROM）、単独の訳書（和文・欧文）、文献注3件（C63〜C65）を追加。全件一致。
 - 実データ：`compare-real.sh` は差分なし。`../bib` 全エントリの比較で、変更は意図したもののみ：Cho2015夢（単独訳書）が「張彧暋，2015，『…』山岡由美訳，朝日新聞出版．」に、note（電子書籍版、OCLC、Section）が末尾の括弧に。ほかに、行数が1行増えたため、ページ先頭の項目で同一著者のダッシュが出入りした（standard.bbx の \iffirstonpage の仕様。不具合ではない）。
 - bib（ブランチ `jsr-phase-c`、未コミット）：books.bib の OCLC 等の note 2件と、Saitama1956埼玉県議会史mv の urldate を削除。main との比較で、これらの表示だけが消えることを確認した。副作用：その mvbook の親を単独で出すと、年が「2026」（urldate 由来）から n.d. になる（date={1956-} が年として解釈されていない）。
+
+## 2026-10-24 区切り4b-3：新聞記事（提案2 D）
+- 新聞・雑誌の判定を `entrysubtype` に（`type=newspaper`／`magazine` も互換で受け付ける）。版・地域版を `version` から `note` に。欧文の署名記事を ASA 式（月日、p.／pp.）に。
+- テスト：entrysubtype の新聞（Asahi1998）、互換の type=newspaper（Mainichi1998）、版・地域版つき（Mainichi1999）、署名入りの和文・欧文（Nakaoka1975、Walsh1998・1999）、文献注4件（C66〜C69）。全件一致。
+- bib（ブランチ `jsr-phase-c`、未コミット）：newspaper.bib、magazine.bib、test.bib の `type={newspaper/magazine}` 64件を `entrysubtype` に、`version` 44件を `note` に、空の `version={}` 4件を削除。旧スタイル＋main の bib と、新スタイル＋ブランチの bib で、新聞・雑誌の出力は完全に一致した。
+- フェーズC 作業5 のうち、新聞の `type`／`issue`／`version` の転用は解消。`webpagetitle` と report の `type=onlinereport` は未着手。
+- 未確認：magazine.bib の `Miyazato1929デイゼルエンヂン` ほか `type={}`（空）のエントリ（books.bib 1件、article.bib 4件、magazine.bib 1件）は、今のまま（通常の論文として出る）。

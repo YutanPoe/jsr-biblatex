@@ -75,3 +75,9 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **B. 電子書籍**：紙媒体の刊行年・出版社は `origdate`＋`origpublisher` で書く。書名の後に和文は（2005，日本放送出版協会刊）、欧文は (2005, 所在地: 出版社)（所在地は `origlocation`。和文では出さない）。`origpublisher` があるときは再刊の [初版年] の形にしない（リストも文献注も）。フォーマット（Kindle版、Available on CD-ROM only）は `note` に書き、末尾の括弧に出す。取得日・URL がある場合は（取得日，URL）の後に続ける。「刊」はコードに書いてある（bibstring 化はフェーズC 作業2）。並び順は紙版の年（origdate）が優先される。
 - **C. 原典のエントリがない訳書**（translator あり、related なし、author あり）：著者を先頭にし、訳者は書名の後（版の後）に置く。原典の年は出さない：ウルリッヒ・ベック，1998，『危険社会』東廉・伊藤美登里監訳，法政大学出版局．／Beck, Ulrich, 1992, Risk Society, Mark Ritter, trans., London: Sage.。文献注は origdate があれば（ベック 1986=1998）。原典に添える訳書（添え物）と、著者のいない訳書は、従来どおり訳者が先頭。原典のエントリを作って related でつなぐ書き方が推奨。
 - **sortname の警告**：`crossref`／`xref` で親から継承する項目は対象外（継承前の段階では sortname が見えず、誤検出になるため）。
+
+## 新聞記事（提案2 D、2026-10-24 実装）
+- **判定**：標準の `entrysubtype`（newspaper／magazine）で行う。互換のため `type=newspaper`／`type=magazine` も当面受け付ける（`\jsr@ifnewspaper`、`\jsr@ifnewsmag`）。
+- **フィールド**：朝刊・夕刊は `issue`、版・地域版（第3版、東京都版、全国版）は `note`。`version` は読まなくなった（既存の bib は `note` に書き換える）。
+- **和文**：文献リストは 1975年3月17日夕刊，全国版，3面。文献注は （『毎日新聞』1999.3.15 夕刊，第3版，東京都版，5面）。
+- **欧文の署名記事**（ASA）：Smith, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.。日付は月日だけ（年は著者の後に出している）。ページの前に p.／pp.（biblatex の `\mkpageprefix` は A1 のような数字でないページには付けないので、`\jsr@pgprefix` で範囲かどうかを調べて付ける）。

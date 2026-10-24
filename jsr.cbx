@@ -430,9 +430,9 @@ language=auto,%
 %%  和文：（『朝日新聞』1998.11.3 朝刊，第○版，○面）  欧文：（The New York Times, November 3, 1998）
 \newbibmacro*{noauthorcite}{%
   \usebibmacro{journal}%
-  \iffieldundef{type}{}{%
-    \ifthenelse{\boolean{CJK}}{\usebibmacro{yyyymmdd}}{\printdate}}%
-  \iffieldequalstr{type}{newspaper}%
+  \jsr@ifnewsmag{%
+    \ifthenelse{\boolean{CJK}}{\usebibmacro{yyyymmdd}}{\printdate}}{}%
+  \jsr@ifnewspaper
     {\usebibmacro{newspaper:edition}}%
     {\usebibmacro{magazine:volpages}}}
 
@@ -449,7 +449,7 @@ language=auto,%
 \newbibmacro*{newspaper:edition}{%
   \ifthenelse{\boolean{CJK}}{%
     \iffieldundef{issue}{}{\setunit*{\addspace}\printfield{issue}}%
-    \iffieldundef{version}{}{\setunit*{\printdelim{fhcomma}}\printfield{version}}%
+    \iffieldundef{note}{}{\setunit*{\printdelim{fhcomma}}\printfield{note}}%
     \iffieldundef{pages}{}{\setunit*{\printdelim{fhcomma}}\printtext{\printfield{pages}面}}%
   }{}}
 

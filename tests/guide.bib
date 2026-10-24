@@ -1106,9 +1106,64 @@
 @article{Asahi1998,
   journaltitle = {朝日新聞},
   date         = {1998-11-03},
-  type         = {newspaper},
+  entrysubtype = {newspaper},
   issue        = {朝刊},
   langid       = {japanese},
+}
+
+%% 互換：type=newspaper でも新聞として扱う
+@article{Mainichi1998,
+  journaltitle = {毎日新聞},
+  date         = {1998-11-11},
+  type         = {newspaper},
+  issue        = {夕刊},
+  langid       = {japanese},
+}
+
+%% 3.7 版・地域版は note，朝刊・夕刊は issue（詳細な出典）
+@article{Mainichi1999,
+  journaltitle = {毎日新聞},
+  date         = {1999-03-15},
+  entrysubtype = {newspaper},
+  issue        = {夕刊},
+  note         = {第3版，東京都版},
+  pages        = {5},
+  langid       = {japanese},
+}
+
+%% 3.7 署名入りの新聞記事は文献リストにも載せる（和文・欧文）
+@article{Nakaoka1975,
+  author       = {中岡,哲郎},
+  sortname     = {Nakaoka, Tetsuro},
+  date         = {1975-03-17},
+  journaltitle = {朝日新聞},
+  title        = {テスト署名記事},
+  subtitle     = {雑考・新線建設《上》},
+  entrysubtype = {newspaper},
+  issue        = {夕刊},
+  note         = {全国版},
+  pages        = {3},
+  langid       = {japanese},
+}
+
+@article{Walsh1999,
+  author       = {Walsh, Tom},
+  date         = {1999-02-14},
+  title        = {Another Test News},
+  journaltitle = {The New York Times},
+  entrysubtype = {newspaper},
+  pages        = {A12--A13},
+  langid       = {american},
+}
+
+@article{Walsh1998,
+  author       = {Walsh, Tom},
+  date         = {1998-11-03},
+  title        = {Test News},
+  journaltitle = {The New York Times},
+  entrysubtype = {newspaper},
+  pages        = {A1},
+  langid       = {american},
 }
 
 %% 3.7 商業雑誌の記事（著者なし：文献リストには載せない）

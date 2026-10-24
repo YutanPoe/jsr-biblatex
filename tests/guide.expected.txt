@@ -83,6 +83,12 @@ C62 （岩本 1997）
 C63 （藤竹 2008）
 C64 （ベック 1986=1998）
 C65 （Beck 1986=1992）
+# 3.7 新聞記事：entrysubtype で判定（互換のため type=newspaper も受け付ける）。朝刊・夕刊は issue，版・地域版は note
+C66 （『毎日新聞』1998.11.11 夕刊）
+C67 （『毎日新聞』1999.3.15 夕刊，第3版，東京都版，5面）
+# 3.7 署名入りの新聞記事は文献注もつける
+C68 （中岡 1975）
+C69 （Walsh 1998）
 == BIBLIOGRAPHY ==
 Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
 # DOI：既定（doi=false）では取得日がないと出さない（doi=true の場合は tests/doi.tex）
@@ -158,6 +164,8 @@ Meyer, Dana, 2007, The Acceptance and Diffusion of Innovation, Washington, DC: A
 森田三郎，2018，「テスト博士論文」東京大学大学院人文社会系研究科博士論文．
 # 4.4(9) 政府刊行物
 内閣府国民生活局，2009，『平成20年版国民生活白書』．
+# 3.7 署名入りの新聞記事（和文）：1975年3月17日夕刊，全国版，3面
+中岡哲郎，1975，「テスト署名記事——雑考・新線建設《上》」『朝日新聞』1975年3月17日夕刊，全国版，3面．
 # 4.5.4.1 オンラインデータベース（欧文）
 National Center for Health Statistics, 2007, “Faststats, A to Z,” (Retrieved February 2, 2007, http://www.cdc.gov/).
 # 4.5.3 ウェブページ（和文）
@@ -222,6 +230,9 @@ Taylor, Mary, 2005, Test Technical Report, Technical Report TR-12, Chicago: Univ
 # 4.5.3 ブログ（和文）
 # 4.4(8) 研究分担者がいる報告書は代表者名の後に「編」（親の報告書は，所収の論文から crossref されても単独で載る）
 碓井崧編，1997，『地域組織とネットワーク』1995-1996年度科学研究費補助金研究成果報告書，金沢大学文学部．
+# 3.7 署名入りの新聞記事（欧文，ASA）：ページの前に p.／pp.
+Walsh, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.
+————, 1999, “Another Test News,” The New York Times, February 14, pp. A12-A13.
 渡辺潤，2009，「スポーツの値段」，珈琲をもう一杯 film&tv，2009年1月5日，（2009年2月2日取得，http://www.tku.ac.jp/~juwat/blog/film_blog/2009/01/post_54.html）．
 # 4.5.2.2 紙媒体・電子媒体の雑誌（和文）
 渡邊勉・竹ノ下弘久，2008，「特集 階層移動研究の最前線」『理論と方法』23(2): 1-3，（2009年1月10日取得，http://www.jstage.jst.go.jp/article/ojjams/23/2/23_2_1/_article/-char/ja/）．
