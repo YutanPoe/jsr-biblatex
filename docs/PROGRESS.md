@@ -79,3 +79,8 @@
 - `\mkbibfparens`（全角丸かっこ）の定義を cbx から bbx に移した（bbx が cbx に依存しないように）。cbx は bbx の定義を使う。
 - ハードコードを bibstring に：「取得」「Retrieved」→ `urlseen`（既存の文字列。非CJK の jsr.lbx で Retrieved に上書き）、「面」→ `newspaperpage`、「全」→ `totalprefix`、「巻」「vols.」→ `totalvolumes`、「刊」→ `origpublished`（新規。全言語の jsr.lbx に定義。和文以外は空、totalvolumes だけ vols.）。bbx と cbx の該当箇所を `\bibstring` に置き換えた。
 - テスト：欧文の多巻本（3 vols.）を追加。全件一致。実データの出力は変わらない（compare-real、`../bib` 全エントリの比較ともに差分なし）。
+
+## 2026-10-24 フェーズC 作業3：全角「）」が行頭に来る問題
+- 再現しなかった。`../bib/test.bib` の Ashworth の訳書を行幅 26〜48 字で組み、また `../bib` の全エントリを 9 通りの行幅（30〜50 字）で組んで、行頭に閉じ括弧・句読点が来る行は 0 件。改行前のノード列では、「．」と「）」の間は `PEN(10000) KERN PEN(10000) KERN PEN(10000) GLUE GLUE` で、改行できる位置がない（禁則が効いている）。
+- 以前の症状（行頭の「）．」）は、「）」の直前に改行可能な glue があったときの形。スタイルのコピーで「）」の直前に `\hskip0pt plus 1pt` を入れると、同じ症状が出ることを確かめた（負の対照）。
+- 再発防止に回帰テスト `kinsoku` を追加（`kinsoku.tex`、`check-kinsoku.py`）。行幅 16〜49 字の箱に、guide.bib の全エントリの文献リストを繰り返し組み、行頭の閉じ括弧・句読点、行末の開き括弧がないことを確かめる。`run-tests.sh` に組み込んだ。

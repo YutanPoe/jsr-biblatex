@@ -31,7 +31,7 @@ claude.ai のプロジェクト「社会学評論スタイルガイド準拠bibl
 ```sh
 sh tests/run-tests.sh      # biber が PATH にないときは BIBER=パス を付ける。OK: all cases match ／ NG: <文書>: n expected line(s) … （差分は tests/<文書>.diff）
 ```
-- 必要なもの：lualatex、biber、python3。リポジトリの bbx/cbx/lbx を `TEXINPUTS` で優先して読む。テスト文書は3つ（guide、noextra、doi）。
+- 必要なもの：lualatex、biber、python3。リポジトリの bbx/cbx/lbx を `TEXINPUTS` で優先して読む。テスト文書は4つ（guide、noextra、doi、kinsoku）。
 - 変更のたびに実行する。出力を変える変更をしたら、`tests/guide.bib`／`guide.tex`／`guide.expected.txt` の3つをそろえて更新する（期待値はスタイルガイドに準拠させる。実際の出力に合わせて期待値を書き換えない）。
 - 実データでの確認：`sh tests/compare-real.sh [REV]` が、`../test.tex` を REV（既定 HEAD）のスタイルと作業コピーのスタイルで組み、組版された行を比べる（差分は `tests/real.diff`）。意図した変更だけか確かめる。行単位の比較なので、改行位置が変わると後続の行も差分に出る。pdftotext は使わない（手元の環境にない）。
 - `../bib` は別のリポジトリ。bib を書き直すときは作業ブランチ（`jsr-phase-c`）で行い、確認してから main にマージする。bib の書き直しの影響は、同じスタイルで main の bib とブランチの bib を `\nocite{*}` で組んで比べる（`compare-real.sh` は `../test.tex` が引用する分だけ）。
@@ -55,7 +55,7 @@ bib の各エントリは、単独で完結した正しい書誌として biblat
 ## フェーズCの作業（優先順の目安）
 1. （完了）`\mkbibfparens` を bbx に移した。
 2. （完了）ハードコードの bibstring 化（`urlseen`、`newspaperpage`、`totalprefix`、`totalvolumes`、`origpublished`）。
-3. 全角の閉じ丸カッコ「）」が行頭に来る問題（`../bib/test.bib` の Ashworth の訳書。`\nobreak` では直らなかった。luatexja の禁則とノードの並びを調べる）。
+3. （完了）全角の閉じ丸カッコ「）」が行頭に来る問題：現在のスタイルでは再現しない（改行前のノード列で、「．」と「）」の間に改行できる位置がない）。禁則のテスト `kinsoku` を足した。原因は以前のスタイルの、「）」の直前の改行可能な glue と考えられる。
 4. ヘッダーの版情報、README。書くこと：使い方、オプション（`firstfull`、`doi`）、ウェブページは `@online`＋`titleaddon`、`\parencite[78=86]{訳書}`、欧文タイトルの大文字化はデータ側の責任、エンジンの前提、bib の書き方（新聞は `entrysubtype`＋`issue`＋`note`、電子書籍は `origdate`＋`origpublisher`＋`note`、訳書は原典のエントリを作って `related` でつなぐ、報告書所収の論文は `crossref`）、`\footcite` は使わず `\parencite`／`\textcite` を使う、電子書籍は紙版の年の位置に並ぶ。
 5. （完了）独自フィールドの置き換え：新聞は `entrysubtype`＋`issue`＋`note`、ウェブサイト名は `titleaddon`、オンラインで取得した報告書は `@online`。旧形式（`webpagetitle`、`type=onlinereport`、`type=newspaper`、`version`）のうち、`webpagetitle` と `onlinereport` は読み替えて警告を出す。次の版で警告を外す。
 6. texmf 側クローンと作業コピーの二重管理（latexmkrc か `TEXINPUTS`）。

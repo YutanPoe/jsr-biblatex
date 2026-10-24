@@ -35,5 +35,20 @@ for name in guide noextra doi; do
     [ "$status" -eq 0 ] && status=1
   fi
 done
+
+# 禁則の確認（行頭に閉じ括弧・句読点，行末に開き括弧が来る行がない）
+name=kinsoku
+rm -f "$name".lines.txt "$name".aux "$name".bbl "$name".bcf "$name".run.xml
+lualatex -interaction=nonstopmode -halt-on-error "$name".tex >/dev/null 2>&1
+"${BIBER:-biber}" --quiet "$name" >"$name".biber.log 2>&1 || { echo "$name: biber failed"; cat "$name".biber.log; exit 2; }
+lualatex -interaction=nonstopmode "$name".tex >/dev/null 2>&1
+lualatex -interaction=nonstopmode "$name".tex >/dev/null 2>&1 || { echo "$name: lualatex failed (see tests/$name.log)"; exit 2; }
+if python3 check-kinsoku.py "$name".lines.txt >"$name".diff; then
+  echo "OK: $name: no kinsoku violations"
+else
+  echo "NG: $name: kinsoku violations (see tests/$name.diff)"; head -3 "$name".diff
+  [ "$status" -eq 0 ] && status=1
+fi
+
 [ "$status" -eq 0 ] && echo "OK: all cases match"
 exit "$status"

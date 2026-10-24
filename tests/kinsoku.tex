@@ -1,0 +1,26 @@
+%% jsr-biblatex 回帰テスト：禁則（行頭に閉じ括弧・句読点が来ない，行末に開き括弧が来ない）
+%% 行幅を変えた箱（minipage）に文献リストを繰り返し組み，textdump.lua で書き出した行を check-kinsoku.py で調べる。
+%% 以前は，訳書の末尾の全角「）」が行頭に来ることがあった（フェーズC 作業3）。現在は再現しない。
+\documentclass[a4paper]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\addbibresource{guide.bib}
+\AtBeginBibliography{\raggedright}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\directlua{dofile(kpse.find_file('textdump.lua'))}
+\newcount\kwidth
+
+\begin{document}
+\nocite{*}
+\kwidth=16
+\loop
+  \noindent\begin{minipage}{\kwidth\zw}
+    \printbibliography[heading=none]
+  \end{minipage}\par
+  \advance\kwidth by 3
+\ifnum\kwidth<52 \repeat
+\end{document}
