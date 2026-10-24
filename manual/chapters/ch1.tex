@@ -1,0 +1,67 @@
+\section{はじめに}\label{sec:intro}
+\subsection{このスタイルについて}
+jsr-biblatex は，日本社会学会の『社会学評論スタイルガイド』（第3版）にそって，文献リストと文献注（本文中の引用）を組むための biblatex スタイルです。\sty{biblatex} の \opt{style=jsr} で使います。和文と欧文の文献が混ざっていても，スタイルガイドの書式で組めます。
+
+\begin{itemize}
+\item 文献注は（著者名\ 出版年），文献リストは「著者名，出版年，『書名』出版社．」の形になります。
+\item 訳書・再録は，原典の項目に添えて1つの項目にまとめます（\ref{sec:related} 節）。
+\item bib の各エントリは，単独で完結した正しい書誌として，biblatex の標準のデータモデルで書きます。原典と共通する項目の省略や整形は，スタイルが行います。
+\end{itemize}
+
+この文書は，biblatex のマニュアルを読んでいない人にも使えるように書いてあります。bib ファイルの書き方（第\ref{sec:db}章）と，文書への組み込み方・引用の仕方（第\ref{sec:user}章）を先に読み，エントリ型ごとの書き方（第\ref{sec:examples}章）は，必要なところを引いてください。
+
+\subsection{免責}
+このスタイルは，『社会学評論スタイルガイド』にそって個人が作成したものであり，日本社会学会が作成・配布するものではありません。このスタイルについて日本社会学会に問い合わせることのないようにしてください。また，できるかぎりスタイルガイドにそうように作成してありますが，このスタイルによる文献リストがそのまま受理されることを保証するものではありません。
+
+スタイルガイドは著作物なので，このリポジトリには含めていません。この文書も，スタイルガイドの文章は引用せず，節番号と要約で示します。スタイルガイドに規定がなく，解釈で決めた点は，リポジトリの \file{docs/DECISIONS.md} に記録してあります。
+
+\subsection{ライセンスと謝辞}
+このスタイルは，芝田征司氏の biblatex-jpa（日本心理学会風文献スタイル，\url{https://github.com/sbtseiji/biblatex-jpa}）を元に，社会学評論スタイルガイドにそうように作り替えたものです。この文書の構成も，同スタイルのドキュメントと biblatex のマニュアルを参考にしました。
+
+biblatex-jpa は LaTeX Project Public License（バージョン 1.3 以降）で配布されており，このスタイルも同じ条件（LPPL 1.3c 以降）で配布します。ファイルの一部は biblatex-apa を元にしています。この文書の体裁は，Philipp Lehman 氏の ltxdockit（LPPL 1.3）の環境を借りています。
+
+\subsection{要件}
+\begin{itemize}
+\item \textbf{LuaLaTeX}（\file{lualatex}）。カタカナ名の判定が Unicode を前提にしているため，Unicode 対応のエンジンが必要です。動作を確かめているのは LuaLaTeX だけです。
+\item \textbf{biblatex} 3.19 以上と \textbf{biber} 2.19 以上。確かめた版は，TeX Live 2023（biblatex 3.19，biber 2.19）と，TeX Live 2026（biblatex 3.22，biber 2.23 beta）です。
+\item 和文の文書クラスとパッケージ（\file{jlreq}，\file{luatexja}），および \file{babel}（\opt{american}，\opt{japanese}），\file{csquotes}。
+\end{itemize}
+
+\subsection{インストール}
+次のいずれかの方法で，スタイルのファイル（\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx}，\file{lbx/} の中の \file{*-jsr.lbx}）を，TeX が見つけられる場所に置きます。
+
+\begin{enumerate}
+\item \textbf{texmf に置く}（すべての文書で使う場合）。\file{TEXMFHOME} の下の \file{tex/latex/jsr-biblatex/} にコピーし，\file{mktexlsr} を実行します。
+\begin{ltxexample}
+mkdir -p "$(kpsewhich -var-value=TEXMFHOME)/tex/latex/jsr-biblatex"
+cp -R jsr.bbx jsr.cbx jsr.dbx lbx \
+  "$(kpsewhich -var-value=TEXMFHOME)/tex/latex/jsr-biblatex/"
+mktexlsr "$(kpsewhich -var-value=TEXMFHOME)"
+\end{ltxexample}
+\item \textbf{文書と同じフォルダに置く}（その文書だけで使う場合）。\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx} と，\file{lbx/} の中の \file{*-jsr.lbx} を，文書のフォルダに\textbf{平置き}にします。\file{lbx/} の下は TeX が探さないためです。
+\item \textbf{リポジトリのまま使う}（開発・試用）。\file{TEXINPUTS} にリポジトリを指定します：\texttt{TEXINPUTS="/path/to/jsr-biblatex//:" lualatex doc.tex}
+\end{enumerate}
+
+\begin{caution}
+biber が \texttt{Unicode/Collate/Locale/ja.pl can't be found} で止まる環境があります（TeX Live 2026 の TinyTeX に入っていた biber 2.22 で確認しました）。その場合は biber を更新してください（2.23 beta で解消を確認しました）。cpan で入れた biber を使うときは，\texttt{PERL5LIB} の指定が必要になることがあります。
+\end{caution}
+
+\subsection{この文書の読み方}\label{sec:howtoread}
+この文書は，biblatex のマニュアルと同じ表記を使っています。
+
+\begin{keymarglist}
+\item[余白の青い文字]
+フィールド名，エントリ型の名前，オプション名，コマンド名は，左の余白に青い文字で出します。本文中では，\bibfield{title}（フィールド），\bibtype{book}（エントリ型），\opt{firstfull}（オプション），\cmd{parencite}（コマンド）のように書きます。
+
+\item[必須：，任意：]
+エントリ型の説明に出てきます。そのエントリ型を正しく組むために書くべきフィールドが「必須」，書けば出力に反映されるフィールドが「任意」です。
+
+\item[ひな形]
+記入のひな形では，自分で書き換える箇所を，山括弧つきのイタリック（<\textit{書名}>）で示します。山括弧そのものは書きません。\texttt{※} から行末までは注意書きです。
+
+\item[記入例と出力]
+bib の中身は枠に入れて示し，すぐ後ろに，実際に組んだ文献リストの出力を示します。左の青い縦線と余白の「出力」が，出力であることを表します。書名・著者・出版社は，すべて架空のものです。
+
+\item[注意]
+迷いやすい点やわかりにくい点は，左余白の「注意」で示します。
+\end{keymarglist}

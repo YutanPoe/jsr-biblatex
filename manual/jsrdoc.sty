@@ -17,13 +17,14 @@
 \PassOptionsToPackage{unicode,pdfencoding=unicode}{hyperref}
 
 %%% 書体 -------------------------------------------------------------------
-%% 和文：原ノ味明朝／原ノ味角ゴシック。欧文：Libertinus。等幅：JuliaMono（なければ Latin Modern Mono）
+%% 和文：原ノ味明朝／原ノ味角ゴシック。欧文：Libertinus。等幅：JuliaMono（なければ Latin Modern Mono）。
+%% 等幅の倍率は，長いコマンド名（\printbibliography）の項目名が左余白の 10mm 以内に入らないように 0.76 にしている
 \RequirePackage[haranoaji]{luatexja-preset}
 \RequirePackage{fontspec}
 \setmainfont{Libertinus Serif}
 \setsansfont{Libertinus Sans}
 \IfFontExistsTF{JuliaMono-Regular.ttf}
-  {\setmonofont{JuliaMono-Regular.ttf}[Scale=0.8,BoldFont=JuliaMono-Bold.ttf,%
+  {\setmonofont{JuliaMono-Regular.ttf}[Scale=0.76,BoldFont=JuliaMono-Bold.ttf,%
      ItalicFont=JuliaMono-RegularItalic.ttf,BoldItalicFont=JuliaMono-BoldItalic.ttf]}
   {\setmonofont{Latin Modern Mono}[Scale=0.9]}
 
@@ -135,7 +136,7 @@
   \setlength{\parindent}{0pt}%
   \setlength{\parskip}{.5\baselineskip plus .1\baselineskip}%
   % 段落の先頭行・末尾行だけがページに取り残されないようにする（導きの文と例が離れるのを防ぐ）
-  \clubpenalty=10000 \widowpenalty=10000 \displaywidowpenalty=10000 %
+  \clubpenalty=10000 \@clubpenalty=10000 \widowpenalty=10000 \displaywidowpenalty=10000 % \@clubpenalty は見出しの直後に復元される値
   % リストの中でも段落の間を同じだけ空ける（\parsep）。jlreq の既定は 0 で，説明の段落が項目の行に詰まる
   \g@addto@macro\@listI{\parsep=.5\baselineskip plus .1\baselineskip\relax}%
   \let\@listi\@listI
@@ -215,17 +216,21 @@
   \ifdefstring{\jsr@first}{1}{\gdef\jsr@first{0}}{\par\vskip.3\baselineskip}%
   \noindent\hangindent=2\zw\hangafter=1\relax}
 \AtEndPreamble{\defbibenvironment{jsrex}{\jsr@exbegin}{\jsr@exend}{\jsr@exitem}}% biblatex を読み込んだあとに定義する
-\newcommand*{\bibexample}[1]{%
+\newcommand*{\bibexample}{\@ifstar{\jsr@bibexample{0}}{\jsr@bibexample{1}}}
+%% \bibexample{<キー>}：bib の枠＋出力。\bibexample*{<キー>}：出力だけ（同じエントリを，オプションを変えて出し直すとき）
+\newcommand*{\jsr@bibexample}[2]{%
   \stepcounter{jsrex}%
-  \directlua{jsrdoc.extract("\jsr@exfiles", "\luaescapestring{#1}", "\jobname-ex\thejsrex.tmp")}%
+  \directlua{jsrdoc.extract("\jsr@exfiles", "\luaescapestring{#2}", "\jobname-ex\thejsrex.tmp")}%
   \par\nopagebreak\medskip % 導きの文（直前の段落）と例を別のページに分けない
   \noindent\vbox{\hsize=\linewidth\relax\parindent=0pt\relax
-    \lstinputlisting[style=jsrbib]{\jobname-ex\thejsrex.tmp}%
-    \par\smallskip
+    \ifnum#1=1
+      \lstinputlisting[style=jsrbib]{\jobname-ex\thejsrex.tmp}%
+      \par\smallskip
+    \fi
     % 出力：縦線と「出力」の文字を，出力の 1 行目のベースラインにそろえる（その位置は Lua で測る）
     % \savebox は内容を \hbox で包むので，縦組みの箱のまま持つ \setbox を使う
     \setbox\jsr@outbox\vbox{\hsize=\linewidth\relax\parindent=0pt\relax
-      \begin{refsection}\nocite{#1}%
+      \begin{refsection}\nocite{#2}%
       \printbibliography[heading=none,env=jsrex]%
       \end{refsection}}%
     \jsr@fb=\directlua{tex.sprint(jsrdoc.firstbaseline(\number\jsr@outbox))}sp\relax
@@ -234,6 +239,12 @@
       \hbox to 0pt{\hss{\color{spot}\vrule width 2pt height\ht\jsr@outbox depth\dp\jsr@outbox}\hspace{4pt}}%
       \usebox{\jsr@outbox}\hss}}%
   \par\medskip}
+
+%%% 表の列：左そろえの段落列（\raggedright）。両端そろえだと，狭い列で字間が間延びする
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+%%% 注意書き：迷いやすい点を，左余白の「注意」の見出しで示す -----------------------------
+\newenvironment{caution}{\begin{marglist}\item[注意]}{\end{marglist}}
 
 %%% 文中の表記（biblatex のマニュアルと同じ名前） ---------------------------
 %% \bibfield，\bibtype，\cmd，\opt，\prm，\sty，\file は btxdockit／ltxdockit のものを使う

@@ -1,0 +1,410 @@
+\section{データベースの手引き}\label{sec:db}
+この章は，bib ファイル（文献データベース）の書き方の説明です。エントリ型ごとの具体的な書き方と出力は，第\ref{sec:examples}章にあります。
+
+\subsection{bib ファイルの基本}
+bib ファイルは UTF-8 のテキストファイルで，文献1件ごとに「エントリ」を書きます。
+
+\begin{bibtemplate}
+@<エントリ型>{<キー>,
+  <フィールド名> = {<値>},    ※ フィールドごとに「名前 = {値},」と書く
+  <フィールド名> = {<値>},
+}
+\end{bibtemplate}
+
+\begin{itemize}
+\item \textbf{エントリ型}（\bibtype{book}，\bibtype{article} など）は，文献の種類です。どれを選ぶかは，次の節で説明します。
+\item \textbf{キー}は，本文から引用するときの名前です（\cmd{parencite}\{aoki2015\} の \texttt{aoki2015}）。半角の英数字で，ほかのエントリと重ならないようにします。
+\item \textbf{フィールド}は，著者・書名・年などの情報です。名前と使い方は，\ref{sec:fields}節にあります。値は波括弧 \texttt{\{\ \}} で囲みます。
+\item 各エントリは，\textbf{単独で完結した正しい書誌}として書きます。原典と共通する項目（訳書の書名や，再録の著者名など）を，省いたり整形したりして書く必要はありません。省略や整形は，スタイルが行います。
+\item スタイルが使わないフィールド（\bibfield{abstract}，\bibfield{isbn}，\bibfield{keywords}，\bibfield{file} など）は，無視されます。Zotero などから書き出した bib をそのまま使えます。
+\end{itemize}
+
+\subsection{エントリ型の選び方}\label{sec:choose}
+\subsubsection{文献の種類とエントリ型}
+文献の種類ごとに，使うエントリ型は次のとおりです。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.44\textwidth}L{0.44\textwidth}@{}}
+\toprule
+\textbf{文献の種類} & \textbf{エントリ型} \\
+\midrule
+単著・共著の書籍 & \bibtype{book} \\
+編者だけで著者のいない本（論文集・講座など） & \bibtype{collection}（\bibtype{book} でもよい） \\
+数巻にわたる書籍の全体／その1巻 & \bibtype{mvbook}／\bibtype{book}（\bibfield{volume}） \\
+編書・共著書の中の1つの章・論文 & \bibtype{incollection} \\
+雑誌・紀要の論文 & \bibtype{article} \\
+新聞・商業雑誌の記事 & \bibtype{article}（\bibfield{entrysubtype}） \\
+翻訳書・再録・再刊 & もとの型（\bibtype{book}，\bibtype{article}，\bibtype{incollection}）＋\bibfield{related} \\
+電子書籍 & \bibtype{book}（\bibfield{origpublisher}，\bibfield{note}） \\
+調査報告書・政府刊行物 & \bibtype{report} \\
+報告書の中の論文 & \bibtype{incollection}＋\bibfield{crossref} \\
+修士論文・博士論文 & \bibtype{thesis} \\
+学会報告（口頭） & \bibtype{inproceedings}（\bibfield{booktitle} なし）／\bibtype{unpublished} \\
+予稿集の論文 & \bibtype{inproceedings}（\bibfield{booktitle} あり） \\
+ウェブページ・ブログ・オンラインデータベース・オンラインで取得した報告書 & \bibtype{online} \\
+コンピュータファイル（MRDF） & \bibtype{dataset} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+専用の書式がないエントリ型は，近い型の書式で組まれます（\ref{sec:types} 節の末尾）。
+
+\subsubsection{\bibtype{article} と \bibtype{incollection} の違い}\label{sec:artcoll}
+どちらも「大きな刊行物の中の1つの文章」ですが，\textbf{その入れ物が違います}。入れ物が何かで選んでください。
+
+\begin{keymarglist}
+\item[article]
+入れ物が\textbf{雑誌・紀要・年報・新聞}などの定期刊行物のとき。入れ物の名前を \bibfield{journaltitle} に書き，巻・号を \bibfield{volume}・\bibfield{number} に書きます。出版社・出版地・編者は書きません（和文誌の発行元だけは，\bibfield{publisher} に書くと出ます）。
+
+\item[incollection]
+入れ物が\textbf{書籍}（編書・共著書・論文集・講座の1巻）のとき。入れ物の書名を \bibfield{booktitle} に書き，編者を \bibfield{editor}，出版社を \bibfield{publisher}，ページを \bibfield{pages} に書きます。
+\end{keymarglist}
+
+出力の形もはっきり違います。\bibtype{article} は「『誌名』巻(号): ページ」，\bibtype{incollection} は「編者編『書名』出版社，ページ」です。
+
+\bibexample{mori2018}
+\bibexample{ono2014}
+
+\begin{caution}
+迷いやすいものをまとめます。
+
+\textbf{年報・紀要・学会誌}は，雑誌と同じ \bibtype{article} です（\bibfield{journaltitle} に誌名）。\textbf{講座・叢書の1巻に載った章}は，その巻が書籍なので \bibtype{incollection} です（講座名は，親の巻の \bibfield{series} に書きます）。\textbf{共著書の中の1章}も，\bibtype{incollection} を使います。biblatex には \bibtype{inbook} もありますが，このスタイルでは \bibtype{incollection} と同じ書式で組まれるので，\bibtype{incollection} だけ覚えれば足ります。
+\end{caution}
+
+\subsubsection{\bibtype{book}，\bibtype{collection}，\bibtype{mvbook}}
+著者のいる本は \bibtype{book}，編者だけで著者のいない本（論文集など）は \bibtype{collection} です。書式は同じで，\bibfield{author} がなく \bibfield{editor} だけのときは，著者の位置に編者が出て「編」が付きます。編書の章を \bibfield{crossref} で指すとき（次の節）は，親を \bibtype{collection} にします。
+
+数巻にわたる本は，全体を \bibtype{mvbook}（\bibfield{volumes} に巻数），1巻だけを \bibtype{book}（\bibfield{volume} に巻の番号）で書きます。
+
+\subsubsection{\bibfield{crossref}：所収書の情報を1か所にまとめる}\label{sec:crossref}
+同じ編書の章を何本も引用するときは，所収書の情報（書名・編者・出版社・出版年）を章ごとに繰り返して書くことになり，書き間違いのもとです。\bibfield{crossref} を使うと，所収書を \bibtype{collection} として1回だけ書き，章のエントリには，章に固有の情報（著者・題名・ページ）と \texttt{crossref = \{<親のキー>\}} だけを書けます。
+
+\begin{bibtemplate}
+@incollection{<キー>,
+  author   = {<姓>,<名>},
+  sortname = {<Family>, <Given>},   ※ 和文のみ
+  title    = {<論文名>},
+  pages    = {<開始ページ>--<終了ページ>},
+  crossref = {<親のキー>},          ※ 親は @collection（同じ bib ファイルに書く）
+  langid   = {japanese},
+}
+\end{bibtemplate}
+
+まず，親になる所収書を \bibtype{collection} として書きます（キーは \texttt{sakaied2014}）：
+
+\bibexample{sakaied2014}
+
+章のエントリは，\bibfield{crossref} で親を指します。親の書名・編者・出版社・出版年が引き継がれて，所収書の情報つきで出ます（章だけを引用した場合の出力です。親は出ません）：
+
+\bibexample{onocr2014}
+
+\begin{itemize}
+\item 引き継がれるのは，親の \bibfield{title}（子では所収書名 \bibfield{booktitle}），\bibfield{subtitle}（\bibfield{booksubtitle}），\bibfield{editor}，\bibfield{publisher}，\bibfield{location}，\bibfield{date} などです。子に同じフィールドがあれば，子の値が優先されます。
+\item 親のエントリは，同じ bib ファイル（または \cmd{addbibresource} で読み込んだファイル）になければなりません。キーを書き間違えると，biber が警告を出します。
+\item \textbf{章を引用しても，親は文献リストに載りません。}所収書そのものも載せたいときは，本文で引用するか，\cmd{nocite}\{<親のキー>\} を書きます。
+\item 和文の著者（子の \bibfield{author}）には，子にも \bibfield{sortname} が要ります。
+\item 親と子の組み合わせは，\bibtype{collection}・\bibtype{book}・\bibtype{proceedings} を親にした \bibtype{incollection}・\bibtype{inproceedings}，\bibtype{report} を親にした \bibtype{incollection}（報告書の中の論文，\ref{sec:report} 節），\bibtype{mvbook} を親にした \bibtype{book}（多巻本の1巻）です。
+\end{itemize}
+
+\subsubsection{\bibfield{related} と \bibfield{crossref} の違い}\label{sec:related}
+どちらも別のエントリを指しますが，目的が違います。取り違えやすいので，表にまとめます。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.14\textwidth}L{0.36\textwidth}L{0.36\textwidth}@{}}
+\toprule
+ & \bibfield{crossref} & \bibfield{related}（＋\bibfield{relatedtype}） \\
+\midrule
+指すもの & 所収書・報告書・多巻本の全体など，文献を\textbf{入れる側} & 原典・初出など，同じ文章の\textbf{別の版} \\
+目的 & 書誌情報を引き継ぎ，入力を省く & 出力を1つの項目にまとめる \\
+使う場面 & 編書の章，報告書の中の論文，多巻本の1巻 & 訳書（\opt{translationof}），再録・再刊（\opt{reprintof}） \\
+指された側 & 引用しなければ文献リストに載らない & 原典が代表として載り，訳書・再録が添えられる \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+「訳書の原典」を \bibfield{crossref} で指したり，「所収書」を \bibfield{related} で指したりしないでください。訳書・再録の書き方は，\ref{sec:trans} 節にあります。
+
+\subsection{エントリ型の一覧}\label{sec:types}
+このスタイルが専用の書式を持つエントリ型の，必須・任意のフィールドです。どのエントリ型にも，\bibfield{langid}（\ref{sec:cautions} 節）を書きます。和文の著者・編者には \bibfield{sortname} も書きます。
+
+\begin{typelist}
+\typeitem{book}
+
+単著・共著の書籍です。\bibtype{booklet}，\bibtype{manual}，\bibtype{reference}，\bibtype{proceedings}，\bibtype{bookinbook} も同じ書式で組まれます。
+
+\reqitem{author, title, date, publisher, langid}
+\optitem{editor, translator, subtitle, edition, series, number, volume, part, maintitle, location, origdate, origpublisher, origlocation, urldate, url, doi, note, related, relatedtype}
+
+\typeitem{collection}
+
+編者だけで著者のいない本です。\bibfield{author} の代わりに \bibfield{editor} を書きます。書式は \bibtype{book} と同じです。
+
+\reqitem{editor, title, date, publisher, langid}
+\optitem{subtitle, edition, series, number, location, translator, urldate, url, note}
+
+\typeitem{mvbook}
+
+数巻にわたる書籍の全体です。\bibtype{mvcollection}，\bibtype{mvreference}，\bibtype{mvproceedings} も同じ書式で組まれます。
+
+\reqitem{author, title, date, volumes, publisher, langid}
+\optitem{editor, subtitle, location}
+
+\typeitem{incollection}
+
+編書・共著書の中の1つの章・論文です。\bibtype{inbook}，\bibtype{inreference}，\bibtype{suppbook}，\bibtype{suppcollection} も同じ書式で組まれます。
+
+\reqitem{author, title, booktitle, date, publisher, pages, langid}
+\optitem{editor, booksubtitle, edition, location, translator, series, number, origdate, urldate, url, note, related, relatedtype, crossref}
+
+\typeitem{article}
+
+雑誌・紀要・年報・新聞の記事です。\bibtype{misc}，\bibtype{software}，\bibtype{patent} も同じ書式で組まれます。
+
+\reqitem{author, title, journaltitle, date, langid}
+\optitem{subtitle, volume, number, pages, publisher, howpublished, doi, url, urldate, eprinttype, entrysubtype, issue, note, related, relatedtype}
+
+\typeitem{report}
+
+調査報告書・政府刊行物です。\bibfield{author}，\bibfield{editor}，\bibfield{institution} のうち，先にあるものが先頭の名前になります。
+
+\reqitem{title, date, langid}
+\optitem{author, editor, institution, type, number, publisher, location, subtitle, url, urldate}
+
+\typeitem{thesis}
+
+修士論文・博士論文です。
+
+\reqitem{author, title, date, institution, type, langid}
+\optitem{subtitle, url, urldate}
+
+\typeitem{inproceedings}
+
+学会報告です。\bibfield{booktitle} があれば，刊行された予稿集の論文として，\bibtype{incollection} と同じ形で出ます。\bibtype{unpublished}（未刊行の報告）も同じ書式で組まれます。
+
+\reqitem{author, title, date, eventtitle, langid}
+\optitem{type, eventdate, venue, booktitle, editor, publisher, location, pages}
+
+\typeitem{online}
+
+ウェブページ・ブログ・オンラインデータベース・オンラインで取得した報告書です。
+
+\reqitem{title, date, url, urldate, langid}
+\optitem{author, titleaddon, organization, location, subtitle, note}
+
+\typeitem{dataset}
+
+コンピュータファイル（MRDF）です。
+
+\reqitem{author, title, date, type, publisher, langid}
+\optitem{location, howpublished}
+\end{typelist}
+
+\subsection{フィールドの一覧}\label{sec:fields}
+このスタイルが使うフィールドです。（　）の中は，biblatex でのデータの種類で，書き方に影響します（literal＝文字列，name＝名前，date＝日付，range＝ページの範囲，uri＝URL，key＝決まった語，entry set＝別のエントリのキー）。リストの種類のフィールドは，複数の値を \texttt{and} でつなげて書けます。
+
+\subsubsection{名前}
+\begin{fieldlist}
+\listitem{author}{name}
+
+著者です。複数なら \texttt{and} でつなぎます。和文は \texttt{\{姓,名\}}，欧文は \texttt{\{Family, Given\}}，団体は \texttt{\{\{団体名\}\}} と書きます（\ref{sec:cautions} 節）。
+
+\listitem{editor}{name}
+
+編者です。「編」（欧文は \texttt{ed.}，\texttt{eds.}）が付きます。\bibfield{author} がないときは，著者の位置に出ます。
+
+\listitem{translator}{name}
+
+訳者です。「訳」（欧文は \texttt{trans.}）が付きます。原典に添えた訳書では著者の位置に，単独の訳書では書名の後に出ます。
+
+\fielditem{translatortype}{key}
+
+訳者の役割を「監訳」などに変えるときに書きます。\bibfield{editortype}（編者）も同様です。
+
+\listitem{sortname}{name}
+
+並べ替え用の名前です。和文の著者・編者には，必ず書きます（\ref{sec:cautions} 節）。
+\end{fieldlist}
+
+\subsubsection{タイトル・版・巻}
+\begin{fieldlist}
+\fielditem{title}{literal}
+
+書名・論文名・記事名です。和文では，文脈によって『』または「」で囲まれます。
+
+\fielditem{subtitle}{literal}
+
+副題です。和文は「――」，欧文は「:」で書名につながります。
+
+\fielditem{titleaddon}{literal}
+
+書名に添える語です。\bibtype{online} では，ウェブサイト名・ブログ名を書きます。
+
+\fielditem{booktitle}{literal}
+
+所収書の書名です（\bibtype{incollection}，\bibtype{inproceedings}）。\bibfield{booksubtitle} は副題です。
+
+\fielditem{journaltitle}{literal}
+
+誌名・紙名です（\bibtype{article}）。
+
+\fielditem{edition}{integer または literal}
+
+版です。数字（\texttt{2}）は和文で「第2版」，欧文で \texttt{2nd ed.} になります。「新版」「改訂版」などの語はそのまま出ます。和文では書名に含まれます。
+
+\fielditem{series}{literal}
+
+叢書名・講座名です。和文だけ，書名の前に出ます（『講座社会学 12 環境』）。\bibfield{number} が叢書の中の番号です。
+
+\fielditem{volume}{integer または literal}
+
+多巻本の巻の番号，または雑誌の巻です。\bibfield{part} は巻の中の分冊，\bibfield{volumes} は多巻本の総巻数，\bibfield{maintitle} は多巻本の総書名です。
+
+\fielditem{number}{literal}
+
+雑誌の号，または叢書の中の番号，報告書の課題番号です。
+\end{fieldlist}
+
+\subsubsection{日付}
+\begin{fieldlist}
+\fielditem{date}{date}
+
+刊行年です。\texttt{2015}，または \texttt{1975-03-17}（新聞・雑誌・ブログ）と書きます。年が不明なときは書きません（\texttt{n.d.} と出ます）。
+
+\fielditem{origdate}{date}
+
+原典の刊行年です。訳書と再刊で「原典の年」を出すときと，電子書籍で紙媒体の年を出すときに使います。
+
+\fielditem{urldate}{date}
+
+URL を見た日（取得日）です。これがあるときだけ，（取得日，URL）が出ます。
+
+\fielditem{eventdate}{date}
+
+学会の開催日です（欧文の学会報告で，月日だけが出ます）。
+
+\fielditem{pubstate}{key}
+
+近刊のときは \texttt{forthcoming} と書きます（「近刊」，欧文は \texttt{forthcoming}）。
+\end{fieldlist}
+
+\subsubsection{出版・機関・その他}
+\begin{fieldlist}
+\listitem{publisher}{literal}
+
+出版社です。著者・編者・機関名と同じときと，「国立印刷局」のときは，自動で省かれます。
+
+\listitem{location}{literal}
+
+出版地です。欧文だけ出ます。
+
+\listitem{institution}{literal}
+
+大学・研究機関・研究科などです（\bibtype{thesis}，\bibtype{report}）。
+
+\listitem{organization}{literal}
+
+ウェブサイトの運営機関です（\bibtype{online}）。欧文だけ出ます。
+
+\listitem{origpublisher}{literal}
+
+電子書籍の，紙媒体の出版社です。\bibfield{origlocation} は紙媒体の出版地（欧文だけ）です。
+
+\fielditem{type}{key または literal}
+
+学位論文・報告書・コンピュータファイルの種類です。\texttt{phdthesis}，\texttt{mathesis}，\texttt{techreport} のようなキー，または \texttt{2019年度修士論文} のような文字で書きます。
+
+\fielditem{entrysubtype}{literal}
+
+\texttt{newspaper}（新聞）または \texttt{magazine}（商業雑誌）と書きます。
+
+\fielditem{issue}{literal}
+
+新聞の朝刊・夕刊です。
+
+\fielditem{eventtitle}{literal}
+
+学会の名前（大会名）です。\bibfield{venue} は開催地です。
+
+\fielditem{howpublished}{literal}
+
+雑誌では，巻・号・ページの代わりに出す文字です。コンピュータファイルでは，入手先です。
+
+\fielditem{note}{literal}
+
+書籍では，末尾の括弧に出ます（電子書籍のフォーマット：\texttt{Kindle版} など）。新聞では，版・地域版（\texttt{第3版，東京都版}）を書きます。
+
+\fielditem{pages}{range}
+
+ページです。\texttt{10--20} と書き，範囲の重複する位は自動で省かれます（\texttt{102--104} は \texttt{102-4}）。
+
+\fielditem{url}{uri}
+
+URL です。取得日（\bibfield{urldate}）がないと出ません。\bibfield{doi} は DOI で，取得日があるときだけ出ます（オプション \opt{doi=true} で，取得日がなくても出せます）。\bibfield{eprinttype} は，データベース名です。
+\end{fieldlist}
+
+\subsubsection{別のエントリとの関係・言語}
+\begin{fieldlist}
+\fielditem{crossref}{entry key}
+
+親のエントリのキーです（\ref{sec:crossref} 節）。
+
+\fielditem{related}{entry key}
+
+原典のキーです。\bibfield{relatedtype} に \texttt{translationof}（訳書）または \texttt{reprintof}（再録・再刊）を書きます（\ref{sec:related} 節）。
+
+\fielditem{langid}{identifier}
+
+文献の言語です（\texttt{japanese}，\texttt{american} など）。和文か欧文かは，これで決まります。
+\end{fieldlist}
+
+\subsection{書き方の注意（迷いやすい点）}\label{sec:cautions}
+\subsubsection{\bibfield{langid}：和文か欧文か}
+和文のエントリには \texttt{langid = \{japanese\}}，欧文のエントリには \texttt{langid = \{american\}} を書きます。区切りの記号（「，」か「,」か），括弧（『』か斜体か），「編」か \texttt{ed.} か，といった書式が，これで切り替わります。
+
+\begin{caution}
+\bibfield{language} は \bibfield{langid} の代わりになりません。\bibfield{language} は文献の言語を記録するだけで，書式を切り替えません。書式を切り替えるのは \bibfield{langid} です。\bibfield{langid} がない，または文書に読み込まれていない言語のときは，欧文（\texttt{american}）として組まれます。
+\end{caution}
+
+\subsubsection{\bibfield{sortname}：和文の並び順}
+文献リストは，著者名のローマ字順に並びます。漢字の読みは自動では得られないので，和文の著者・編者には，並べ替え用に \bibfield{sortname}（\texttt{Family, Given}。団体は \texttt{\{\{団体名\}\}}）を書きます。書かないと，漢字のコード順になって，欧文の文献との並びから外れ，組版時に警告（\texttt{has no sortname}）が出ます。欧文は \bibfield{sortname} が要りません。
+
+\subsubsection{名前の書き方}
+\begin{itemize}
+\item 和文は \texttt{\{姓,名\}}（姓と名の間を「,」で区切る）。姓と名を区切らずに書くと，全体が姓として扱われます。
+\item 欧文は \texttt{\{Family, Given\}}。名がイニシャルのときは \texttt{\{Doe, J.\}} と書きます（書いたとおりに出ます）。
+\item 複数の著者は \texttt{and} でつなぎます（「,」や「，」でつながない）。他の著者を省略するときは，最後に \texttt{and others} を付けます（「ほか」／\texttt{et al.}）。
+\item 団体・機関が著者のときは，二重の波括弧で囲みます（\texttt{\{\{架空総合研究所\}\}}）。囲まないと，姓と名に分けられてしまいます。
+\item 姓がカタカナの外国人名は，「名・姓」の順に中黒でつながります（\texttt{\{ノヴァーク,ヤン\}} →「ヤン・ノヴァーク」）。
+\end{itemize}
+
+\subsubsection{日付とページ}
+年は \bibfield{date} に書きます（\texttt{date = \{2015\}}）。BibTeX の \bibfield{year}・\bibfield{month} も読めますが，\bibfield{date} を勧めます。新聞・雑誌・ブログは年月日（\texttt{1975-03-17}）で書きます。ページの範囲は \texttt{10--20}（ハイフン2つ）で書きます。
+
+\subsubsection{タイトルの大文字と小文字}
+スタイルは，欧文タイトルの大文字小文字を変えません。書いたとおりに出ます。データ側で，ガイドの書き方（主要な語の先頭を大文字にするなど）にそろえてください。bib の中で大文字を保ちたい語は，波括弧で囲みます（\texttt{\{Tokyo\}}）。
+
+\subsubsection{特殊文字}
+\texttt{\&}，\texttt{\%}，\texttt{\#}，\texttt{\_} は，\TeX{} の特殊文字です。bib の中では \texttt{\textbackslash\&} のように，前に \texttt{\textbackslash} を付けて書きます。和文の括弧や記号は，全角のまま書けます。
+
+\subsubsection{BibTeX の書き方との対応}
+BibTeX 用に書いた bib は，biber が次の対応で読み替えるので，多くの場合そのまま使えます。
+
+\begin{center}\small
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{BibTeX} & \textbf{このスタイルで使う名前} & \textbf{備考} \\
+\midrule
+\texttt{journal} & \bibfield{journaltitle} & \\
+\texttt{address} & \bibfield{location} & \\
+\texttt{school} & \bibfield{institution} & \bibtype{thesis} \\
+\texttt{year}，\texttt{month} & \bibfield{date} & \\
+\texttt{howpublished} & \bibfield{howpublished} & 同じ名前 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{\bibfield{note}：出力に出る場合}
+書籍と編書論文では，\bibfield{note} が末尾に括弧で出ます（電子書籍のフォーマットを書くため）。Zotero が付ける注記（OCLC 番号など）も出力に出るので，不要なものは bib から消してください。
+
+\subsubsection{\bibfield{url} と \bibfield{urldate}}
+URL は，取得日（\bibfield{urldate}）があるときだけ出ます。書籍の書誌 URL（NDL や CiNii のページなど）を \bibfield{url} に書いておいても，取得日がなければ出力には出ません。電子媒体で利用した文献には，取得日も書きます。

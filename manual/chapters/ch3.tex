@@ -1,0 +1,226 @@
+\section{利用者の手引き}\label{sec:user}
+この章は，スタイルを文書に組み込む方法と，本文中の引用（文献注）の書き方，文献リストの出し方の説明です。
+
+\subsection{文書への組み込みと組版}
+プリアンブルで，\file{biblatex} をバックエンド \opt{biber}，スタイル \opt{jsr} で読み込みます。
+
+\begin{ltxexample}
+\documentclass[a4paper]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\addbibresource{refs.bib}
+
+\begin{document}
+\textcite{aoki2015}は，…を論じた\parencite[128]{aoki2015}。
+\printbibliography[title={文献}]
+\end{document}
+\end{ltxexample}
+
+組版は，\file{lualatex}，\file{biber}，\file{lualatex} の順に行います（\file{latexmk -lualatex} でもよい）。\file{biber} を実行しないと，引用が「?」になり，文献リストが空になります。bib を書き換えたときも，\file{biber} をもう一度実行します。
+
+\begin{caution}
+\opt{date=ymd} は，日付を年月日の形で扱うための指定です（このスタイルのテストと同じ指定です）。\file{babel} には \opt{american} と \opt{japanese} の両方を読み込み，和文と欧文の文献が混ざっても書式が切り替わるようにします。
+\end{caution}
+
+\subsection{オプション}\label{sec:options}
+\begin{optionlist}
+\boolitem[true]{firstfull}
+
+文献注で，初出の人物をフルネームで出します（\ref{sec:firstfull} 節）。\opt{false} にすると，引用キーごとに初出を判定します。
+
+\optitem[false]{doi}{\opt{true}, \opt{false}}
+
+\opt{false} では，取得日（\bibfield{urldate}）があるときだけ，（取得日，DOI または URL）を出します。ガイドは，電子媒体で利用したときに取得日と URL を書くとしており，取得日の有無を「電子媒体で利用したか」の目印にしているためです。\opt{true} にすると，取得日がなくても DOI を（DOI）の形で出します。
+\end{optionlist}
+
+取得日（\bibfield{urldate}）がなく，DOI だけがある論文は，既定（\opt{doi=false}）では DOI が出ません。
+
+\bibexample{mori2020}
+
+\opt{doi=true} にすると，同じエントリで，DOI が（DOI）の形で出ます（取得日のある文献は，どちらのときも（取得日，DOI）の形です）。
+
+{\toggletrue{bbx:doi}\bibexample*{mori2020}}
+
+\subsubsection{スタイルが固定しているオプション}
+次のオプションは，スタイルが決めています。通常は変更しません。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.30\textwidth}L{0.55\textwidth}@{}}
+\toprule
+\textbf{オプション} & \textbf{意味} \\
+\midrule
+\texttt{maxbibnames=99} & 文献リストには，著者全員の名前を出す \\
+\texttt{maxcitenames=2} & 文献注では，3名以上を「ほか」（\texttt{et al.}）にする \\
+\texttt{sorting=nymdt} & 著者名のローマ字順，同一著者は単著→単独編書→共著→共編書，各カテゴリは年順（\ref{sec:sorting} 節） \\
+\texttt{uniquename=full} & 同姓の著者は，名前も付けて区別する \\
+\texttt{mincrossrefs=999} & \bibfield{crossref} の親は，引用しなければ文献リストに載せない \\
+\texttt{autocite=inline} & \cmd{autocite} は，括弧なしの形で本文に埋め込む \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{引用コマンド}\label{sec:cite}
+引用コマンドは，どれも「前置，後置，キー」の形です。前置（\prm{prenote}）は引用の頭に，後置（\prm{postnote}）は末尾に出す文字で，後置はふつうページです。第1の角括弧だけを書くと，後置になります。キーはコンマで区切って，複数書けます。
+
+\begin{ltxsyntax}
+\cmditem{parencite}[prenote][postnote]{key}
+
+全角の丸括弧で囲む文献注です。本文での引用の基本形です。
+
+\cmditem{textcite}[prenote][postnote]{key}
+
+「著者名（出版年）」の形で，文中に埋め込む引用です。
+
+\cmditem{cite}[prenote][postnote]{key}
+
+括弧なしの「著者名\ 出版年」です。括弧の中に書き込むときなどに使います。
+
+\cmditem{citeauthor}[prenote][postnote]{key}
+
+著者名だけを出します。
+
+\cmditem{citeyear}[prenote][postnote]{key}
+
+出版年だけを出します。
+
+\cmditem{parencites}[prenote][postnote]{key}{key}
+\cmditem{textcites}[prenote][postnote]{key}{key}
+
+複数の文献を，1つの括弧（または1つの文）にまとめて引用します。キーごとに，前置・後置を付けられます。
+\end{ltxsyntax}
+
+\begin{caution}
+\cmd{footcite} は，このスタイルでは調整していません。ガイドでは，注の中でも文献注は（著者名\ 出版年）の形で書くので，\cmd{parencite} か \cmd{textcite} を使ってください。
+\end{caution}
+
+\subsubsection{引用の形}
+\begin{center}\small
+\begin{tabular}{@{}L{0.46\textwidth}L{0.42\textwidth}@{}}
+\toprule
+\textbf{書き方} & \textbf{出力} \\
+\midrule
+\verb|\parencite{aoki2015}| & \parencite{aoki2015} \\
+\verb|\parencite[128]{aoki2015}| & \parencite[128]{aoki2015} \\
+\verb|\parencite[371--373]{aoki2015}| & \parencite[371--373]{aoki2015} \\
+\verb|\parencite[see][128]{aoki2015}| & \parencite[see][128]{aoki2015} \\
+\verb|\parencite{aoki2015,sakai2012}| & \parencite{aoki2015,sakai2012} \\
+\verb|\cite{aoki2015}| & \cite{aoki2015} \\
+\verb|\citeauthor{aoki2015}| & \citeauthor{aoki2015} \\
+\verb|\citeyear{aoki2015}| & \citeyear{aoki2015} \\
+\verb|\parencites{aoki2015}{mori2018}| & \parencites{aoki2015}{mori2018} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+著者の人数によって，文献注の形が変わります（和文は「・」と「ほか」，欧文は \texttt{and} と \texttt{et al.}）。編書の編者には「編」（欧文は \texttt{ed.}，\texttt{eds.}）が付きます。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.46\textwidth}L{0.42\textwidth}@{}}
+\toprule
+\textbf{書き方} & \textbf{出力} \\
+\midrule
+\verb|\parencite{aokikita2018}|（2名・和文）& \parencite{aokikita2018} \\
+\verb|\parencite{ishida2020}|（3名・和文）& \parencite{ishida2020} \\
+\verb|\parencite{baker2014}|（2名・欧文）& \parencite{baker2014} \\
+\verb|\parencite{clark2017}|（3名・欧文）& \parencite{clark2017} \\
+\verb|\parencite{sakaied2014}|（編書・和文）& \parencite{sakaied2014} \\
+\verb|\parencite{rowe2013}|（編書・欧文）& \parencite{rowe2013} \\
+\verb|\parencite{institute2019}|（団体）& \parencite{institute2019} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{初出はフルネーム（\opt{firstfull}）}\label{sec:firstfull}
+\cmd{textcite} で人物を初めて出すときはフルネーム，2回目以降は姓だけにします。初出かどうかは，人物（名前）ごとに判定するので，同じ著者の別の文献や，共著者の一人の単著を先に引用していれば，既出と数えます。\cmd{parencite} は，言及に数えません。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.46\textwidth}L{0.42\textwidth}@{}}
+\toprule
+\textbf{書き方} & \textbf{出力} \\
+\midrule
+\verb|\textcite{mori2018}|（初出）& \textcite{mori2018} \\
+\verb|\textcite{mori2022}|（2回目）& \textcite{mori2022} \\
+\verb|\textcite{yamadat2020}|（同姓の著者）& \textcite{yamadat2020} \\
+\verb|\textcite{yamadah2021}|（同姓の著者）& \textcite{yamadah2021} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{caution}
+結果は，\textbf{本文に現れる順}に決まります。この文書の表の中の出力も，前に出てきた引用の影響を受けています。同じ姓の著者（山田太郎・山田花子）は，2回目以降も名前を付けて区別されます。
+\end{caution}
+
+\subsubsection{訳書・再録の引用}\label{sec:citetrans}
+訳書（\bibfield{related} で原典を指す）は「（原典の著者\ 原典の年=訳書の年）」，再録は「（著者\ [初出の年]\ 再録の年）」の形になります。原書と訳書の両方のページを示すときは，後置に \texttt{78=86} のように「=」で区切って書きます（前が原書，後ろが訳書）。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.46\textwidth}L{0.42\textwidth}@{}}
+\toprule
+\textbf{書き方} & \textbf{出力} \\
+\midrule
+\verb|\parencite{hale1985}|（訳書）& \parencite{hale1985} \\
+\verb|\parencite[78=86]{hale1985}|（両方のページ）& \parencite[78=86]{hale1985} \\
+\verb|\parencite{ito1990}|（再録）& \parencite{ito1990} \\
+\verb|\parencite{hirose2000}|（再刊）& \parencite{hirose2000} \\
+\verb|\parencite{beck1998}|（原典のない訳書）& \parencite{beck1998} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsubsection{著者のいない新聞・雑誌・報告書}
+新聞・商業雑誌の記事は，著者がいなければ，紙名と日付（和文は 1998.11.3 の形，欧文は \texttt{November 3, 1998}），朝刊・夕刊，版・ページを文献注に出します。この場合は，文献リストには載せません（文献注だけを書きます）。署名入りの記事は，著者名の文献注になり，文献リストにも載ります。著者のいない報告書は，機関名が著者の位置に入ります。
+
+\begin{center}\small
+\begin{tabular}{@{}L{0.46\textwidth}L{0.42\textwidth}@{}}
+\toprule
+\textbf{書き方} & \textbf{出力} \\
+\midrule
+\verb|\parencite{asahi1998}|（朝刊）& \parencite{asahi1998} \\
+\verb|\parencite{asahi1999}|（版・地域版・ページ）& \parencite{asahi1999} \\
+\verb|\parencite{shukan1964}|（商業雑誌）& \parencite{shukan1964} \\
+\verb|\parencite{kawai1975}|（署名入り）& \parencite{kawai1975} \\
+\verb|\parencite{walsh1998}|（欧文・署名入り）& \parencite{walsh1998} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\subsection{文献リスト}
+文献リストは，文書の中で出したい場所に，\cmd{printbibliography} を書いて出します。
+
+\begin{ltxsyntax}
+\cmditem{printbibliography}[options]
+
+文献リストを出します。見出しは \texttt{[title=\{文献\}]} のように \prm{options} に書きます。省くと，既定の見出しが付きます。見出しを付けないときは，\texttt{[heading=none]} と書きます。
+\end{ltxsyntax}
+
+\begin{itemize}
+\item 文献リストに載るのは，本文で引用した文献です。引用しない文献も載せたいときは，\cmd{nocite}\{<キー>\}，すべて載せたいときは \cmd{nocite}\{*\} を書きます。
+\item \bibfield{crossref} の親（所収書など）は，引用しなければ載りません（\ref{sec:crossref} 節）。\bibfield{related} で原典を指した訳書を引用すると，原典に訳書が添えられた1つの項目として載ります（原典を引用していなくても載ります。\ref{sec:related} 節）。
+\item 著者のいない新聞・雑誌の記事は，文献リストに載りません（文献注だけを書きます）。
+\end{itemize}
+
+\subsubsection{並び順}\label{sec:sorting}
+文献リストは，著者名のローマ字順（和文は \bibfield{sortname}）に並びます。同じ著者（第1著者）の文献は，次の順に並べ，それぞれ年順にします。
+
+\begin{enumerate}
+\item 単著
+\item 単独の編書
+\item 共著
+\item 共編書
+\end{enumerate}
+
+同じ著者の2つ目以降は，著者名が「————」に置き換わります。同一著者の，同一カテゴリー（単著，編書など）の，同一年度の文献には，年に a，b が付きます（単著と編書は，別のカテゴリーなので付きません）。訳書は，原典の年で判定します。原典の年（\bibfield{origdate}）がある文献は，原典の年で先に並びます。
+
+\subsection{警告とメッセージ}
+組版のログには，このスタイルが出す警告があります。
+
+\begin{keymarglist}
+\item[has no sortname]
+和文の著者・編者のエントリに，\bibfield{sortname} がありません（\ref{sec:cautions} 節）。\bibfield{crossref} で親を指すエントリは，対象外です。
+
+\item[uses deprecated]
+旧い書き方（\bibfield{webpagetitle}，\bibtype{report} の \texttt{type=onlinereport}）で書かれたエントリです。読み替えて組まれますが，新しい書き方に書き換えてください（第\ref{sec:migrate}章）。
+\end{keymarglist}
