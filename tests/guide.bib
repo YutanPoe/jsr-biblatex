@@ -1365,13 +1365,33 @@
   langid       = {american},
 }
 
-%% 書籍：発行元が著者と同じなら省く
+%% 書籍：発行元が著者と同じでも省かない（2026-10-25 決定）
 @book{Tetsudo1971,
   author    = {{テスト鉄道協会}},
   sortname  = {{Tesuto Tetsudo Kyokai}},
   date      = {1971},
   title     = {テスト鉄道百年史 第3巻},
   publisher = {テスト鉄道協会},
+  langid    = {japanese},
+}
+
+%% 書籍：編者と発行元が同じ民間の機関（発行元を省かない）
+@book{Shinbun1990,
+  editor    = {{テスト新聞社}},
+  sortname  = {{Tesuto Shinbunsha}},
+  date      = {1990},
+  title     = {テスト新聞百年史},
+  publisher = {テスト新聞社},
+  langid    = {japanese},
+}
+
+%% 書籍：発行元が国立印刷局でも省かない（2026-10-25 決定）
+@book{Insatsu1985,
+  author    = {{テスト省}},
+  sortname  = {{Tesuto Sho}},
+  date      = {1985},
+  title     = {テスト白書},
+  publisher = {国立印刷局},
   langid    = {japanese},
 }
 

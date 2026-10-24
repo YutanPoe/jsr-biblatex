@@ -937,14 +937,12 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       {\addspace\printtext[parens]{\strfield{volume}}}}}%
 
 
-%%% 発行元の自動省略（社会学評論スタイルガイド 4.4(9)）
-%%%  ・発行元が著者・編者・編集機関名と同一である場合
-%%%  ・発行元が「国立印刷局」（旧・大蔵省印刷局）である場合
-%%% bib ファイル側は発行元を省かず自己完結した書誌として書き，省略はスタイルが行う。
-\newbool{bbx:omitpublisher}
-\def\bbx@collect@pub#1{\xdef\bbx@pubstr{\bbx@pubstr#1}}%
-\def\bbx@collect@in#1{\xdef\bbx@instr{\bbx@instr#1}}%
-% 名前の取り出しは \savebox の中で \printnames を使うので，その間だけ句読点の状態
+%%% 発行元（社会学評論スタイルガイド 4.4(9)）
+%%% ガイドは，発行元が著者・編者・機関名と同一の場合や「国立印刷局」の場合に「省略してよい」としている。
+%%% 場合分けが難しく，民間の機関が編者・発行元を兼ねる文献（例：毎日新聞社編・毎日新聞社刊）では
+%%% 発行元を示したほうがよいため，スタイルは発行元を自動では省略しない（書いたものは常に出す）。
+%%% 省略したいときは，bib ファイルの publisher を書かない。
+% \savebox の中で \printnames を使う処理のために，その間だけ句読点の状態
 % （\setunit で保留中の区切りなど）を退避する。退避しないと保留中の区切りが箱の中で消費される。
 \def\jsr@punctstates{block,unit,insert,lastins,keepunit}%
 \def\jsr@savepunct@i#1{\iftoggle{blx@#1}
@@ -958,26 +956,8 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \def\jsr@restorepunct{%
   \global\let\blx@unitpunct\jsr@sv@unitpunct
   \expandafter\forcsvlist\expandafter\jsr@restorepunct@i\expandafter{\jsr@punctstates}}%
-\DeclareNameFormat{bbx:capture}{%
-  \ifnumequal{\value{listcount}}{1}{\xdef\bbx@nmstr{\bbx@nmstr\namepartfamily}}{}}%
-\newbibmacro*{publisher:check}{%
-  \global\boolfalse{bbx:omitpublisher}%
-  \gdef\bbx@pubstr{}\gdef\bbx@nmstr{}\gdef\bbx@instr{}%
-  \iflistundef{publisher}{}{\forlistcsloop{\bbx@collect@pub}{abx@list@publisher}}%
-  \ifdefempty{\bbx@pubstr}{}{%
-    \ifboolexpr{ test {\ifdefstring{\bbx@pubstr}{国立印刷局}} or test {\ifdefstring{\bbx@pubstr}{大蔵省印刷局}} }%
-      {\global\booltrue{bbx:omitpublisher}}%
-      {\jsr@savepunct
-       \ifnameundef{author}{%
-         \ifnameundef{editor}{}{\savebox0{\printnames[bbx:capture]{editor}}}%
-       }{\savebox0{\printnames[bbx:capture]{author}}}%
-       \jsr@restorepunct
-       \iflistundef{institution}{}{\forlistcsloop{\bbx@collect@in}{abx@list@institution}}%
-       \ifboolexpr{ test {\ifdefequal{\bbx@pubstr}{\bbx@nmstr}} or test {\ifdefequal{\bbx@pubstr}{\bbx@instr}} }%
-         {\global\booltrue{bbx:omitpublisher}}{}}}}%
 \newbibmacro*{publisher:print}{%
-  \usebibmacro{publisher:check}%
-  \ifbool{bbx:omitpublisher}{}{\printlist{publisher}}}%
+  \printlist{publisher}}%
 
 %%% 書籍の Vol. の処理（複数冊）%%%
 % 和文：『書名』（全10巻），欧文：Title, 10 vols.（「全」「巻」「vols.」は bibstring：totalprefix、totalvolumes）
@@ -1574,9 +1554,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     \usebibmacro{report:typenumber}%
   }%
   % 発行元
-  %  ・発行元が「国立印刷局」（旧・大蔵省印刷局）である場合，
-  %  ・編集機関名（上記の author／institution）と発行元が同一である場合，
-  %  のいずれも，publisher:print が自動的に省略する（社会学評論スタイルガイド 4.4(9)参照）。
+  %  著者・機関名や「国立印刷局」と同一でも省略しない（社会学評論スタイルガイド 4.4(9)参照）。
   \iflistundef{publisher}{}{%
     \setunit*{\addhnspace}%
     \usebibmacro{publisher:print}%
