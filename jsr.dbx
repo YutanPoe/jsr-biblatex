@@ -7,3 +7,6 @@
 \DeclareDatamodelFields[type=field,datatype=literal]{translatoratype}
 \DeclareDatamodelFields[type=field, datatype=literal, label=true]{webpagetitle}
 \DeclareDatamodelEntryfields{webpagetitle}
+% 同一著者の並び順（単著→単独編書→共著→共編書）のためのソート用フィールド。bbx の sourcemap が設定する
+\DeclareDatamodelFields[type=field,datatype=integer]{jsrsortrole}
+\DeclareDatamodelEntryfields{jsrsortrole}

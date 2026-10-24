@@ -17,6 +17,7 @@ language=auto,%
 % 引用ごとに言語を判断して処理
 \AtEveryCitekey{%
   \usebibmacro{checkLang}%言語の判定
+  \jsr@scankata% カタカナ名の判定（bbx）
   \global\boolfalse{cbx:warichu}%割注かどうかの判断%
   \csundef{cbx:relatedloop}%related循環参照防止リストを引用キーごとにリセット
 }%
@@ -72,9 +73,9 @@ language=auto,%
 
 % parenciteのときとtextciteのときを共通に
 \DeclareDelimFormat[parencite,textcite,citeauthor]{multinamedelim}% 人の著者名の間
-  {\ifthenelse{\boolean{CJK}}{\unspace{・}}{\addcomma\space}}%
+  {\ifthenelse{\boolean{CJK}}{\jsr@cjknamedelim}{\addcomma\space}}%
 \DeclareDelimFormat[parencite,textcite,citeauthor]{finalnamedelim}%
-  {\addhnspace\bibstring{and}\addhnspace}%
+  {\ifthenelse{\boolean{CJK}}{\jsr@cjknamedelim}{\addhnspace\bibstring{and}\addhnspace}}%
 \DeclareDelimFormat[parencite]{andothersdelim}% 3人以上のときの最後の文字
   {\addhnspace\bibstring{andothers}}%
 
@@ -83,7 +84,8 @@ language=auto,%
 %\DeclareDelimFormat[textcite,citeauthor]{finalnamedelim}{\unspace{と}}% 和英どちらも「と」にしてみた
   %{\ifthenelse{\boolean{japanese}}{\unspace{・}}%
     %{\ifnumgreater{\value{liststop}}{2}{\finalandcomma}{}\addthinspace\&\thinspace}}%
-\DeclareDelimFormat[textcite,citeauthor]{andothersdelim}{\unspace{ら}}% 3人以上のときの最後の文字
+% 3人以上のとき：本文中の引用も割注と同じく「ほか」「et al.」（ガイド 3.2。以前は和欧とも「ら」）
+\DeclareDelimFormat[textcite,citeauthor]{andothersdelim}{\addhnspace\bibstring{andothers}}%
 
 % FiledFormatの宣言
 % ================================================================================
@@ -98,10 +100,10 @@ language=auto,%
   {citetitle}{#1}% なんかあった、たぶん使わない
 
 % ページ数関係
-\DeclareFieldFormat{postnote}% ページ範囲の圧縮「123-125」を「123-5」に
-  {\mkcomprange{#1}}%
+\DeclareFieldFormat{postnote}% ページ範囲の圧縮「123-125」を「123-5」に（ハイフンは \mkjsrrange）
+  {\mkjsrrange{#1}}%
 \DeclareDelimFormat{postnotedelim}
-  {\addcolon\addthinspace}%  発行年とページ数の区切りをコロンとスペースに
+  {\addcolon\space}%  発行年とページ数の区切りは半角コロンと半角スペース
 \DeclareDelimFormat{multipostnotedelim}
   {\nopunct}% 複数ページ数が表示された際に、余計なコンマなどを入れない
 
@@ -159,15 +161,20 @@ language=auto,%
     {\setcounter{uniquename}{0}}%
     {}%
   \ifthenelse{\boolean{CJK}}{% CJKの場合
+    % カタカナ名のフルネームは「名・姓」（ロス・マオア）
     \ifcase\value{uniquename}%
-      {\usebibmacro{name:#1}%通常（佐藤）、フルネーム出力の場合はフルネーム
-        {\namepartfamily}{\namepartgiven}{\relax}{\relax}}% 
+      {\ifboolexpr{ test {\ifstrequal{#1}{family-given}} and test {\jsr@ifkatakana\namepartfamily} }
+        {\usebibmacro{jsr:kataname}}%
+        {\usebibmacro{name:#1}%通常（佐藤）、フルネーム出力の場合はフルネーム
+          {\namepartfamily}{\namepartgiven}{\relax}{\relax}}}%
     \or%
-      {\usebibmacro{name:family-given}%名前まで（佐藤健二）
-        {\namepartfamily}{\namepartgiven}{\relax}{\relax}}% 
+      {\jsr@ifkatakana\namepartfamily{\usebibmacro{jsr:kataname}}%
+        {\usebibmacro{name:family-given}%名前まで（佐藤健二）
+          {\namepartfamily}{\namepartgiven}{\relax}{\relax}}}%
     \or%
-      {\usebibmacro{name:family-given}%上に同じ
-        {\namepartfamily}{\namepartgiven}{\relax}{\relax}}% 
+      {\jsr@ifkatakana\namepartfamily{\usebibmacro{jsr:kataname}}%
+        {\usebibmacro{name:family-given}%上に同じ
+          {\namepartfamily}{\namepartgiven}{\relax}{\relax}}}%
     \fi%
   }{%
     \ifgiveninits{\def\cbx@tempa{\namepartgiveni}}{\def\cbx@tempa{\namepartgiven}}%
@@ -178,11 +185,11 @@ language=auto,%
         {\usebibmacro{name:#2}%
           {\namepartfamily}{\cbx@tempa}{\relax}{\relax}}%
     \or%
-      \ifuseprefix% giveniで特定できる場合
+      \ifuseprefix% giveniで特定できる場合（常に頭文字）
         {\usebibmacro{name:#3}%
-          {\namepartfamily}{\cbx@tempa}{\namepartprefix}{\relax}}%
+          {\namepartfamily}{\namepartgiveni}{\namepartprefix}{\relax}}%
         {\usebibmacro{name:#3}%
-          {\namepartfamily}{\cbx@tempa}{\relax}{\relax}}%
+          {\namepartfamily}{\namepartgiveni}{\relax}{\relax}}%
     \or%
       \ifuseprefix% givenをつかってフルネーム表記
         {\usebibmacro{name:#3}%
@@ -208,8 +215,7 @@ language=auto,%
   {\usebibmacro{apply:uniquename}%
     {family-given}%
     {given-family}%
-    {given-family}%
-    \iffieldundef{shortauthor}{}{\printname[fhparen]{shorauthor}}}%
+    {given-family}}%
 
 \DeclareNameAlias{translator}{labelname}
 \DeclareNameAlias{origauthor}{labelname}
@@ -223,12 +229,43 @@ language=auto,%
 
 %%% 引用形式定義 %%%
 %% 最初の引用時はフルネーム %%
+%% 初出の人物はフルネーム、既出の人物は姓のみ（引用キーではなく人物単位で判定）
+%%  ・オプション firstfull=true（既定）：名前ハッシュ（人物）ごとに初出を判定する。
+%%    同じ著者の別文献や、共著者の一人の単著を引用した場合も既出とみなす。
+%%    割注（\parencite）は言及に数えない。
+%%  ・オプション firstfull=false：従来どおり、引用キーごとに判定する（\ifciteseen）。
+\newbool{cbx:firstfull}%
+\DeclareBiblatexOption{global}[boolean]{firstfull}[true]{%
+  \ifstrequal{#1}{true}{\global\booltrue{cbx:firstfull}}{\global\boolfalse{cbx:firstfull}}}%
+\ExecuteBibliographyOptions{firstfull=true}%
+\newcommand*{\cbx@seennames}{}% 既出の人物の名前ハッシュのリスト（グローバル）
+\def\cbx@markseen#1{%
+  \edef\cbx@tmph{#1}%
+  \expandafter\listgadd\expandafter\cbx@seennames\expandafter{\cbx@tmph}}%
+%  共著（名前リストが2名以上）は全体を1つの著者単位として判定する：
+%   ・名前リスト全体（namehash）が既出でなければフルネーム（構成員の一人が既出でも）
+%   ・初出のとき、構成員それぞれも既出として登録する（後の単著は姓のみ）
+%  単著は人物（name hash）ごとに判定する。
+\DeclareNameFormat{labelname:person}{%
+  \ifnumgreater{\value{liststop}}{1}%
+    {\xifinlist{\thefield{namehash}}{\cbx@seennames}%
+       {\usebibmacro{apply:uniquename}{family}{family}{given-family}}%
+       {\usebibmacro{apply:uniquename}{family-given}{given-family}{given-family}%
+        \cbx@markseen{\thefield{hash}}%
+        \ifnumequal{\value{listcount}}{\value{liststop}}%
+          {\cbx@markseen{\thefield{namehash}}}{}}}%
+    {\xifinlist{\thefield{hash}}{\cbx@seennames}%
+       {\usebibmacro{apply:uniquename}{family}{family}{given-family}}%
+       {\usebibmacro{apply:uniquename}{family-given}{given-family}{given-family}%
+        \cbx@markseen{\thefield{hash}}}}}%
 \newbibmacro*{citecheck}{%
-  \ifciteseen{%
-    \printnames{labelname}%
-  }{%
-    \printnames[labelname:fullname]{labelname}%
-  }%
+  \ifbool{cbx:firstfull}%
+    {\printnames[labelname:person]{labelname}}%
+    {\ifciteseen{%
+       \printnames{labelname}%
+     }{%
+       \printnames[labelname:fullname]{labelname}%
+     }}%
 }%
 
 %%% 曖昧さを考慮したlabelnameとed-edsを、
@@ -284,6 +321,7 @@ language=auto,%
 %% 本体 %%
 \renewbibmacro*{textcite}{%
   \global\boolfalse{cbx:warichu}%
+  \usebibmacro{cbx:checkdualpages}%
   \usebibmacro*{check:samename}%
   \ifbool{cbx:samename}{% 同じ著者の引用が複数続く場合は区切り文字と出版年のみを表示
     \setunit{\compcitedelim}%
@@ -315,6 +353,24 @@ language=auto,%
   }%
 }%
 
+%% 原書と訳書の両方のページ（ガイド 3.2）：\parencite[78=86]{訳書} →（Goffman 1961: 78=1984: 86）
+%%  訳書（relatedtype=translationof）の postnote に「=」があれば，前を原書，後ろを訳書のページとする
+\newbool{cbx:dualpages}
+\def\cbx@splitpn#1=#2=#3\@nil{\gdef\cbx@pn@orig{#1}\gdef\cbx@pn@trans{#2}\gdef\cbx@pn@rest{#3}}
+\newbibmacro*{cbx:checkdualpages}{%
+  \global\boolfalse{cbx:dualpages}%
+  \ifboolexpr{ test {\iffieldequalstr{relatedtype}{translationof}}
+                and not test {\iffieldundef{postnote}} }
+    {\expandafter\cbx@splitpn\abx@field@postnote==\@nil
+     \ifdefempty\cbx@pn@rest{}{\global\booltrue{cbx:dualpages}}}
+    {}}
+\renewbibmacro*{postnote}{%
+  \iffieldundef{postnote}{}{%
+    \setunit{\printdelim{postnotedelim}}%
+    \ifbool{cbx:dualpages}
+      {\printtext[postnote]{\cbx@pn@trans}}
+      {\printfield{postnote}}}}
+
 %% textciteの終わりを全角かっこに変更
 \renewbibmacro*{textcite:postnote}%
 {\usebibmacro{postnote}%
@@ -336,6 +392,7 @@ language=auto,%
 %%% (author et al.year: pages) %%%
 \renewbibmacro*{cite}{%
   \global\booltrue{cbx:warichu}%
+  \usebibmacro{cbx:checkdualpages}%
   \usebibmacro*{check:samename}%
   \ifbool{cbx:samename}{% 同じ著者の引用が複数続く場合は区切り文字と出版年のみを表示
     \setunit{\compcitedelim}%
@@ -346,7 +403,9 @@ language=auto,%
     and
     test {\ifnameundef{labelname}}
     }{%著者も編者もrelatedでリンクもされていない場合
-      \usebibmacro{noauthorcite}%
+      \iflistundef{institution}%
+        {\usebibmacro{noauthorcite}}%
+        {\usebibmacro{institutioncite}}%
     }{%
       \ifnameundef{origauthor}{%再販著者情報がない場合
         \usebibmacro{cite:uniquename}%名前の出力
@@ -361,24 +420,45 @@ language=auto,%
   }%
 }%
 
-%% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
-\newbibmacro*{noauthorcite}%
-  {\iffieldundef{title}{}%
-    {%タイトルを挿入したい場合はコメントアウトを削除する
-      %\usebibmacro{title}{fhkakko}{}%
-    }%
-  % 誌名
-  \usebibmacro{journal}%
-  \usebibmacro{yyyymmdd}%
-  \usebibmacro{vol+pages}}
+%% 著者のいない報告書：機関名を著者の位置に出力する
+\newbibmacro*{institutioncite}{%
+  \printlist{institution}%
+  \setunit{\printdelim{nameyeardelim}}%
+  \usebibmacro{cite:plabelyear+extradate}}
 
+%% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
+%%  和文：（『朝日新聞』1998.11.3 朝刊，第○版，○面）  欧文：（The New York Times, November 3, 1998）
+\newbibmacro*{noauthorcite}{%
+  \usebibmacro{journal}%
+  \iffieldundef{type}{}{%
+    \ifthenelse{\boolean{CJK}}{\usebibmacro{yyyymmdd}}{\printdate}}%
+  \iffieldequalstr{type}{newspaper}%
+    {\usebibmacro{newspaper:edition}}%
+    {\usebibmacro{magazine:volpages}}}
+
+%% 雑誌：巻(号): ページ（bbx の vol+pages は末尾に \newunit があり，割注では閉じ括弧の前に空白が入る）
+\newbibmacro*{magazine:volpages}{%
+  \iffieldundef{howpublished}{%
+    \usebibmacro{volume+issues}%
+    \iffieldundef{pages}{}{\setunit{\addcolon\space}\printfield{pages}}%
+  }{%
+    \printtext{\ifthenelse{\boolean{CJK}}{\addspace}{\adddot}\printfield{howpublished}}%
+  }}
+
+%% 朝刊・夕刊，版，ページ（和文の新聞のみ）
+\newbibmacro*{newspaper:edition}{%
+  \ifthenelse{\boolean{CJK}}{%
+    \iffieldundef{issue}{}{\setunit*{\addspace}\printfield{issue}}%
+    \iffieldundef{version}{}{\setunit*{\printdelim{fhcomma}}\printfield{version}}%
+    \iffieldundef{pages}{}{\setunit*{\printdelim{fhcomma}}\printtext{\printfield{pages}面}}%
+  }{}}
 
 % relatedtypeがreprintofの場合の処理
 \newbibmacro*{cite:reprintof}%
 {\iffieldequalstr{relatedtype}{reprintof}%
   {\usebibmacro{cbx:descend}{%
     \usebibmacro{cite:translationof}%
-    \printtext[brackets]{\printdateextra}\space}}%
+    \printtext[brackets]{\printlabeldateextra}\space}}%
   {}%
 }%
 % relatedtypeがtranslationofの場合の処理
@@ -388,13 +468,16 @@ language=auto,%
     \usebibmacro{cite:reprintof}%
     \usebibmacro{cite:origyear}%
     \printtext{\printlabeldateextra}%
+    \ifbool{cbx:dualpages}% 原書のページ
+      {\setunit{\printdelim{postnotedelim}}\printtext[postnote]{\cbx@pn@orig}}
+      {}%
     \setunit{\printdelim{transeq}}%
     }}%
   {}%
 }%
 % 再販情報のみ（origyear記載）があった場合の処理
 \newbibmacro*{cite:origyear}%
-{\iffieldundef{origyear}{}%
+{\ifboolexpr{ test {\iffieldundef{origyear}} or not test {\iffieldundef{related}} }{}%
   {\usebibmacro{cite:translationof}%
   \printtext[brackets]{\thefield{origyear}}%
   \setunit{\addthinspace}%
