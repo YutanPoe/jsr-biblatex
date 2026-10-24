@@ -28,3 +28,19 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
   - 従来は `date<言語>` の有無で判定していた。新しい babel（26.11）は、未読み込みの言語も `\select@language` の中で読み込むため、この判定が効かなくなった。
   - 現在は、プリアンブル終了時の言語一覧（`\jsr@doclangs`。babel の `\bbl@loaded`／`\bbl@ini@loaded`、polyglossia の `\xpg@bloaded`）に `langid` があるかで判定する。
   - 一覧にない言語の項目は `langid` を消す。`checkLang` は biblatex の autolang（`\blx@beglang`）より前に動くので、`\selectlanguage` だけでは、あとから `langid` の言語に上書きされるため。
+
+## 2026-10-24 追加（提案書 report-thesis-presentation／misc-review への回答）
+提案書：`docs/proposals/2026-10-24-report-thesis-presentation.md`（以下「提案1」）、`docs/proposals/2026-10-24-misc-review.md`（以下「提案2」）。
+
+### 学位論文・学会報告（提案1 の B・C）
+- 欧文の博士論文（type=phdthesis）は **PhD dissertation**（ASA）。括弧は付けない：Doe, Jane, 2012, “Title,” PhD dissertation, University of …
+- 和文の学会報告で type を書かなかったときは **「報告原稿」を補わない**（「題」第94回日本社会学会大会．）。type を書いたときだけ eventtitle の後に続ける。
+- 欧文の学会報告は **ASA 式**：Roe, Ann, 2015, “A Test Paper,” Paper presented at the Annual Meeting of the American Sociological Association, August 22, Chicago, IL.
+
+### 提案2 の A〜F
+- **A. DOI**：**オプションで出せるようにする**（例：`doi=true`。既定は false＝取得日がある場合だけ「（取得日，https://doi.org/…）」を出す今の動作）。オプション名と、取得日がないときの書式は実装時に提案する。
+- **B. 電子書籍**：紙版の刊行年・出版社は `origdate`＋`origpublisher`（＋`origlocation`）で表し、『タイトル』（2005，日本放送出版協会刊）の形にする。`origpublisher` があるときは再刊の [初版年] 形式にしない。フォーマット（Kindle版、Available on CD-ROM only）は **`note`** に書き、末尾の括弧に出す（今の「note＝紙版の情報」の運用は改める）。
+- **C. 原典のエントリがない訳書**（translator あり、related なし）：**著者を先頭**にし、訳者は書名の後に置く（ベック，U.，1998，『危険社会』東廉・伊藤美登里監訳，法政大学出版局．）。origdate があれば文献注は **（ベック 1986=1998）**。README で原典のエントリを作って related でつなぐ書き方を推奨する。
+- **D. 新聞記事**：新聞・雑誌の判定は標準の `entrysubtype`（newspaper／magazine）で行い、`type=newspaper` も互換のため当面受け付ける。朝刊・夕刊は `issue`、版・地域版（第14版、全国版、○○県版）は **`note`**。欧文の署名記事は ASA 式で、ページの前に **p. を付ける**：Smith, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.
+- **E. コンピュータファイル（MRDF）**：`@dataset` に専用ドライバ。データ形式＝`type`（MRDF）、提供機関＝**`publisher`**（作成者と同じなら発行元の自動省略の仕組みを使う）、入手先＝**`howpublished`**。
+- **F. \footcite**：**今のまま**（biblatex の既定）。README で \parencite／\textcite を使うよう案内する。

@@ -1,0 +1,57 @@
+diff --git a/jsr.bbx b/jsr.bbx
+index 98ff188..97dd62f 100644
+--- a/jsr.bbx
++++ b/jsr.bbx
+@@ -1042,6 +1042,10 @@ language=auto,%
+ %    通常どおり単独で印刷される。
+ %
+ \newcommand*{\jsr@pfx}{}% <refsection>@<datalist>
++% リストがない（一度も登録されていない）ときは何もしないループ
++% （etoolbox のループに未定義のリストを渡すと，\relax が項目として処理されてしまう）
++\newcommand*{\jsr@forlistcs}[2]{\ifcsvoid{#2}{}{\forlistcsloop{#1}{#2}}}
++\newcommand*{\jsr@dolistcs}[1]{\ifcsvoid{#1}{}{\dolistcsloop{#1}}}
+ \newcount\jsr@cnta
+ \newcount\jsr@cntb
+ 
+@@ -1108,9 +1112,9 @@ language=auto,%
+ \def\jsr@renumgroup#1{%
+   \jsr@cnta\z@
+   \def\jsr@hasshadow{0}%
+-  \forlistcsloop{\jsr@countmember}{jsr@edg@\jsr@pfx @#1}%
++  \jsr@forlistcs{\jsr@countmember}{jsr@edg@\jsr@pfx @#1}%
+   \jsr@cntb\z@
+-  \forlistcsloop{\jsr@assignmember}{jsr@edg@\jsr@pfx @#1}}
++  \jsr@forlistcs{\jsr@assignmember}{jsr@edg@\jsr@pfx @#1}}
+ % 影の複製は原典と同じ値にする（訳書の文献注は複製の値を使うため）
+ \def\jsr@shadowfix#1{%
+   \edef\jsr@src{\csuse{jsr@shadowsrc@\jsr@pfx @#1}}%
+@@ -1122,12 +1126,12 @@ language=auto,%
+   \edef\jsr@pfx{\the\c@refsection @\blx@dlist@name}%
+   % 添え物を印刷リストから除く
+   \def\do##1{\listcsgremove{blx@dlist@entry@\jsr@pfx}{##1}}%
+-  \dolistcsloop{jsr@reps@\jsr@pfx}%
++  \jsr@dolistcs{jsr@reps@\jsr@pfx}%
+   % extradate の振り直し
+-  \forlistcsloop{\jsr@renumgroup}{jsr@edgroups@\jsr@pfx}%
+-  \forlistcsloop{\jsr@shadowfix}{jsr@shadows@\jsr@pfx}%
++  \jsr@forlistcs{\jsr@renumgroup}{jsr@edgroups@\jsr@pfx}%
++  \jsr@forlistcs{\jsr@shadowfix}{jsr@shadows@\jsr@pfx}%
+   \def\do##1{\jsr@setextradate{##1}{}}%
+-  \dolistcsloop{jsr@reps@\jsr@pfx}}
++  \jsr@dolistcs{jsr@reps@\jsr@pfx}}
+ \pretocmd\blx@bbl@enddlist
+   {\expandafter\ifstrequal\expandafter{\blx@dlist@type}{entry}{\jsr@finishlist}{}}
+   {}
+@@ -1141,10 +1145,10 @@ language=auto,%
+   \let\jsr@attachlist\@empty
+   \edef\jsr@tmpkey{\thefield{entrykey}}%
+   \def\do##1{\listxadd\jsr@attachlist{##1}}%
+-  \dolistcsloop{jsr@attach@\the\c@refsection @\jsr@tmpkey}%
++  \jsr@dolistcs{jsr@attach@\the\c@refsection @\jsr@tmpkey}%
+   \ifcsdef{jsr@cloneof@\the\c@refsection @\jsr@tmpkey}
+     {\edef\jsr@tmpkey{\csuse{jsr@cloneof@\the\c@refsection @\jsr@tmpkey}}%
+-     \dolistcsloop{jsr@attach@\the\c@refsection @\jsr@tmpkey}}
++     \jsr@dolistcs{jsr@attach@\the\c@refsection @\jsr@tmpkey}}
+     {}}
+ % 書籍型か（再刊の判定に使う）
+ \newcommand*{\jsr@ifbooklike}{%
