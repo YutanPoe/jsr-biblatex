@@ -1,0 +1,13 @@
+# run-tests.sh が生成するファイル
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.run.xml
+*.pdf
+*.lines.txt
+*.actual.txt
+*.expected.norm.txt
+*.diff
+*.biber.log

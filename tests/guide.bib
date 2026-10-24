@@ -1,0 +1,984 @@
+%% =====================================================================
+%% jsr-biblatex 回帰テスト用データ（社会学評論スタイルガイドの例文）
+%%
+%% 方針
+%%  - 各エントリはそれ単独で完結した書誌として書く（原著と共通の項目も省かない）。
+%%  - 訳書・再録は related ＋ relatedtype でつなぎ、ソート用に origdate（原著の刊行年）を書く。
+%%  - skipbib など、出力を制御するための指定はしない。
+%%  - 「テスト」「Test」を含む書名は、文献注の例を再現するための架空の書誌。
+%%  - 4.5.1 電子書籍、4.5.4.2 MRDF はフィールドの割り当てが未決のため未収録。
+%%  - ウェブサイト名は暫定的に独自フィールド webpagetitle を使う（見直し予定）。
+%%  - 新聞記事は暫定的に type/issue を使う（見直し予定）。
+%% =====================================================================
+
+%% ---------------------------------------------------------------------
+%% 4.2 欧文の文献
+%% ---------------------------------------------------------------------
+
+@book{Broadbent1998,
+  author    = {Broadbent, Jeffrey},
+  date      = {1998},
+  title     = {Environmental Politics in Japan},
+  subtitle  = {Networks of Power and Protest},
+  location  = {New York},
+  publisher = {Cambridge University Press},
+  langid    = {american},
+}
+
+@book{Berger1972,
+  author    = {Berger, Peter L. and Berger, Brigitte},
+  date      = {1972},
+  title     = {Sociology},
+  subtitle  = {A Biographical Approach},
+  location  = {New York},
+  publisher = {Basic Books},
+  langid    = {american},
+}
+
+@collection{Douglas1970,
+  editor    = {Douglas, Jack},
+  date      = {1970},
+  title     = {Understanding Everyday Life},
+  location  = {Chicago},
+  publisher = {Aldine},
+  langid    = {american},
+}
+
+@collection{Rubington1965,
+  editor    = {Rubington, Earl and Weinberg, Martin},
+  date      = {1965},
+  title     = {Deviance},
+  subtitle  = {The International Perspective},
+  location  = {New York},
+  publisher = {Macmillan},
+  langid    = {american},
+}
+
+@incollection{Mayer1995,
+  author    = {Mayer, Margit and Roth, Poland},
+  date      = {1995},
+  title     = {New Social Movements and the Transformation to Post-Fordist Society},
+  editor    = {Darnovsky, Marcy and Epstein, Barbara and Flacks, Richard},
+  booktitle = {Cultural Politics and Social Movements},
+  location  = {Philadelphia},
+  publisher = {Temple University Press},
+  pages     = {299--319},
+  langid    = {american},
+}
+
+@article{Abbott1995,
+  author       = {Abbott, Andrew},
+  date         = {1995},
+  title        = {Things of Boundaries},
+  journaltitle = {Social Research},
+  volume       = {62},
+  number       = {4},
+  pages        = {857--882},
+  langid       = {american},
+}
+
+%% (6) 英訳文献：原典（本）＋英訳
+@book{Bourdieu1989,
+  author    = {Bourdieu, Pierre},
+  date      = {1989},
+  title     = {La noblesse d'état},
+  subtitle  = {Grandes écoles et esprit de corps},
+  location  = {Paris},
+  publisher = {Les Editions de Minuit},
+  langid    = {french},
+}
+
+@book{Bourdieu1996,
+  author      = {Bourdieu, Pierre},
+  translator  = {Clough, Lauretta},
+  date        = {1996},
+  origdate    = {1989},
+  title       = {The State Nobility},
+  subtitle    = {Elite Schools in the Field of Power},
+  location    = {Oxford},
+  publisher   = {Polity Press},
+  langid      = {american},
+  related     = {Bourdieu1989},
+  relatedtype = {translationof},
+}
+
+%% (6) 英訳文献：原典（雑誌論文）＋英訳（編書論文）
+@article{Bourdieu1983,
+  author       = {Bourdieu, Pierre},
+  date         = {1983},
+  title        = {Vous avez dit \enquote{populaire}?},
+  journaltitle = {Actes de la recherche en sciences sociales},
+  volume       = {46},
+  pages        = {98--105},
+  langid       = {french},
+}
+
+@incollection{Bourdieu1991,
+  author      = {Bourdieu, Pierre},
+  translator  = {Raymond, Gino and Adamson, Matthew},
+  date        = {1991},
+  origdate    = {1983},
+  title       = {Did You Say \enquote{Popular}?},
+  editor      = {Thompson, John},
+  booktitle   = {Language and Symbolic Power},
+  location    = {Cambridge},
+  publisher   = {Harvard University Press},
+  pages       = {90--102},
+  langid      = {american},
+  related     = {Bourdieu1983},
+  relatedtype = {translationof},
+}
+
+%% (7) 初版の出版年
+@book{Simpson1972,
+  author    = {Simpson, George Eaton and Yinger, J. Milton},
+  date      = {1972},
+  origdate  = {1953},
+  title     = {Racial and Cultural Minorities},
+  subtitle  = {An Analysis of Prejudice and Discrimination},
+  edition   = {4},
+  location  = {New York},
+  publisher = {Harper \& Row},
+  langid    = {american},
+}
+
+%% (8) 初出誌と再録編著書
+@article{McCarthy1977,
+  author       = {McCarthy, John D. and Zald, Mayer N.},
+  date         = {1977},
+  title        = {Resource Mobilization and Social Movements},
+  subtitle     = {A Partial Theory},
+  journaltitle = {American Journal of Sociology},
+  volume       = {82},
+  number       = {6},
+  pages        = {1212--1241},
+  langid       = {american},
+}
+
+@incollection{McCarthy1987,
+  author       = {McCarthy, John D. and Zald, Mayer N.},
+  date         = {1987},
+  origdate     = {1977},
+  title        = {Resource Mobilization and Social Movements},
+  subtitle     = {A Partial Theory},
+  editor       = {Zald, Mayer N. and McCarthy, John D.},
+  booktitle    = {Social Movements in an Organizational Society},
+  booksubtitle = {Collected Essays},
+  location     = {New Brunswick},
+  publisher    = {Transaction Publishers},
+  pages        = {15--42},
+  langid       = {american},
+  related      = {McCarthy1977},
+  relatedtype  = {reprintof},
+}
+
+%% 4.4(6) 翻訳論文（同じ原典の和訳）
+@incollection{McCarthy1989,
+  author       = {McCarthy, John D. and Zald, Mayer N.},
+  translator   = {片桐,新自},
+  date         = {1989},
+  origdate     = {1977},
+  title        = {社会運動の合理的理論},
+  editor       = {塩原,勉},
+  booktitle    = {資源動員と組織戦略},
+  booksubtitle = {運動論の新パラダイム},
+  publisher    = {新曜社},
+  pages        = {21--58},
+  langid       = {japanese},
+  related      = {McCarthy1977},
+  relatedtype  = {translationof},
+}
+
+%% ---------------------------------------------------------------------
+%% 4.4 邦文の文献
+%% ---------------------------------------------------------------------
+
+@book{Inagami1981,
+  author    = {稲上,毅},
+  sortname  = {Inagami, Tsuyoshi},
+  date      = {1981},
+  title     = {労使関係の社会学},
+  publisher = {東京大学出版会},
+  langid    = {japanese},
+}
+
+@book{Maki1977a,
+  author    = {真木,悠介},
+  sortname  = {Maki, Yusuke},
+  date      = {1977},
+  title     = {現代社会の存立構造},
+  sorttitle = {Gendai shakai no sonritsu kozo},
+  publisher = {筑摩書房},
+  langid    = {japanese},
+}
+
+@book{Maki1977b,
+  author    = {真木,悠介},
+  sortname  = {Maki, Yusuke},
+  date      = {1977},
+  title     = {気流の鳴る音},
+  sorttitle = {Kiryu no naru oto},
+  publisher = {筑摩書房},
+  langid    = {japanese},
+}
+
+@book{Oguma1995,
+  author    = {小熊,英二},
+  sortname  = {Oguma, Eiji},
+  date      = {1995},
+  title     = {単一民族神話の起源},
+  subtitle  = {〈日本人〉の自画像の系譜},
+  publisher = {新曜社},
+  langid    = {japanese},
+}
+
+@book{Miyajima1985,
+  author    = {宮島,喬 and 梶田,孝道 and 伊藤,るり},
+  sortname  = {Miyajima, Takashi and Kajita, Takamichi and Ito, Ruri},
+  date      = {1985},
+  title     = {先進社会のジレンマ},
+  publisher = {有斐閣},
+  langid    = {japanese},
+}
+
+@book{Sugimoto1995,
+  author    = {杉本,良夫 and マオア,ロス},
+  sortname  = {Sugimoto, Yoshio and Mouer, Ross},
+  date      = {1995},
+  title     = {日本人論の方程式},
+  publisher = {筑摩書房},
+  langid    = {japanese},
+}
+
+@collection{Kosaka1998,
+  editor    = {高坂,健次 and 厚東,洋輔},
+  sortname  = {Kosaka, Kenji and Koto, Yosuke},
+  date      = {1998},
+  title     = {講座社会学1 理論と方法},
+  publisher = {東京大学出版会},
+  langid    = {japanese},
+}
+
+%% 編書論文（crossref の親は単独では引用しない）
+@collection{FunabashiIijima1998,
+  editor    = {舩橋,晴俊 and 飯島,伸子},
+  sortname  = {Funabashi, Harutoshi and Iijima, Nobuko},
+  date      = {1998},
+  title     = {講座社会学12 環境},
+  publisher = {東京大学出版会},
+  langid    = {japanese},
+}
+
+@incollection{Funabashi1998,
+  author   = {舩橋,晴俊},
+  sortname = {Funabashi, Harutoshi},
+  title    = {環境問題の未来と社会変動},
+  subtitle = {社会の自己破壊性と自己組織性},
+  pages    = {191--224},
+  crossref = {FunabashiIijima1998},
+  langid   = {japanese},
+}
+
+%% 共著の本に収録された論文（crossref で author → bookauthor を継承）
+@book{TakahashiEtAl1965,
+  author    = {高橋,徹 and 富永,健一 and 佐藤,毅},
+  sortname  = {Takahashi, Toru and Tominaga, Ken'ichi and Sato, Takeshi},
+  date      = {1965},
+  title     = {今日の社会心理学1 社会心理学の形成},
+  publisher = {培風館},
+  langid    = {japanese},
+}
+
+@inbook{Takahashi1965,
+  author   = {高橋,徹},
+  sortname = {Takahashi, Toru},
+  title    = {日本における社会心理学の形成},
+  pages    = {317--505},
+  crossref = {TakahashiEtAl1965},
+  langid   = {japanese},
+}
+
+@article{SatoY1998,
+  author       = {佐藤,嘉倫},
+  sortname     = {Sato, Yoshimichi},
+  date         = {1998},
+  title        = {合理的選択理論批判の論理構造とその問題点},
+  journaltitle = {社会学評論},
+  volume       = {49},
+  number       = {2},
+  pages        = {188--205},
+  langid       = {japanese},
+}
+
+%% 号のみの雑誌、発行元を記載
+@article{Sakurai1993,
+  author       = {桜井,厚},
+  sortname     = {Sakurai, Atsushi},
+  date         = {1993},
+  title        = {ライフヒストリー調査雑感},
+  journaltitle = {三色旗},
+  publisher    = {慶應通信},
+  number       = {549},
+  pages        = {11--14},
+  langid       = {japanese},
+}
+
+%% (6) 翻訳書：原典も直接引用する（原典は単独では載らないことを確認）
+@book{Fromm1941,
+  author    = {Fromm, Erich},
+  date      = {1941},
+  title     = {Escape from Freedom},
+  location  = {New York},
+  publisher = {Reinehart and Winston},
+  langid    = {american},
+}
+
+@book{Fromm1951,
+  author      = {フロム,E.},
+  sortname    = {Fromm, Erich},
+  translator  = {日高,六郎},
+  date        = {1951},
+  origdate    = {1941},
+  title       = {自由からの逃走},
+  publisher   = {東京創元社},
+  langid      = {japanese},
+  related     = {Fromm1941},
+  relatedtype = {translationof},
+}
+
+%% (7) 再録（単著論文集への再録。タイトル同一なので省略される）
+@article{Yoshida1974,
+  author       = {吉田,民人},
+  sortname     = {Yoshida, Tamito},
+  date         = {1974},
+  title        = {社会システム論における情報},
+  subtitle     = {資源処理パラダイムの構想},
+  journaltitle = {現代社会学},
+  volume       = {1},
+  number       = {1},
+  pages        = {7--27},
+  langid       = {japanese},
+}
+
+@inbook{Yoshida1990,
+  author      = {吉田,民人},
+  sortname    = {Yoshida, Tamito},
+  date        = {1990},
+  origdate    = {1974},
+  title       = {社会システム論における情報},
+  subtitle    = {資源処理パラダイムの構想},
+  booktitle   = {情報と自己組織性の理論},
+  publisher   = {東京大学出版会},
+  pages       = {153--172},
+  langid      = {japanese},
+  related     = {Yoshida1974},
+  relatedtype = {reprintof},
+}
+
+%% n.d. と近刊
+@book{Smith,
+  author    = {Smith, John},
+  title     = {Undated Book},
+  location  = {London},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+@book{Suzuki,
+  author    = {鈴木,一郎},
+  sortname  = {Suzuki, Ichiro},
+  pubstate  = {forthcoming},
+  title     = {テスト近刊書},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@article{Iversen,
+  author       = {Iversen, Solveig},
+  pubstate     = {forthcoming},
+  title        = {Speculative Infrastructures},
+  journaltitle = {Journal of Futures Studies},
+  langid       = {american},
+}
+
+%% (8) 調査報告書
+@report{Kambara1999,
+  author      = {神原,文子},
+  sortname    = {Kambara, Fumiko},
+  date        = {1999},
+  title       = {同和地区における子育ての現状と課題に関する実証研究},
+  type        = {1996-1998年度科学研究費補助金研究成果報告書},
+  number      = {08451041},
+  institution = {相愛大学},
+  langid      = {japanese},
+}
+
+%% (9) 政府刊行物
+@report{Naikakufu2009,
+  author   = {{内閣府国民生活局}},
+  sortname = {{Naikakufu Kokumin Seikatsukyoku}},
+  date     = {2009},
+  title    = {平成20年版国民生活白書},
+  langid   = {japanese},
+}
+
+@report{Shizuoka1972,
+  author   = {{静岡県}},
+  sortname = {Shizuokaken},
+  date     = {1972},
+  title    = {第8次静岡県総合開発計画},
+  langid   = {japanese},
+}
+
+%% (10) 修士論文・学会報告
+@thesis{Yamada2020,
+  author      = {山田,太郎},
+  sortname    = {Yamada, Taro},
+  date        = {2020},
+  title       = {テスト修士論文},
+  institution = {東京大学大学院人文社会系研究科},
+  type        = {2019年度修士論文},
+  langid      = {japanese},
+}
+
+@inproceedings{Yamada2021,
+  author     = {山田,花子},
+  sortname   = {Yamada, Hanako},
+  date       = {2021},
+  title      = {テスト報告},
+  eventtitle = {第94回日本社会学会大会報告原稿},
+  langid     = {japanese},
+}
+
+%% ---------------------------------------------------------------------
+%% 4.5 電子化された資料
+%% ---------------------------------------------------------------------
+
+%% 4.5.2.1 電子媒体のみの雑誌
+@article{Schafer2003,
+  author       = {Schafer, Daniel W. and Ramsey, Fred L.},
+  date         = {2003},
+  title        = {Teaching the Craft of Data Analysis},
+  journaltitle = {Journal of Statistics Education},
+  volume       = {11},
+  number       = {1},
+  url          = {http://www.amstat.org/publications/jse/v11n1/schafer.html},
+  urldate      = {2006-12-12},
+  langid       = {american},
+}
+
+%% 4.5.2.2 紙媒体・電子媒体の雑誌（和文：URL、欧文：データベース）
+@article{WatanabeT2008,
+  author       = {渡邊,勉 and 竹ノ下,弘久},
+  sortname     = {Watanabe, Tsutomu and Takenoshita, Hirohisa},
+  date         = {2008},
+  title        = {特集 階層移動研究の最前線},
+  journaltitle = {理論と方法},
+  volume       = {23},
+  number       = {2},
+  pages        = {1--3},
+  url          = {http://www.jstage.jst.go.jp/article/ojjams/23/2/23_2_1/_article/-char/ja/},
+  urldate      = {2009-01-10},
+  langid       = {japanese},
+}
+
+@article{Scott2005,
+  author       = {Scott, Jr., Lionel D. and House, Laura E.},
+  date         = {2005},
+  title        = {Relationship of Distress and Perceived Control to Coping with Perceived Racial Discrimination among Black Youth},
+  journaltitle = {Journal of Black Psychology},
+  volume       = {31},
+  number       = {3},
+  pages        = {254--272},
+  eprinttype   = {JSTOR},
+  urldate      = {2006-12-16},
+  langid       = {american},
+}
+
+%% 4.5.3 ウェブページ（和文）
+@online{JSS2006,
+  author       = {{日本社会学会}},
+  sortname     = {{Nihon Shakai Gakkai}},
+  date         = {2006},
+  title        = {日本社会学会倫理綱領にもとづく研究指針},
+  webpagetitle = {日本社会学会ホームページ},
+  url          = {http://www.gakkai.ne.jp/jss/about/shishin.pdf},
+  urldate      = {2009-02-02},
+  langid       = {japanese},
+}
+
+@online{JSS2009,
+  author       = {{日本社会学会}},
+  sortname     = {{Nihon Shakai Gakkai}},
+  date         = {2009},
+  webpagetitle = {日本社会学会ホームページ},
+  url          = {http://www.gakkai.ne.jp/jss},
+  urldate      = {2009-02-02},
+  langid       = {japanese},
+}
+
+@online{Yamanaka2004,
+  author       = {山中,速人},
+  sortname     = {Yamanaka, Hayato},
+  date         = {2004},
+  title        = {なにが人質を解放させたのか},
+  webpagetitle = {Yamanaka Research Office},
+  url          = {http://www.asahi-net.or.jp/~cr1h-ymnk/kaiho.html},
+  urldate      = {2009-02-02},
+  langid       = {japanese},
+}
+
+%% 4.5.3 ウェブページ（欧文：所在地と運営機関名）
+@online{JHU2003,
+  author       = {{Johns Hopkins University}},
+  date         = {2003},
+  title        = {Economic Impact of the Johns Hopkins Institutions in Maryland},
+  location     = {Silver Spring, MD},
+  organization = {{Johns Hopkins University and Johns Hopkins Medicine}},
+  url          = {http://www.jhu.edu/news_info/reports/impact/2003/impact2003.pdf},
+  urldate      = {2007-01-26},
+  langid       = {american},
+}
+
+@online{ICPSR2009,
+  author       = {{ICPSR}},
+  date         = {2009},
+  title        = {Mission Statement},
+  location     = {Ann Arbor, MI},
+  organization = {University of Michigan},
+  url          = {http://www.icpsr.umich.edu/ICPSR/org/mission.html},
+  urldate      = {2009-02-02},
+  langid       = {american},
+}
+
+%% 4.5.3 ブログ（記事作成日あり）
+@online{WatanabeJ2009,
+  author       = {渡辺,潤},
+  sortname     = {Watanabe, Jun},
+  date         = {2009-01-05},
+  title        = {スポーツの値段},
+  webpagetitle = {珈琲をもう一杯 film\&tv},
+  url          = {http://www.tku.ac.jp/~juwat/blog/film_blog/2009/01/post_54.html},
+  urldate      = {2009-02-02},
+  langid       = {japanese},
+}
+
+@online{DeLong2007,
+  author       = {DeLong, Brad},
+  date         = {2007-01-07},
+  title        = {Thomas Piketty and Emmanuel Saez Give Their Current View on American Income Inequality},
+  webpagetitle = {The Brad DeLong Blog},
+  url          = {http://econ161.berkeley.edu/movable_type},
+  urldate      = {2007-01-09},
+  langid       = {american},
+}
+
+%% 4.5.4.1 オンラインデータベース
+@online{Somusho2007,
+  author   = {{総務省統計局}},
+  sortname = {{Somusho Tokeikyoku}},
+  date     = {2007},
+  title    = {平成17年国勢調査第1表 労働力状態（8区分），年齢（各歳），男女別15歳以上人口},
+  subtitle = {全国（第2次基本集計）},
+  url      = {http://www.e-stat.go.jp/SG1/estat/},
+  urldate  = {2009-01-10},
+  langid   = {japanese},
+}
+
+@online{NCHS2007,
+  author  = {{National Center for Health Statistics}},
+  date    = {2007},
+  title   = {Faststats, A to Z},
+  url     = {http://www.cdc.gov/},
+  urldate = {2007-02-02},
+  langid  = {american},
+}
+
+%% ---------------------------------------------------------------------
+%% 3.2 文献注の例を再現するための書誌
+%% ---------------------------------------------------------------------
+
+@book{Mita1979,
+  author    = {見田,宗介},
+  sortname  = {Mita, Munesuke},
+  date      = {1979},
+  title     = {現代社会の社会意識},
+  publisher = {弘文堂},
+  langid    = {japanese},
+}
+
+@book{Mita1984,
+  author    = {見田,宗介},
+  sortname  = {Mita, Munesuke},
+  date      = {1984},
+  title     = {新版 現代日本の精神構造},
+  publisher = {弘文堂},
+  langid    = {japanese},
+}
+
+@book{Goffman1961a,
+  author    = {Goffman, Erving},
+  date      = {1961},
+  title     = {Asylums},
+  subtitle  = {Essays on the Social Situation of Mental Patients and Other Inmates},
+  location  = {Garden City},
+  publisher = {Anchor Books},
+  langid    = {american},
+}
+
+@book{Goffman1961b,
+  author    = {Goffman, Erving},
+  date      = {1961},
+  title     = {Encounters},
+  subtitle  = {Two Studies in the Sociology of Interaction},
+  location  = {Indianapolis},
+  publisher = {Bobbs-Merrill},
+  langid    = {american},
+}
+
+@book{Goffman1984,
+  author      = {ゴッフマン,E.},
+  sortname    = {Goffman, Erving},
+  translator  = {石黒,毅},
+  date        = {1984},
+  origdate    = {1961},
+  title       = {アサイラム},
+  subtitle    = {施設被収容者の日常世界},
+  publisher   = {誠信書房},
+  langid      = {japanese},
+  related     = {Goffman1961a},
+  relatedtype = {translationof},
+}
+
+@book{Okuda1983,
+  author    = {奥田,道大},
+  sortname  = {Okuda, Michihiro},
+  date      = {1983},
+  title     = {都市コミュニティの理論},
+  publisher = {東京大学出版会},
+  langid    = {japanese},
+}
+
+@book{OkudaHirota1982,
+  author    = {奥田,道大 and 広田,康生},
+  sortname  = {Okuda, Michihiro and Hirota, Yasuo},
+  date      = {1982},
+  title     = {テスト共著書},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{CohenArato1981,
+  author    = {Cohen, Jean L. and Arato, Andrew},
+  date      = {1981},
+  title     = {Test Book on Civil Society},
+  location  = {Cambridge},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+@book{ZaldEtAl1995,
+  author    = {Zald, Mayer N. and McCarthy, John D. and Smith, Jackie},
+  date      = {1995},
+  title     = {Test Book on Movements},
+  location  = {New York},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+@collection{Kurihara1996,
+  editor    = {栗原,彬},
+  sortname  = {Kurihara, Akira},
+  date      = {1996},
+  title     = {テスト編書A},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@collection{Hall1979,
+  editor    = {Hall, Stuart},
+  date      = {1979},
+  title     = {Test Edited Volume},
+  location  = {London},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+@collection{MiyajimaKajita1991,
+  editor    = {宮島,喬 and 梶田,孝道},
+  sortname  = {Miyajima, Takashi and Kajita, Takamichi},
+  date      = {1991},
+  title     = {テスト共編書B},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@collection{JohnstonKlandermans1995,
+  editor    = {Johnston, Hank and Klandermans, Bert},
+  date      = {1995},
+  title     = {Social Movements and Culture},
+  location  = {Minneapolis},
+  publisher = {University of Minnesota Press},
+  langid    = {american},
+}
+
+@collection{FunabashiEtAl1998,
+  editor    = {舩橋,晴俊 and 長谷川,公一 and 飯島,伸子},
+  sortname  = {Funabashi, Harutoshi and Hasegawa, Koichi and Iijima, Nobuko},
+  date      = {1998},
+  title     = {テスト共編書A},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@collection{Kurasawa1990,
+  editor    = {倉沢,進},
+  sortname  = {Kurasawa, Susumu},
+  date      = {1990},
+  title     = {テスト編書B},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@collection{Takahashi1992,
+  editor    = {高橋,徹},
+  sortname  = {Takahashi, Toru},
+  date      = {1992},
+  title     = {テスト編書C},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{Marx1932,
+  author    = {Marx, Karl},
+  date      = {1932},
+  origdate  = {1844},
+  title     = {Ökonomisch-philosophische Manuskripte},
+  location  = {Berlin},
+  publisher = {Marx-Engels-Verlag},
+  langid    = {german},
+}
+
+@book{Marx1964,
+  author      = {マルクス,K.},
+  sortname    = {Marx, Karl},
+  translator  = {城塚,登 and 田中,吉六},
+  date        = {1964},
+  origdate    = {1932},
+  title       = {経済学・哲学草稿},
+  publisher   = {岩波書店},
+  langid      = {japanese},
+  related     = {Marx1932},
+  relatedtype = {translationof},
+}
+
+@book{WeberA1920,
+  author    = {Weber, Alfred},
+  date      = {1920},
+  title     = {Test Book A},
+  location  = {Berlin},
+  publisher = {Test Verlag},
+  langid    = {german},
+}
+
+@book{WeberM1920,
+  author    = {Weber, Max},
+  date      = {1920},
+  title     = {Test Book M},
+  location  = {Tübingen},
+  publisher = {Mohr},
+  langid    = {german},
+}
+
+%% 3.7 新聞記事（著者なし：文献リストには載せない）
+@article{Asahi1998,
+  journaltitle = {朝日新聞},
+  date         = {1998-11-03},
+  type         = {newspaper},
+  issue        = {朝刊},
+  langid       = {japanese},
+}
+
+%% 3.7 商業雑誌の記事（著者なし：文献リストには載せない）
+@article{Shukan1964,
+  journaltitle = {週刊朝日},
+  date         = {1964-10-09},
+  type         = {magazine},
+  pages        = {20--23},
+  langid       = {japanese},
+}
+
+@book{Ito1990,
+  author    = {伊藤,太郎},
+  sortname  = {Ito, Taro},
+  date      = {1990},
+  title     = {テスト単著書},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{ItoSato1991,
+  author    = {伊藤,太郎 and 佐藤,花子},
+  sortname  = {Ito, Taro and Sato, Hanako},
+  date      = {1991},
+  title     = {テスト共著書二},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+%% ---------------------------------------------------------------------
+%% フェーズB で追加：原典を代表にする方式の確認（架空の書誌）
+%% ---------------------------------------------------------------------
+
+%% 再刊（原典が書籍）：原典の位置に「[原典の年] 手元の版の年」の形で出る
+@book{Kaku1960,
+  author    = {加来,一郎},
+  sortname  = {Kaku, Ichiro},
+  date      = {1960},
+  title     = {テスト初版書},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{Kaku2000,
+  author      = {加来,一郎},
+  sortname    = {Kaku, Ichiro},
+  date        = {2000},
+  origdate    = {1960},
+  title       = {テスト初版書},
+  publisher   = {テスト文庫社},
+  langid      = {japanese},
+  related     = {Kaku1960},
+  relatedtype = {reprintof},
+}
+
+%% 和文の原典の英訳
+@book{Kaku1975,
+  author    = {加来,一郎},
+  sortname  = {Kaku, Ichiro},
+  date      = {1975},
+  title     = {テスト社会論},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{Kaku1980,
+  author      = {Kaku, Ichiro},
+  translator  = {Smith, Jane},
+  date        = {1980},
+  origdate    = {1975},
+  title       = {Test Society},
+  location    = {London},
+  publisher   = {Test Press},
+  langid      = {american},
+  related     = {Kaku1975},
+  relatedtype = {translationof},
+}
+
+%% 原典を引用せず訳書だけを引用：extradate は原典の年で判定する
+@book{Lane1970a,
+  author    = {Lane, Robert},
+  date      = {1970},
+  title     = {Alpha Book},
+  location  = {London},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+@book{Lane1970b,
+  author    = {Lane, Robert},
+  date      = {1970},
+  title     = {Beta Book},
+  location  = {London},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+@book{Lane1980,
+  author      = {レイン,R.},
+  sortname    = {Lane, Robert},
+  translator  = {山本,花子},
+  date        = {1980},
+  origdate    = {1970},
+  title       = {アルファの本},
+  publisher   = {テスト出版},
+  langid      = {japanese},
+  related     = {Lane1970a},
+  relatedtype = {translationof},
+}
+
+%% 同一著者・同年の著書と編書：カテゴリーが違えば a，b を付けない（ガイド 4.4）
+@book{Oda1991,
+  author    = {小田,一},
+  sortname  = {Oda, Hajime},
+  date      = {1991},
+  title     = {テスト単著書C},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@collection{Oda1991ed,
+  editor    = {小田,一},
+  sortname  = {Oda, Hajime},
+  date      = {1991},
+  title     = {テスト編書D},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+%% series：和文は書名の前に出し，欧文は出さない（2026-10-24 決定）
+@book{Nishimura1990,
+  author    = {西村,二郎},
+  sortname  = {Nishimura, Jiro},
+  date      = {1990},
+  title     = {テスト講座本},
+  series    = {テスト講座},
+  number    = {3},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{Norton2004,
+  author    = {Norton, Alan},
+  date      = {2004},
+  title     = {Test Book in a Series},
+  series    = {Studies in Testing},
+  number    = {12},
+  location  = {Oxford},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
+%% 欧文誌の publisher は出さない（2026-10-24 決定）
+@article{Owen2010,
+  author       = {Owen, Brian},
+  date         = {2010},
+  title        = {Test Article with Publisher},
+  journaltitle = {Journal of Testing},
+  publisher    = {Test Publishing},
+  volume       = {5},
+  number       = {2},
+  pages        = {10--20},
+  langid       = {american},
+}
+
+%% 書籍：発行元が著者と同じなら省く
+@book{Tetsudo1971,
+  author    = {{テスト鉄道協会}},
+  sortname  = {{Tesuto Tetsudo Kyokai}},
+  date      = {1971},
+  title     = {テスト鉄道百年史 第3巻},
+  publisher = {テスト鉄道協会},
+  langid    = {japanese},
+}
+
+%% 多巻本
+@mvbook{Rekishi1980,
+  editor    = {{テスト史編纂委員会}},
+  sortname  = {{Tesuto shi Hensan Iinkai}},
+  date      = {1980},
+  title     = {テスト史},
+  volumes   = {10},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}

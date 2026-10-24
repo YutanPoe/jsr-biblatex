@@ -1,0 +1,97 @@
+%% jsr-biblatex 回帰テスト：社会学評論スタイルガイドの例文
+%% 1 行 1 項目で出力されるよう、紙面を横に極端に広くしている。
+\documentclass[paper={1500mm,1000mm},line_length=1450mm,number_of_lines=150]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\addbibresource{guide.bib}
+\AtBeginBibliography{\raggedright}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\newcommand*{\case}[2]{#1 #2\par}
+\directlua{dofile(kpse.find_file('textdump.lua'))}
+
+\begin{document}
+\raggedright
+== CITATIONS ==\par
+% 3.1/3.3 初出はフルネーム、2 回目以降は姓のみ（人物単位）
+\case{C01}{\textcite{Mita1979}}
+\case{C02}{\parencite{Mita1979}}
+\case{C03}{\parencite[128]{Mita1979}}
+\case{C04}{\parencite{Mita1979,Mita1984}}
+\case{C05}{\textcite{Mita1984}}
+\case{C06}{\textcite{Broadbent1998}}
+\case{C07}{\parencite[371--373]{Broadbent1998}}
+% 3.2 文献注のさまざまなケース
+\case{C08}{\parencite{Goffman1961a}}
+\case{C09}{\parencite{Goffman1961b}}
+\case{C10}{\parencite{OkudaHirota1982}}
+\case{C11}{\parencite{CohenArato1981}}
+\case{C12}{\parencite{TakahashiEtAl1965}}
+\case{C13}{\parencite{ZaldEtAl1995}}
+\case{C14}{\parencite{Kurihara1996}}
+\case{C15}{\parencite{Hall1979}}
+\case{C16}{\parencite{MiyajimaKajita1991}}
+\case{C17}{\parencite{JohnstonKlandermans1995}}
+\case{C18}{\parencite{FunabashiEtAl1998}}
+\case{C19}{\parencite{Goffman1984}}
+\case{C20}{\parencite[78]{Goffman1984}}
+\case{C21}{\parencite[78]{Goffman1961a}}
+\case{C22}{\parencite{Kurasawa1990,Okuda1983,Takahashi1992}}
+\case{C23}{\parencite{Simpson1972}}
+\case{C24}{\parencite{Yoshida1990}}
+\case{C25}{\parencite{Marx1932}}
+\case{C26}{\parencite{Marx1964}}
+\case{C27}{\parencite{McCarthy1987}}
+\case{C28}{\parencite{WeberA1920}}
+\case{C29}{\parencite{WeberM1920}}
+\case{C30}{\parencite{Smith}}
+\case{C31}{\parencite{Suzuki}}
+\case{C32}{\parencite{Iversen}}
+\case{C33}{\parencite[第5段落]{WatanabeJ2009}}
+\case{C34}{\parencite{Asahi1998}}
+\case{C35}{\parencite{Yamada2020}}
+\case{C36}{\parencite{Yamada2021}}
+\case{C37}{\parencite{Fromm1951}}
+\case{C38}{\parencite{McCarthy1989}}
+\case{C39}{\parencite{Fromm1941}}
+\case{C40}{\parencite{Takahashi1965}}
+% 3.1 人物単位の初出判定：同じ著者の別文献、共著者の一人の単著
+\case{C41}{\textcite{Maki1977a}}
+\case{C42}{\textcite{Maki1977b}}
+\case{C43}{\textcite{OkudaHirota1982}}
+\case{C44}{\textcite{Okuda1983}}
+% 共著は全体で1つの著者単位：構成員の一人が既出でも、共著の初出はフルネーム
+\case{C46}{\textcite{Ito1990}}
+\case{C47}{\textcite{ItoSato1991}}
+\case{C48}{\textcite{ItoSato1991}}
+% 3.7 商業雑誌（著者なし）
+\case{C45}{\parencite{Shukan1964}}
+% 原典を代表にする方式：再刊、和文原典の英訳、原典を引用しない訳書の extradate
+\case{C49}{\parencite{Kaku2000}}
+\case{C50}{\parencite{Kaku1980}}
+\case{C51}{\parencite{Lane1980}}
+\case{C52}{\parencite{Lane1970b}}
+% カタカナ書きの外国人名（4.4(2)）
+\case{C53}{\textcite{Sugimoto1995}}
+\case{C54}{\parencite{Sugimoto1995}}
+% 本文中の引用の 3 名以上（ほか／et al.）、原書と訳書の両方のページ
+\case{C55}{\textcite{TakahashiEtAl1965}}
+\case{C56}{\textcite{ZaldEtAl1995}}
+\case{C57}{\parencite[78=86]{Goffman1984}}
+\case{C58}{\textcite[78=86]{Goffman1984}}
+% 同一著者・同年の著書と編書
+\case{C59}{\parencite{Oda1991}}
+\case{C60}{\parencite{Oda1991ed}}
+== BIBLIOGRAPHY ==\par
+\nocite{Berger1972,Douglas1970,Rubington1965,Mayer1995,Abbott1995,
+  Bourdieu1996,Bourdieu1991,Inagami1981,Maki1977a,Maki1977b,Oguma1995,
+  Miyajima1985,Sugimoto1995,Kosaka1998,Funabashi1998,SatoY1998,
+  Sakurai1993,Kambara1999,Naikakufu2009,Shizuoka1972,Schafer2003,
+  WatanabeT2008,Scott2005,JSS2006,JSS2009,Yamanaka2004,JHU2003,ICPSR2009,
+  DeLong2007,Somusho2007,NCHS2007,
+  Nishimura1990,Norton2004,Owen2010,Tetsudo1971,Rekishi1980}
+\printbibliography[heading=none]
+\end{document}

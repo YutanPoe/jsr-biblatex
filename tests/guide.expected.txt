@@ -1,0 +1,185 @@
+# jsr-biblatex 回帰テストの期待値（社会学評論スタイルガイドに準拠）
+# - 「#」で始まる行は注釈。比較の前に、和文文字の前後の空白は取り除かれる。
+# - 1 行が 1 つの文献注または 1 つの文献に対応する。
+# - 括弧内の節番号はスタイルガイドの該当箇所。
+== CITATIONS ==
+# 3.1, 3.3 初出はフルネーム、2 回目以降は姓のみ（同じ人物の別文献でも姓のみ）
+C01 見田宗介（1979）
+C02 （見田 1979）
+C03 （見田 1979: 128）
+C04 （見田 1979, 1984）
+C05 見田（1984）
+C06 Jeffrey Broadbent（1998）
+C07 （Broadbent 1998: 371-3）
+# 3.2
+C08 （Goffman 1961a）
+C09 （Goffman 1961b）
+C10 （奥田・広田 1982）
+C11 （Cohen and Arato 1981）
+C12 （高橋ほか 1965）
+C13 （Zald et al. 1995）
+C14 （栗原編 1996）
+C15 （Hall ed. 1979）
+C16 （宮島・梶田編 1991）
+C17 （Johnston and Klandermans eds. 1995）
+C18 （舩橋ほか編 1998）
+C19 （Goffman 1961a=1984）
+C20 （Goffman 1961a=1984: 78）
+C21 （Goffman 1961a: 78）
+C22 （倉沢編 1990; 奥田 1983; 高橋編 1992）
+C23 （Simpson and Yinger [1953] 1972）
+C24 （吉田 [1974] 1990）
+C25 （Marx [1844] 1932）
+C26 （Marx [1844] 1932=1964）
+C27 （McCarthy and Zald [1977] 1987）
+C28 （Weber, A. 1920）
+C29 （Weber, M. 1920）
+# 4.4 出版年不明・近刊
+C30 （Smith n.d.）
+C31 （鈴木 近刊）
+C32 （Iversen forthcoming）
+# 3.8.1(3) ウェブ文書の段落指定
+C33 （渡辺 2009: 第5段落）
+# 3.7 新聞記事
+C34 （『朝日新聞』1998.11.3 朝刊）
+# 3.2 同姓の著者はフルネーム
+C35 （山田太郎 2020）
+C36 （山田花子 2021）
+C37 （Fromm 1941=1951）
+C38 （McCarthy and Zald 1977=1989）
+C39 （Fromm 1941）
+C40 （高橋 1965）
+# 3.1 人物単位の初出判定（括弧内の文献注は「言及」に数えない）
+C41 真木悠介（1977a）
+C42 真木（1977b）
+C43 奥田道大・広田康生（1982）
+C44 奥田（1983）
+C46 伊藤太郎（1990）
+C47 伊藤太郎・佐藤花子（1991）
+C48 伊藤・佐藤（1991）
+# 3.7 商業雑誌（著者なし）
+C45 （『週刊朝日』1964.10.9: 20-3）
+# 原典を代表にする方式（フェーズB）
+C49 （加来 [1960] 2000）
+C50 （加来 1975=1980）
+C51 （Lane 1970a=1980）
+C52 （Lane 1970b）
+# 4.4(2) カタカナ書きの外国人名を含む共著は全角スラッシュでつなぐ（文献注にも同じ規則を適用）
+C53 杉本良夫／ロス・マオア（1995）
+C54 （杉本／マオア 1995）
+# 3.2 本文中の引用でも 3 名以上は「ほか」「et al.」（フェーズB で「ら」から変更）
+C55 高橋徹ほか（1965）
+C56 Mayer N. Zald et al.（1995）
+# 3.2 原書と訳書の両方のページ：\parencite[78=86]{訳書}
+C57 （Goffman 1961a: 78=1984: 86）
+C58 Erving Goffman（1961a: 78=1984: 86）
+# 4.4 a, b は同一著者の同一カテゴリーの同一年度のみ（著書と編書は区別しない）
+C59 （小田 1991）
+C60 （小田編 1991）
+== BIBLIOGRAPHY ==
+Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
+Berger, Peter L. and Brigitte Berger, 1972, Sociology: A Biographical Approach, New York: Basic Books.
+# 4.2(6) 英訳文献（原典は単独では載らない）
+Bourdieu, Pierre, 1983, “Vous avez dit ‘populaire’?,” Actes de la recherche en sciences sociales, 46: 98-105. (Gino Raymond and Matthew Adamson, trans., 1991, “Did You Say ‘Popular’?,” John Thompson ed., Language and Symbolic Power, Cambridge: Harvard University Press, 90-102.)
+————, 1989, La noblesse d'état: Grandes écoles et esprit de corps, Paris: Les Editions de Minuit. (Lauretta Clough, trans., 1996, The State Nobility: Elite Schools in the Field of Power, Oxford: Polity Press.)
+Broadbent, Jeffrey, 1998, Environmental Politics in Japan: Networks of Power and Protest, New York: Cambridge University Press.
+Cohen, Jean L. and Andrew Arato, 1981, Test Book on Civil Society, Cambridge: Test Press.
+# 4.5.3 ブログ（欧文）
+DeLong, Brad, 2007, “Thomas Piketty and Emmanuel Saez Give Their Current View on American Income Inequality,” The Brad DeLong Blog, January 7, 2007, (Retrieved January 9, 2007, http://econ161.berkeley.edu/movable_type).
+Douglas, Jack ed., 1970, Understanding Everyday Life, Chicago: Aldine.
+# 4.4(6) 翻訳書（原典も直接引用しているが、単独では載らない）
+Fromm, Erich, 1941, Escape from Freedom, New York: Reinehart and Winston.（日高六郎訳，1951，『自由からの逃走』東京創元社．）
+# 4.1 同一著者：単著 → 単独編書 → 共著 → 共編書
+舩橋晴俊，1998，「環境問題の未来と社会変動——社会の自己破壊性と自己組織性」舩橋晴俊・飯島伸子編『講座社会学12 環境』東京大学出版会，191-224．
+舩橋晴俊・長谷川公一・飯島伸子編，1998，『テスト共編書A』テスト出版．
+Goffman, Erving, 1961a, Asylums: Essays on the Social Situation of Mental Patients and Other Inmates, Garden City: Anchor Books.（石黒毅訳，1984，『アサイラム——施設被収容者の日常世界』誠信書房．）
+————, 1961b, Encounters: Two Studies in the Sociology of Interaction, Indianapolis: Bobbs-Merrill.
+Hall, Stuart ed., 1979, Test Edited Volume, London: Test Press.
+# 4.5.3 ウェブページ（欧文）
+ICPSR, 2009, “Mission Statement,” Ann Arbor, MI: University of Michigan, (Retrieved February 2, 2009, http://www.icpsr.umich.edu/ICPSR/org/mission.html).
+稲上毅，1981，『労使関係の社会学』東京大学出版会．
+伊藤太郎，1990，『テスト単著書』テスト出版．
+伊藤太郎・佐藤花子，1991，『テスト共著書二』テスト出版．
+Iversen, Solveig, forthcoming, “Speculative Infrastructures,” Journal of Futures Studies.
+Johns Hopkins University, 2003, “Economic Impact of the Johns Hopkins Institutions in Maryland,” Silver Spring, MD: Johns Hopkins University and Johns Hopkins Medicine, (Retrieved January 26, 2007, http://www.jhu.edu/news_info/reports/impact/2003/impact2003.pdf).
+Johnston, Hank and Bert Klandermans eds., 1995, Social Movements and Culture, Minneapolis: University of Minnesota Press.
+# 再刊（原典が書籍）／和文原典の英訳（フェーズB）
+加来一郎，[1960] 2000，『テスト初版書』テスト文庫社．
+————，1975，『テスト社会論』テスト出版．(Jane Smith, trans., 1980, Test Society, London: Test Press.)
+# 4.4(8) 調査報告書
+神原文子，1999，『同和地区における子育ての現状と課題に関する実証研究』1996-1998年度科学研究費補助金研究成果報告書（08451041），相愛大学．
+高坂健次・厚東洋輔編，1998，『講座社会学1 理論と方法』東京大学出版会．
+倉沢進編，1990，『テスト編書B』テスト出版．
+栗原彬編，1996，『テスト編書A』テスト出版．
+# 原典を引用しない訳書：原典の複製が代表になり，extradate は原典の年で判定（フェーズB）
+Lane, Robert, 1970a, Alpha Book, London: Test Press.（山本花子訳，1980，『アルファの本』テスト出版．）
+————, 1970b, Beta Book, London: Test Press.
+# 4.4(1) 同一著者・同一年
+真木悠介，1977a，『現代社会の存立構造』筑摩書房．
+————，1977b，『気流の鳴る音』筑摩書房．
+Marx, Karl, [1844] 1932, Ökonomisch-philosophische Manuskripte, Berlin: Marx-Engels-Verlag.（城塚登・田中吉六訳，1964，『経済学・哲学草稿』岩波書店．）
+Mayer, Margit and Poland Roth, 1995, “New Social Movements and the Transformation to Post-Fordist Society,” Marcy Darnovsky, Barbara Epstein and Richard Flacks eds., Cultural Politics and Social Movements, Philadelphia: Temple University Press, 299-319.
+# 4.2(8) 再録（重複する著者名・論文タイトルは省略）／4.4(6) 同じ原典の和訳
+# 同じ原典の再録と和訳をともに引用した場合は 1 項目にまとめ，添え物を年順に並べる（2026-10-24 決定）
+McCarthy, John D. and Mayer N. Zald, 1977, “Resource Mobilization and Social Movements: A Partial Theory,” American Journal of Sociology, 82(6): 1212-41. Reprinted in: Mayer N. Zald and John D. McCarthy eds., 1987, Social Movements in an Organizational Society: Collected Essays, New Brunswick: Transaction Publishers, 15-42.（片桐新自訳，1989，「社会運動の合理的理論」塩原勉編『資源動員と組織戦略——運動論の新パラダイム』新曜社，21-58．）
+見田宗介，1979，『現代社会の社会意識』弘文堂．
+————，1984，『新版 現代日本の精神構造』弘文堂．
+宮島喬・梶田孝道・伊藤るり，1985，『先進社会のジレンマ』有斐閣．
+宮島喬・梶田孝道編，1991，『テスト共編書B』テスト出版．
+# 4.4(9) 政府刊行物
+内閣府国民生活局，2009，『平成20年版国民生活白書』．
+# 4.5.4.1 オンラインデータベース（欧文）
+National Center for Health Statistics, 2007, “Faststats, A to Z,” (Retrieved February 2, 2007, http://www.cdc.gov/).
+# 4.5.3 ウェブページ（和文）
+日本社会学会，2006，「日本社会学会倫理綱領にもとづく研究指針」，日本社会学会ホームページ，（2009年2月2日取得，http://www.gakkai.ne.jp/jss/about/shishin.pdf）．
+————，2009，日本社会学会ホームページ，（2009年2月2日取得，http://www.gakkai.ne.jp/jss）．
+# series：和文は書名の前に出し，欧文は出さない（フェーズB 決定）
+西村二郎，1990，『テスト講座 3 テスト講座本』テスト出版．
+Norton, Alan, 2004, Test Book in a Series, Oxford: Test Press.
+# 同一著者・同年の著書と編書（a, b を付けない）
+小田一，1991，『テスト単著書C』テスト出版．
+————編，1991，『テスト編書D』テスト出版．
+小熊英二，1995，『単一民族神話の起源——〈日本人〉の自画像の系譜』新曜社．
+奥田道大，1983，『都市コミュニティの理論』東京大学出版会．
+奥田道大・広田康生，1982，『テスト共著書』テスト出版．
+# 欧文誌の publisher は出さない（フェーズB 決定）
+Owen, Brian, 2010, “Test Article with Publisher,” Journal of Testing, 5(2): 10-20.
+Rubington, Earl and Martin Weinberg eds., 1965, Deviance: The International Perspective, New York: Macmillan.
+# 4.4(5) 号のみの雑誌・発行元の記載
+桜井厚，1993，「ライフヒストリー調査雑感」『三色旗』慶應通信，549: 11-4．
+佐藤嘉倫，1998，「合理的選択理論批判の論理構造とその問題点」『社会学評論』49(2): 188-205．
+# 4.5.2.1 電子媒体のみの雑誌
+Schafer, Daniel W. and Fred L. Ramsey, 2003, “Teaching the Craft of Data Analysis,” Journal of Statistics Education, 11(1), (Retrieved December 12, 2006, http://www.amstat.org/publications/jse/v11n1/schafer.html).
+# 4.5.2.2 データベース経由
+Scott, Lionel D., Jr. and Laura E. House, 2005, “Relationship of Distress and Perceived Control to Coping with Perceived Racial Discrimination among Black Youth,” Journal of Black Psychology, 31(3): 254-72, (Retrieved December 16, 2006, JSTOR).
+静岡県，1972，『第8次静岡県総合開発計画』．
+# 4.2(7) 初版の出版年
+Simpson, George Eaton and J. Milton Yinger, [1953] 1972, Racial and Cultural Minorities: An Analysis of Prejudice and Discrimination, 4th ed., New York: Harper & Row.
+Smith, John, n.d., Undated Book, London: Test Press.
+# 4.5.4.1 オンラインデータベース（和文）
+総務省統計局，2007，「平成17年国勢調査第1表 労働力状態（8区分），年齢（各歳），男女別15歳以上人口——全国（第2次基本集計）」，（2009年1月10日取得，http://www.e-stat.go.jp/SG1/estat/）．
+# 4.4(2) カタカナの外国人名を含む共著
+杉本良夫／ロス・マオア，1995，『日本人論の方程式』筑摩書房．
+鈴木一郎，近刊，『テスト近刊書』テスト出版．
+# 4.4(4) 共著の本に収録された論文／同一著者の編書（4 倍ダッシュ）／共著
+高橋徹，1965，「日本における社会心理学の形成」高橋徹・富永健一・佐藤毅『今日の社会心理学1 社会心理学の形成』培風館，317-505．
+————編，1992，『テスト編書C』テスト出版．
+高橋徹・富永健一・佐藤毅，1965，『今日の社会心理学1 社会心理学の形成』培風館．
+# 多巻本：『書名』（全○巻）
+テスト史編纂委員会編，1980，『テスト史』（全 10 巻）テスト出版．
+# 書籍：発行元が著者と同じなら省く
+テスト鉄道協会，1971，『テスト鉄道百年史 第 3 巻』．
+# 4.5.3 ブログ（和文）
+渡辺潤，2009，「スポーツの値段」，珈琲をもう一杯 film&tv，2009年1月5日，（2009年2月2日取得，http://www.tku.ac.jp/~juwat/blog/film_blog/2009/01/post_54.html）．
+# 4.5.2.2 紙媒体・電子媒体の雑誌（和文）
+渡邊勉・竹ノ下弘久，2008，「特集 階層移動研究の最前線」『理論と方法』23(2): 1-3，（2009年1月10日取得，http://www.jstage.jst.go.jp/article/ojjams/23/2/23_2_1/_article/-char/ja/）．
+Weber, Alfred, 1920, Test Book A, Berlin: Test Verlag.
+Weber, Max, 1920, Test Book M, Tübingen: Mohr.
+# 4.4(10) 学会報告・修士論文
+山田花子，2021，「テスト報告」第94回日本社会学会大会報告原稿．
+山田太郎，2020，「テスト修士論文」東京大学大学院人文社会系研究科2019年度修士論文．
+山中速人，2004，「なにが人質を解放させたのか」，Yamanaka Research Office，（2009年2月2日取得，http://www.asahi-net.or.jp/~cr1h-ymnk/kaiho.html）．
+# 4.4(7) 再録（重複する著者名・論文タイトルは省略）
+吉田民人，1974，「社会システム論における情報——資源処理パラダイムの構想」『現代社会学』1(1): 7-27．（再録：1990，『情報と自己組織性の理論』東京大学出版会，153-72．）
+# 4.2(2) 3 人以上の共著
+Zald, Mayer N., John D. McCarthy and Jackie Smith, 1995, Test Book on Movements, New York: Test Press.
