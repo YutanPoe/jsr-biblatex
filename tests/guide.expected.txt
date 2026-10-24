@@ -91,6 +91,8 @@ Cohen, Jean L. and Andrew Arato, 1981, Test Book on Civil Society, Cambridge: Te
 Cole, Anna, 2009, “Test Chapter,” Ben Dale ed., Big Book, 2nd ed., London: Test Press, 1-20.
 # 4.5.3 ブログ（欧文）
 DeLong, Brad, 2007, “Thomas Piketty and Emmanuel Saez Give Their Current View on American Income Inequality,” The Brad DeLong Blog, January 7, 2007, (Retrieved January 9, 2007, http://econ161.berkeley.edu/movable_type).
+# 4.4(10) 欧文の博士論文・修士論文（ASA：括弧なし）
+Doe, Jane, 2012, “A Test Dissertation,” PhD dissertation, University of Wisconsin-Madison.
 Douglas, Jack ed., 1970, Understanding Everyday Life, Chicago: Aldine.
 # 4.4(6) 翻訳書（原典も直接引用しているが、単独では載らない）
 Fromm, Erich, 1941, Escape from Freedom, New York: Reinehart and Winston.（日高六郎訳，1951，『自由からの逃走』東京創元社．）
@@ -124,6 +126,7 @@ Johnston, Hank and Bert Klandermans eds., 1995, Social Movements and Culture, Mi
 # 原典を引用しない訳書：原典の複製が代表になり，extradate は原典の年で判定（フェーズB）
 Lane, Robert, 1970a, Alpha Book, London: Test Press.（山本花子訳，1980，『アルファの本』テスト出版．）
 ————, 1970b, Beta Book, London: Test Press.
+Lee, Sam, 2014, “A Test Thesis,” MA thesis, Test University.
 # 4.4(1) 同一著者・同一年
 真木悠介，1977a，『現代社会の存立構造』筑摩書房．
 ————，1977b，『気流の鳴る音』筑摩書房．
@@ -136,6 +139,8 @@ McCarthy, John D. and Mayer N. Zald, 1977, “Resource Mobilization and Social M
 ————，1984，『新版 現代日本の精神構造』弘文堂．
 宮島喬・梶田孝道・伊藤るり，1985，『先進社会のジレンマ』有斐閣．
 宮島喬・梶田孝道編，1991，『テスト共編書B』テスト出版．
+# 4.4(10) 和文の博士論文（type はキー）
+森田三郎，2018，「テスト博士論文」東京大学大学院人文社会系研究科博士論文．
 # 4.4(9) 政府刊行物
 内閣府国民生活局，2009，『平成20年版国民生活白書』．
 # 4.5.4.1 オンラインデータベース（欧文）
@@ -158,11 +163,17 @@ Norton, Alan, 2004, Test Book in a Series, Oxford: Test Press.
 奥田道大・広田康生，1982，『テスト共著書』テスト出版．
 # 欧文誌の publisher は出さない（フェーズB 決定）
 Owen, Brian, 2010, “Test Article with Publisher,” Journal of Testing, 5(2): 10-20.
+# 刊行された予稿集の論文は編書論文と同じ形
+Park, Min, 2018, “Proceedings Paper,” Lee Kim ed., Proceedings of the Test Conference, Seoul: Test Press, 10-20.
 # 標準のエントリ型（manual、booklet）は book と同じ書式
 Rivera, Carlos, 2001, Test Manual, London: Test Press.
+# 4.4(10) 欧文の学会報告（ASA 準拠）
+Roe, Ann, 2015, “A Test Paper,” Paper presented at the Annual Meeting of the American Sociological Association, August 22, Chicago, IL.
 Rubington, Earl and Martin Weinberg eds., 1965, Deviance: The International Perspective, New York: Macmillan.
 # 4.4(5) 号のみの雑誌・発行元の記載
 桜井厚，1993，「ライフヒストリー調査雑感」『三色旗』慶應通信，549: 11-4．
+# 4.4(10) 未刊行の報告（@unpublished）は学会報告と同じ形
+佐藤一郎，2019，「未公刊報告」第92回日本社会学会大会報告原稿．
 佐藤嘉倫，1998，「合理的選択理論批判の論理構造とその問題点」『社会学評論』49(2): 188-205．
 # 4.5.2.1 電子媒体のみの雑誌
 Schafer, Daniel W. and Fred L. Ramsey, 2003, “Teaching the Craft of Data Analysis,” Journal of Statistics Education, 11(1), (Retrieved December 12, 2006, http://www.amstat.org/publications/jse/v11n1/schafer.html).
@@ -182,6 +193,9 @@ Smith, John, n.d., Undated Book, London: Test Press.
 高橋徹，1965，「日本における社会心理学の形成」高橋徹・富永健一・佐藤毅『今日の社会心理学1 社会心理学の形成』培風館，317-505．
 ————編，1992，『テスト編書C』テスト出版．
 高橋徹・富永健一・佐藤毅，1965，『今日の社会心理学1 社会心理学の形成』培風館．
+# 4.4(10) 和文の学会報告：type を書いたときだけ eventtitle の後に続ける（書かなければ「報告原稿」を補わない）
+田中一郎，2022，「テスト報告B」第95回日本社会学会大会報告原稿．
+————，2023，「テスト報告C」第96回日本社会学会大会．
 # 多巻本：『書名』（全○巻）
 # 4.4(8) 欧文の報告書は種類と番号を出す
 Taylor, Mary, 2005, Test Technical Report, Technical Report TR-12, Chicago: University of Chicago.

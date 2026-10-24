@@ -56,3 +56,10 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **#3 book／incollection の URL と取得日**：末尾に（取得日，URL）。urldate があるときだけ出す（url だけの書誌 URL は出さない）。
 - **#4 ドライバのないエントリ型**：booklet／manual／reference／proceedings／bookinbook→book、inreference／suppbook／suppcollection→incollection、mvreference／mvproceedings→mvbook、software／patent／dataset→article（dataset は提案2 E で専用ドライバに替える）、unpublished→inproceedings（提案1 C で専用ドライバに替える）。
 - **#5 sortname の書き忘れ**：和文（CJK）で著者・編者がいるのに sortname がない文献は、組版時に警告を出す（`jsr: entry '…' has no sortname`）。sortname は bbl に出力されないので、sourcemap で印のフィールド `jsrnosortname`（jsr.dbx で宣言）を付けて検出する。
+
+## 学位論文・学会報告（提案1 B・C、2026-10-24 実装）
+- **学位論文**：type が bibstring のキーなら lbx の文字列で出す。和文は「修士論文」「博士論文」（略さない）。欧文は `MA thesis`／`PhD dissertation`。欧文は括弧を付けない：Doe, Jane, 2012, “Title,” PhD dissertation, University of …。type に文字で書く運用（「2019年度修士論文」）は従来どおり。
+- **学会報告**（`@inproceedings` の booktitle なし、`@unpublished`）：
+  - 和文：「題」eventtitle＋type。type を書いたときだけ eventtitle の後に続ける。
+  - 欧文（ASA）：Paper presented at the eventtitle, 月 日, venue.。開催日は eventdate の月日（年は著者の後に出している）。「Paper presented at the」は bibstring `paperpresented`（全言語の jsr.lbx に定義）。type を書くと、type で置き換える（Poster presented at the など）。
+- **予稿集の論文**（`@inproceedings` に booktitle がある）は、編書論文と同じ形で出す。eventtitle と type は出ない。

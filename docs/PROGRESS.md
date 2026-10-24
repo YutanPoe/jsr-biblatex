@@ -39,3 +39,10 @@
 - テスト：guide.bib／guide.tex／guide.expected.txt に、野村（版・url のみ）、Cole（欧文の編書論文の版）、藤竹（電子書籍の取得日・URL）、清水（booklet）、Rivera（manual）を追加。結果：guide・noextra ともに全件一致。
 - 実データ：`compare-real.sh`（test.tex）は差分なし。`../bib` の全エントリを `\nocite{*}` で組んだ変更前後の比較では、差分は意図した2種類のみ：(1) 中山 1933 の『モダン語新式辞典 改訂版』、(2) Saitama1956埼玉県議会史mv の urldate を持つ『埼玉県議会史』4件に（取得日，URL）が付いた。
 - 未解決：sortname のない和文の文献が実データに5件ある（SaitamaHistory1991新編埼玉県史通史編7、Saitama1986埼玉県議会史12、Saitama1989埼玉県議会史13、Saitama1989埼玉県議会史13資料編、Saitama1989埼玉県議会史14）。bib の直しは了承を得てから行う。
+
+## 2026-10-24 区切り4a：学位論文・学会報告（提案1 B・C）
+- thesis：欧文の括弧をやめた。lbx の `mathesis`／`phdthesis` を、和文は略さず、欧文は MA thesis／PhD dissertation にした。
+- 学会報告：`conference` マクロ（和文は eventtitle＋type、欧文は ASA 式）を作り、`@inproceedings`（booktitle なし）と `@unpublished` で使う。booktitle があれば編書論文と同じ形。`paperpresented` を全言語の lbx に追加。
+- テスト：欧文の博士・修士論文、和文の博士論文、学会報告（type あり・なし）、@unpublished、欧文の学会報告（ASA）、予稿集の論文を追加。guide・noextra ともに全件一致。
+- 実データ：`compare-real.sh` は差分なし。`../bib` 全エントリの比較では 1 件：test.bib の川口 2018（@inproceedings、booktitle＋eventtitle＋type=ポスター発表）が、予稿集の論文として『…報告要旨集』45-6．の形になり、type と eventtitle は出なくなった（決定どおり）。
+- bib のブランチ：`../bib`（別リポジトリ）に作業ブランチ `jsr-phase-c` を切った。bib の書き直しはこのブランチで行い、確認後に main へマージする。

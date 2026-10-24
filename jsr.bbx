@@ -883,7 +883,8 @@ language=auto,%
     \unspace
     \printfield{type}%
   }{%
-    \printtext[parens]{\printfield{type}}%
+    % 欧文（ASA）：PhD dissertation, University of …（括弧は付けない）
+    \printfield{type}%
     \newunit%
     \printlist{institution}%
   }%
@@ -925,6 +926,33 @@ language=auto,%
       {\usebibmacro{report:typenumber}%
        \printlist{institution}}%
     \setunit*{\printdelim{fhcomma}}}}
+
+%%% 学会報告 %%%
+% 和文：報告者名，大会開催年，「報告のタイトル」第○回日本社会学会大会報告原稿．
+%   eventtitle に「報告原稿」まで書いてよい。type を書いたときだけ eventtitle の後に続ける
+%   （「報告原稿」を補わない。2026-10-24 決定）。
+% 欧文（ASA）：Author, year, “Title,” Paper presented at the Annual Meeting of …, August 22, Chicago, IL.
+%   「Paper presented at the」は bibstring（paperpresented）。type を書いたときは type で置き換える。
+%   開催日は eventdate の月日（年は著者の後に出している）、開催地は venue。
+\newbibmacro*{conference}{%
+  \usebibmacro{author}%
+  \usebibmacro{date+extradate}%
+  \usebibmacro{title}%
+  \ifthenelse{\boolean{CJK}}
+    {\printfield{eventtitle}%
+     \printfield{type}}
+    {\iffieldundef{eventtitle}{}{%
+       \iffieldundef{type}
+         {\printtext{\bibstring{paperpresented}}}
+         {\printfield{type}}%
+       \setunit*{\addspace}%
+       \printfield{eventtitle}%
+       \iffieldundef{eventmonth}{}{%
+         \setunit*{\addcomma\space}%
+         \printtext{\mkbibmonth{\thefield{eventmonth}}%
+           \iffieldundef{eventday}{}{\addspace\stripzeros{\thefield{eventday}}}}}%
+       \setunit*{\addcomma\space}%
+       \printfield{venue}}}}
 
 %%% 学会開催地 %%%
 \newbibmacro*{location}{%
@@ -1444,34 +1472,17 @@ language=auto,%
   \usebibmacro{finentry}%
 }%
 
-%% (10)学会報告原稿
+%% (10)学会報告原稿・予稿集の論文
+%%  booktitle があれば，刊行された予稿集の論文として編書論文（incollection）と同じ形で出す。
+%%  booktitle がなく eventtitle だけなら，学会報告として出す（conference）。
+%%  @unpublished（未刊行の口頭報告）も同じ書式にする。
 \DeclareBibliographyDriver{inproceedings}{%
   \usebibmacro{begentry}%
-  % 著者名，授与年
-  \usebibmacro{author}%
-  \usebibmacro{date+extradate}%
-  % 表題
-  \usebibmacro{title}%
-  % 発表形式（英文のみ）
-  \iffieldundef{type}{}{%
-    \mkbibbrackets{\printfield{type}}%
-    \newunit%
-  }%
-  % 誌名／大会名
-  \iffieldundef{booktitle}{}{%
-    \printfield{booktitle}%
-    \newunit%%
-  }%
-  \iffieldundef{eventtitle}{}{%
-    \printfield{eventtitle}%
-    \newunit%%
-  }%
-  % 引用ページ
-  \iffieldundef{pages}{}{%
-    \printfield{pages}%
-    \newunit%
-  }%
-  \usebibmacro{finentry}%
+  \iffieldundef{booktitle}
+    {\usebibmacro{conference}%
+     \usebibmacro{finentry}}
+    {\usebibmacro{incollection}%
+     \nopunct}%
 }%
 
 %%% 4.5 電子化された資料
@@ -1545,4 +1556,4 @@ language=auto,%
 \DeclareBibliographyAlias{software}{article}%
 \DeclareBibliographyAlias{patent}{article}%
 \DeclareBibliographyAlias{dataset}{article}% 専用ドライバは別に作る（提案2 E）
-\DeclareBibliographyAlias{unpublished}{inproceedings}% 専用ドライバは別に作る（提案1 C）
+\DeclareBibliographyAlias{unpublished}{inproceedings}% 未刊行の口頭報告は学会報告と同じ書式（booktitle がなければ conference）

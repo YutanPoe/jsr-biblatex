@@ -5,6 +5,7 @@
 \InheritBibliographyStrings{japanese}
 
 \NewBibliographyString{reprintin}
+\NewBibliographyString{paperpresented}
 \NewBibliographyString{prenumber}
 
 \DeclareBibliographyStrings{%
@@ -28,5 +29,10 @@
   %% URL取得日（bbxのurldateフィールドフォーマットから\bibstring{urlseen}で参照）
   urlseen          = {{取得}{取得}},
   prenumber        = {{第}{第}},
+  %% 学位論文の種類（略さない：修論→修士論文）
+  mathesis         = {{修士論文}{修士論文}},
+  phdthesis        = {{博士論文}{博士論文}},
+  %% 欧文の学会報告（和文では使わない）
+  paperpresented   = {{Paper presented at the}{Paper presented at the}},
 }
 \endinput%
