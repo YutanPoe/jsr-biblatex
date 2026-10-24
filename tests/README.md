@@ -12,7 +12,7 @@ sh tests/run-tests.sh
 - biber は PATH 上のものを使う。別の場所のものを使うときは環境変数 `BIBER` で指定する（例：cpan で入れた biber は `PERL5LIB=$HOME/perl5/lib/perl5 BIBER=$HOME/perl5/bin/biber sh tests/run-tests.sh`）。
 - このリポジトリの `jsr.bbx`／`jsr.cbx`／`lbx/` を、texmf にインストールしたものより優先して読み込む（`TEXINPUTS` で指定）。
 - テスト文書は2つ。`guide`（スタイルガイドの例文）と `noextra`（a、b の付く文献が1つもない文書。extradate の振り直しで未定義のリストを扱わないことを確かめる）。
-- 結果は文書ごとに `OK` か `NG: n expected line(s) not matched` と表示され、最後に全体の結果が出る。差分は `tests/<文書名>.diff` に出る（`-` が期待値、`+` が実際の出力）。LaTeX のエラーがあれば、ログの場所とともに表示する。
+- 結果は文書ごとに `OK` か `NG: n expected line(s) not matched, m unexpected line(s)` と表示され、最後に全体の結果が出る。差分は `tests/<文書名>.diff` に出る（`-` が期待値、`+` が実際の出力）。LaTeX のエラーがあれば、ログの場所とともに表示する。
 
 ## 実データの変更前後比較
 

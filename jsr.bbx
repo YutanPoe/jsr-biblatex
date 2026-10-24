@@ -106,6 +106,21 @@ language=auto,%
   }%
 }%
 
+%%% 報告書所収の論文 %%%
+% @incollection に crossref で親の @report を指す（ガイド 4.4(8) の岩本 1997 のような文献）。
+% 親の title／subtitle を booktitle／booksubtitle として引き継ぐ。editor、type、number、institution は
+% 同名のフィールドとして既定の規則で引き継がれる（incollection が書名の後に出す。report:parent）。
+% （\DeclareDataInheritance は dbx の読み込み時にはまだ使えないので，bbx に書く）
+\DeclareDataInheritance{report}{incollection,inbook}{%
+  \inherit{title}{booktitle}
+  \inherit{subtitle}{booksubtitle}
+  \inherit{titleaddon}{booktitleaddon}
+  \noinherit{shorttitle}
+  \noinherit{sorttitle}
+  \noinherit{indextitle}
+  \noinherit{indexsorttitle}
+}
+
 %%% ぶら下がりインデント幅 %%%
 \setlength{\bibhang}{2em}%本来はzwが使用できれば{2\zw}のほうがよいが、そうではない可能性もあるので。
 
@@ -841,16 +856,42 @@ language=auto,%
   }%
 }%
 
+% 報告書で，機関名を先頭の名前として出したか（出したなら，ここでは繰り返さない）
+\newbool{jsr@instfirst}
+
 \newbibmacro*{location+institution}{%
   \ifthenelse{\boolean{CJK}}{}{
   \printlist{location}%
-  \iflistundef{institution}
+  \ifboolexpr{ test {\iflistundef{institution}} or bool {jsr@instfirst} }
     {\setunit*{\addcomma\space}}
     {\setunit*{\addcolon\space}}%
-  \printlist{institution}%
+  \ifbool{jsr@instfirst}{}{\printlist{institution}}%
   \setunit*{\addcomma\space}%
   \usebibmacro{date}%
   \newunit}}
+
+% 欧文の報告書の種類と番号：Technical Report TR-12
+\newbibmacro*{report:typenumber}{%
+  \printfield{type}%
+  \setunit*{\addspace}%
+  \printfield{number}%
+  \newunit}
+
+% 報告書所収の論文（親の @report を crossref で指す @incollection）で，書名の後に出す報告書の情報。
+% 親から引き継いだ institution があるときだけ出す。
+%   和文：『書名』1995-1996年度科学研究費補助金研究成果報告書（課題番号），金沢大学文学部，
+%   欧文：Title, Technical Report TR-12, University of Chicago,
+\newbibmacro*{report:parent}{%
+  \iflistundef{institution}{}{%
+    \ifthenelse{\boolean{CJK}}
+      {\printfield{type}%
+       \ifboolexpr{ test {\iffieldundef{number}} or not test {\iffieldundef{series}} }
+         {}{\printtext[fparens]{\printfield{number}}}%
+       \newunit
+       \printlist{institution}}
+      {\usebibmacro{report:typenumber}%
+       \printlist{institution}}%
+    \setunit*{\printdelim{fhcomma}}}}
 
 %%% 学会開催地 %%%
 \newbibmacro*{location}{%
@@ -945,6 +986,8 @@ language=auto,%
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}%
+  % 報告書所収の論文：報告書の種類・番号・研究機関名
+  \usebibmacro{report:parent}%
   % 出版都市名
   \ifthenelse{\boolean{CJK}}{}%
     {\printlist{location}%
@@ -1294,9 +1337,16 @@ language=auto,%
 %%         type に「科研費研究成果報告書（課題番号…）」のように丸ごと書いてもよい。
 \DeclareBibliographyDriver{report}{%
   \usebibmacro{begentry}%
-  % 編集機関名（著者名があればそちらを優先，なければinstitutionフィールドで代替）
+  % 先頭の名前：著者 → 編者（研究分担者がいるときの研究代表者。「編」を付ける）→ 機関名の順に選ぶ
+  \ifboolexpr{ test {\ifnameundef{author}} and test {\ifnameundef{editor}} }
+    {\booltrue{jsr@instfirst}}
+    {\boolfalse{jsr@instfirst}}%
   \ifnameundef{author}{%
-    \iflistundef{institution}{}{\printlist{institution}}%
+    \ifnameundef{editor}{%
+      \iflistundef{institution}{}{\printlist{institution}}%
+    }{%
+      \usebibmacro{editor}%
+    }%
   }{%
     \usebibmacro{author}%
   }%
@@ -1308,13 +1358,17 @@ language=auto,%
   \iffieldequalstr{type}{onlinereport}
     {\usebibmacro{title}}%
     {\usebibmacro{maintitle+title}}%
-  % 報告書の種類・課題番号・研究機関名（和文）
+  % 報告書の種類・課題番号・研究機関名
+  %  和文：『課題名』報告書の種類（課題番号），研究機関名
+  %  欧文：Title, Technical Report TR-12, 所在地: 機関名
   \ifthenelse{\boolean{CJK}}{%
     \iffieldequalstr{type}{onlinereport}{}{\printfield{type}}%
     \iffieldundef{number}{}{\printtext[fparens]{\printfield{number}}}%
-    \ifnameundef{author}{}{%
+    \ifbool{jsr@instfirst}{}{%
       \iflistundef{institution}{}{\newunit\printlist{institution}}}%
-  }{}%
+  }{%
+    \iffieldequalstr{type}{onlinereport}{}{\usebibmacro{report:typenumber}}%
+  }%
   % 発行元
   %  ・発行元が「国立印刷局」（旧・大蔵省印刷局）である場合，
   %  ・編集機関名（上記の author／institution）と発行元が同一である場合，

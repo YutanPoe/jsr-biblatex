@@ -44,3 +44,8 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **D. 新聞記事**：新聞・雑誌の判定は標準の `entrysubtype`（newspaper／magazine）で行い、`type=newspaper` も互換のため当面受け付ける。朝刊・夕刊は `issue`、版・地域版（第14版、全国版、○○県版）は **`note`**。欧文の署名記事は ASA 式で、ページの前に **p. を付ける**：Smith, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.
 - **E. コンピュータファイル（MRDF）**：`@dataset` に専用ドライバ。データ形式＝`type`（MRDF）、提供機関＝**`publisher`**（作成者と同じなら発行元の自動省略の仕組みを使う）、入手先＝**`howpublished`**。
 - **F. \footcite**：**今のまま**（biblatex の既定）。README で \parencite／\textcite を使うよう案内する。
+
+## 報告書（提案1 A、2026-10-24 実装）
+- **先頭の名前**：author → editor（「編」を付ける）→ institution の順。editor を先頭に出したときは、研究機関名（institution）を課題名・種類・番号の後に出す。institution を先頭に出したときは、後ろで繰り返さない。
+- **欧文の種類と番号**：`Technical Report TR-12`（type と number を空白でつなぐ）。type が bibstring のキー（techreport）のときは、略さず `Technical Report` と出す（american／english／british の jsr.lbx で上書き）。
+- **報告書所収の論文**：`@incollection` に `crossref` で親の `@report` を指す。親の title／subtitle は booktitle／booksubtitle として引き継ぐ（`\DeclareDataInheritance` は bbx に書く。dbx の読み込み時には使えない）。親から引き継いだ institution があるときだけ、書名の後に type、（number）、institution を出す。

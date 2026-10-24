@@ -76,6 +76,9 @@ C58 Erving Goffman（1961a: 78=1984: 86）
 # 4.4 a, b は同一著者の同一カテゴリーの同一年度のみ（著書と編書は区別しない）
 C59 （小田 1991）
 C60 （小田編 1991）
+# 4.4(8) 報告書：代表者に編を付けた報告書と，その所収論文
+C61 （碓井編 1997）
+C62 （岩本 1997）
 == BIBLIOGRAPHY ==
 Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
 Berger, Peter L. and Brigitte Berger, 1972, Sociology: A Biographical Approach, New York: Basic Books.
@@ -101,6 +104,9 @@ ICPSR, 2009, “Mission Statement,” Ann Arbor, MI: University of Michigan, (Re
 伊藤太郎，1990，『テスト単著書』テスト出版．
 伊藤太郎・佐藤花子，1991，『テスト共著書二』テスト出版．
 Iversen, Solveig, forthcoming, “Speculative Infrastructures,” Journal of Futures Studies.
+# 4.4(8) 報告書所収の論文（親の報告書を crossref で指す）。ガイド自身の文献リストにある岩本 1997
+岩本健良，1993，「学会誌のフォーマライゼーション——国際化と情報化に向けて」『理論と方法』8(2): 291-4．
+————，1997，「社会学文献データベースの現状と展望——研究情報ネットワークの結節点として」碓井崧編『地域組織とネットワーク』1995-1996年度科学研究費補助金研究成果報告書，金沢大学文学部，89-103．
 Johns Hopkins University, 2003, “Economic Impact of the Johns Hopkins Institutions in Maryland,” Silver Spring, MD: Johns Hopkins University and Johns Hopkins Medicine, (Retrieved January 26, 2007, http://www.jhu.edu/news_info/reports/impact/2003/impact2003.pdf).
 Johnston, Hank and Bert Klandermans eds., 1995, Social Movements and Culture, Minneapolis: University of Minnesota Press.
 # 再刊（原典が書籍）／和文原典の英訳（フェーズB）
@@ -166,10 +172,14 @@ Smith, John, n.d., Undated Book, London: Test Press.
 ————編，1992，『テスト編書C』テスト出版．
 高橋徹・富永健一・佐藤毅，1965，『今日の社会心理学1 社会心理学の形成』培風館．
 # 多巻本：『書名』（全○巻）
+# 4.4(8) 欧文の報告書は種類と番号を出す
+Taylor, Mary, 2005, Test Technical Report, Technical Report TR-12, Chicago: University of Chicago.
 テスト史編纂委員会編，1980，『テスト史』（全 10 巻）テスト出版．
 # 書籍：発行元が著者と同じなら省く
 テスト鉄道協会，1971，『テスト鉄道百年史 第 3 巻』．
 # 4.5.3 ブログ（和文）
+# 4.4(8) 研究分担者がいる報告書は代表者名の後に「編」（親の報告書は，所収の論文から crossref されても単独で載る）
+碓井崧編，1997，『地域組織とネットワーク』1995-1996年度科学研究費補助金研究成果報告書，金沢大学文学部．
 渡辺潤，2009，「スポーツの値段」，珈琲をもう一杯 film&tv，2009年1月5日，（2009年2月2日取得，http://www.tku.ac.jp/~juwat/blog/film_blog/2009/01/post_54.html）．
 # 4.5.2.2 紙媒体・電子媒体の雑誌（和文）
 渡邊勉・竹ノ下弘久，2008，「特集 階層移動研究の最前線」『理論と方法』23(2): 1-3，（2009年1月10日取得，http://www.jstage.jst.go.jp/article/ojjams/23/2/23_2_1/_article/-char/ja/）．
@@ -178,6 +188,8 @@ Weber, Max, 1920, Test Book M, Tübingen: Mohr.
 # 4.4(10) 学会報告・修士論文
 山田花子，2021，「テスト報告」第94回日本社会学会大会報告原稿．
 山田太郎，2020，「テスト修士論文」東京大学大学院人文社会系研究科2019年度修士論文．
+# 4.4(8) 研究分担者がいる報告書（科研費の課題番号つき）
+山本次郎編，1998，『テスト報告書』1996-1997年度科学研究費補助金研究成果報告書（08610123），テスト大学文学部．
 山中速人，2004，「なにが人質を解放させたのか」，Yamanaka Research Office，（2009年2月2日取得，http://www.asahi-net.or.jp/~cr1h-ymnk/kaiho.html）．
 # 4.4(7) 再録（重複する著者名・論文タイトルは省略）
 吉田民人，1974，「社会システム論における情報——資源処理パラダイムの構想」『現代社会学』1(1): 7-27．（再録：1990，『情報と自己組織性の理論』東京大学出版会，153-72．）

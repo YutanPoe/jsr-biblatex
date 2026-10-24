@@ -29,8 +29,9 @@ for name in guide noextra; do
   if diff -u "$name".expected.norm.txt "$name".actual.txt >"$name".diff; then
     echo "OK: $name: all cases match"
   else
-    fails=$(grep -c '^-[^-]' "$name".diff)
-    echo "NG: $name: $fails expected line(s) not matched (see tests/$name.diff)"
+    missing=$(grep -c '^-[^-]' "$name".diff)
+    extra=$(grep -c '^+[^+]' "$name".diff)
+    echo "NG: $name: $missing expected line(s) not matched, $extra unexpected line(s) (see tests/$name.diff)"
     [ "$status" -eq 0 ] && status=1
   fi
 done

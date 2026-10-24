@@ -413,6 +413,65 @@
   langid      = {japanese},
 }
 
+%% (8) 調査報告書：研究分担者がいる場合は代表者名の後に「編」
+@report{Yamamoto1998,
+  editor      = {山本,次郎},
+  sortname    = {Yamamoto, Jiro},
+  date        = {1998},
+  title       = {テスト報告書},
+  type        = {1996-1997年度科学研究費補助金研究成果報告書},
+  number      = {08610123},
+  institution = {テスト大学文学部},
+  langid      = {japanese},
+}
+
+%% (8) 報告書所収の論文：親の @report を crossref で指す（ガイド自身の文献リストにある岩本 1997）
+@report{Usui1997,
+  editor      = {碓井,崧},
+  sortname    = {Usui, Takashi},
+  date        = {1997},
+  title       = {地域組織とネットワーク},
+  type        = {1995-1996年度科学研究費補助金研究成果報告書},
+  institution = {金沢大学文学部},
+  langid      = {japanese},
+}
+
+@article{Iwamoto1993,
+  author       = {岩本,健良},
+  sortname     = {Iwamoto, Takeyoshi},
+  date         = {1993},
+  title        = {学会誌のフォーマライゼーション},
+  subtitle     = {国際化と情報化に向けて},
+  journaltitle = {理論と方法},
+  volume       = {8},
+  number       = {2},
+  pages        = {291--294},
+  langid       = {japanese},
+}
+
+@incollection{Iwamoto1997,
+  author   = {岩本,健良},
+  sortname = {Iwamoto, Takeyoshi},
+  date     = {1997},
+  title    = {社会学文献データベースの現状と展望},
+  subtitle = {研究情報ネットワークの結節点として},
+  pages    = {89--103},
+  crossref = {Usui1997},
+  langid   = {japanese},
+}
+
+%% (8) 欧文の報告書：種類（type）と番号（number）を出す
+@report{Taylor2005,
+  author      = {Taylor, Mary},
+  date        = {2005},
+  title       = {Test Technical Report},
+  type        = {techreport},
+  number      = {TR-12},
+  institution = {University of Chicago},
+  location    = {Chicago},
+  langid      = {american},
+}
+
 %% (9) 政府刊行物
 @report{Naikakufu2009,
   author   = {{内閣府国民生活局}},

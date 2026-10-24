@@ -25,3 +25,11 @@
 - `docs/proposals/2026-10-24-fix-empty-lists.patch` を適用した（`\jsr@forlistcs`／`\jsr@dolistcs`）。a、b の付く文献が1つもない文書で、`\enddatalist` に `Missing \endcsname` が出る不具合の修正。
 - `tests/noextra.tex`／`noextra.expected.txt` を追加し、`run-tests.sh` は guide と noextra の2文書を組むようにした。LaTeX のエラーもログで検出する。
 - 確認：パッチなしで noextra が失敗する（エラー再現）。パッチ後は guide・noextra ともに全件一致。`compare-real.sh` は差分なし。
+
+## 2026-10-24 区切り2：提案1 A（report）
+- report ドライバ：先頭の名前を author → editor → institution の順に選ぶ。欧文でも type と number を出す。
+- 報告書所収の論文（`@incollection` ＋ `crossref` で親の `@report`）：`\DeclareDataInheritance{report}{incollection,inbook}`、`report:parent` マクロ。ガイドの岩本 1997 と一致。
+- lbx：american／english／british の `techreport` を `Technical Report`（略さない）にした。
+- テスト：guide.bib／guide.tex／guide.expected.txt に、分担者あり（山本 1998）、親の報告書（碓井 1997）、所収論文（岩本 1993・1997）、欧文の技術報告書（Taylor 2005）、文献注2件（C61、C62）を追加。`run-tests.sh` は期待値にない行の数も表示する。
+- 結果：guide・noextra ともに全件一致。`compare-real.sh` は差分なし（実データの出力は変わらない）。
+- 未解決：欧文の報告書所収論文（crossref）の書式は、テストしていない。`type=onlinereport` はフェーズC 作業5で扱う。
