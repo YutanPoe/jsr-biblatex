@@ -114,7 +114,7 @@ language=auto,%
 %全角丸かっこ関連
 \newcommand{\fparenopen}{\unspace（}%全角丸かっこ開き
 \newcommand{\fparenclose}{\unspace）}%全角丸かっこ閉じ
-\newcommand{\mkbibfparens}[1]{\unspace{（}#1\unspace{）}}%全角丸かっこ
+% \mkbibfparens（全角丸かっこ）は bbx で定義している
 
 % 複数citesコマンドを並べたときの区切り文字（文書全体で変更）
 \renewcommand*{\textcitedelim}{%
@@ -450,7 +450,7 @@ language=auto,%
   \ifthenelse{\boolean{CJK}}{%
     \iffieldundef{issue}{}{\setunit*{\addspace}\printfield{issue}}%
     \iffieldundef{note}{}{\setunit*{\printdelim{fhcomma}}\printfield{note}}%
-    \iffieldundef{pages}{}{\setunit*{\printdelim{fhcomma}}\printtext{\printfield{pages}面}}%
+    \iffieldundef{pages}{}{\setunit*{\printdelim{fhcomma}}\printtext{\printfield{pages}\bibstring{newspaperpage}}}%
   }{}}
 
 % relatedtypeがreprintofの場合の処理

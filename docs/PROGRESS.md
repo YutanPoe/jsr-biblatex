@@ -74,3 +74,8 @@
 - テスト：guide.bib の webpagetitle を titleaddon に。旧形式（webpagetitle、onlinereport）の確認用に2件追加。全件一致。旧形式のとき `guide.log` に警告が出る。
 - 実データ：`compare-real.sh` は差分なし。旧スタイル＋main の bib と新スタイル＋ブランチの bib、新スタイル＋main の bib（旧形式）と新スタイル＋ブランチの bib の、どちらも差分なし。旧形式の bib の警告は2件、書き直した bib は0件。
 - bib（ブランチ `jsr-online`、未コミット）：others.bib の NDL2013本の万華鏡（webpagetitle→titleaddon）と UIC2018HighSpeedRail（@report＋onlinereport→@online）。
+
+## 2026-10-24 フェーズC 作業1・2：\mkbibfparens の移動とハードコードの bibstring 化
+- `\mkbibfparens`（全角丸かっこ）の定義を cbx から bbx に移した（bbx が cbx に依存しないように）。cbx は bbx の定義を使う。
+- ハードコードを bibstring に：「取得」「Retrieved」→ `urlseen`（既存の文字列。非CJK の jsr.lbx で Retrieved に上書き）、「面」→ `newspaperpage`、「全」→ `totalprefix`、「巻」「vols.」→ `totalvolumes`、「刊」→ `origpublished`（新規。全言語の jsr.lbx に定義。和文以外は空、totalvolumes だけ vols.）。bbx と cbx の該当箇所を `\bibstring` に置き換えた。
+- テスト：欧文の多巻本（3 vols.）を追加。全件一致。実データの出力は変わらない（compare-real、`../bib` 全エントリの比較ともに差分なし）。

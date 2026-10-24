@@ -7,6 +7,10 @@
 \NewBibliographyString{reprintin}
 \NewBibliographyString{paperpresented}
 \NewBibliographyString{producer}
+\NewBibliographyString{totalprefix}
+\NewBibliographyString{totalvolumes}
+\NewBibliographyString{newspaperpage}
+\NewBibliographyString{origpublished}
 
 \DeclareBibliographyStrings{%
   reprintin = {{Reprinted in}{Reprinted in}},%
@@ -15,4 +19,10 @@
   translationof = {{}{}},%
   paperpresented = {{Paper presented at the}{Paper presented at the}},% 欧文の学会報告（ASA）
   producer = {{producer}{producer}},% MRDF の作成者（ASA の [producer]）
+  %% 全10巻，第3面，（2005，日本放送出版協会刊）の「全」「巻」「面」「刊」（bbx の volumes、pages、ebook:orig）
+  totalprefix = {{全}{全}},%
+  totalvolumes = {{巻}{巻}},%
+  newspaperpage = {{面}{面}},%
+  origpublished = {{刊}{刊}},%
+  urlseen = {{取得}{取得}},% （2009年1月10日取得，URL）
 }

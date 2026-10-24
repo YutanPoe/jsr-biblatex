@@ -7,6 +7,10 @@
 \NewBibliographyString{reprintin}
 \NewBibliographyString{paperpresented}
 \NewBibliographyString{producer}
+\NewBibliographyString{totalprefix}
+\NewBibliographyString{totalvolumes}
+\NewBibliographyString{newspaperpage}
+\NewBibliographyString{origpublished}
 
 \DeclareBibliographyStrings{%
   reprintin = {{Reprinted in}{Reprinted in}},%
@@ -16,6 +20,12 @@
   techreport = {{Technical Report}{Technical Report}},% 報告書の種類（略さない）
   paperpresented = {{Paper presented at the}{Paper presented at the}},% 欧文の学会報告（ASA）
   producer = {{producer}{producer}},% MRDF の作成者（ASA の [producer]）
+  %% 10 vols.（bbx の volumes）。全・面・刊は和文だけで使う
+  totalprefix = {{}{}},%
+  totalvolumes = {{vols\adddot}{vols\adddot}},%
+  newspaperpage = {{}{}},%
+  origpublished = {{}{}},%
+  urlseen = {{Retrieved}{Retrieved}},% (Retrieved January 10, 2009, URL)
   phdthesis = {{PhD dissertation}{PhD dissertation}},% 博士論文（ASA）
   mathesis = {{MA thesis}{MA thesis}},%
 }

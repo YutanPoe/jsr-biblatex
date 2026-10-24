@@ -328,6 +328,8 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \renewcommand*{\bibnamedash}{------------}%本来は4倍ダッシュ
 
 %%% かっこ %%%
+% 全角丸かっこ（cbx の \parencite も使う）
+\newcommand{\mkbibfparens}[1]{\unspace{（}#1\unspace{）}}%
 % 全角・半角の丸カッコを言語（CJK）に応じて自動で切り替える
 \newrobustcmd*{\mkbibfhparens}[1]{%
   \ifthenelse{\boolean{CJK}}
@@ -420,8 +422,8 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{CJK}}%
-    {\mkbibdatelong{urlyear}{urlmonth}{urlday}取得}%
-    {Retrieved\space\mkbibdatelong{urlyear}{urlmonth}{urlday}}%
+    {\mkbibdatelong{urlyear}{urlmonth}{urlday}\bibstring{urlseen}}%
+    {\bibstring{urlseen}\space\mkbibdatelong{urlyear}{urlmonth}{urlday}}%
   }%
 
 %%% 名前 %%%
@@ -797,7 +799,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     \printtext[fhparens]{%
       \thefield{origyear}%
       \ifthenelse{\boolean{CJK}}
-        {\printdelim{fhcomma}\printlist{origpublisher}刊}
+        {\printdelim{fhcomma}\printlist{origpublisher}\bibstring{origpublished}}
         {\addcomma\space
          \iflistundef{origlocation}{}{\printlist{origlocation}\addcolon\space}%
          \printlist{origpublisher}}}%
@@ -864,7 +866,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
         \newunit%
         \printfield{note}%
         \newunit%
-        \printtext{\printfield{pages}面}%
+        \printtext{\printfield{pages}\bibstring{newspaperpage}}%
       }{%
         \setunit{\addcomma\space}%
         \printtext{\jsr@pgprefix\printfield{pages}}%
@@ -949,12 +951,12 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \ifbool{bbx:omitpublisher}{}{\printlist{publisher}}}%
 
 %%% 書籍の Vol. の処理（複数冊）%%%
-% 和文：『書名』（全10巻），欧文：Title, 10 vols.（「全」「巻」「vols.」はフェーズCで bibstring に移す）
+% 和文：『書名』（全10巻），欧文：Title, 10 vols.（「全」「巻」「vols.」は bibstring：totalprefix、totalvolumes）
 \newbibmacro*{volumes}%
   {\iffieldundef{volumes}{}%
     {\ifthenelse{\boolean{CJK}}%
-      {\setunit{}\printtext[fparens]{全\strfield{volumes}巻}}% 書名の後の保留中の区切り（副題のダッシュ）を消す
-      {\setunit{\addcomma\space}\printtext{\strfield{volumes}\addspace vols\adddot}}}}%
+      {\setunit{}\printtext[fparens]{\bibstring{totalprefix}\strfield{volumes}\bibstring{totalvolumes}}}% 書名の後の保留中の区切り（副題のダッシュ）を消す
+      {\setunit{\addcomma\space}\printtext{\strfield{volumes}\addspace\bibstring{totalvolumes}}}}}%
 
 %%% 新聞 %%%
 \newbibmacro*{yyyymmdd}{%
