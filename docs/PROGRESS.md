@@ -137,3 +137,6 @@
 - 確認：`tests/run-tests.sh` 全件一致、`manual/build.sh` 全項目合格。
 - TeX Live 2023 での再確認：別の TeX Live をダウンロードして入れる必要があるため、行わないことにした（2026-10-24 ユーザー判断）。確認した版は TeX Live 2026（biblatex 3.22、biber 2.23 beta）のみ。
 - texmf 側の写し（`~/Library/TinyTeX/texmf-local/tex/latex/jsr-biblatex`）：git の pull で更新できるので、当面はそのままにする（ユーザー判断）。
+
+## フェーズC 作業6：texmf 側クローンの更新
+- texmf-local の写しは git クローンで、push のあと pull して作業コピーと同じ内容（HEAD `8bdbcfb`、`jsr.bbx` の差分なし）になっていることを確認した。更新の手順を `CLAUDE.md`（作業6）に記録した。
