@@ -8,6 +8,8 @@ set -u
 cd "$(dirname "$0")"
 REPO="$(cd .. && pwd)"
 export TEXINPUTS="$REPO//:"
+# ログの折り返し（既定は 79 字。TeX Live 2023 は JSRGEO などの行が割れる）で check.py が読み違えないように，折り返さない
+export max_print_line=100000
 name=jsr-biblatex
 
 # 足りないパッケージ・フォントの検出
