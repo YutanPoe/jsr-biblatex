@@ -28,7 +28,7 @@ biblatex-jpa は LaTeX Project Public License（バージョン 1.3 以降）で
 \end{itemize}
 
 \subsection{インストール}
-次のいずれかの方法で，スタイルのファイル（\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx}，\file{lbx/} の中の \file{*-jsr.lbx}）を，TeX が見つけられる場所に置きます。
+次のいずれかの方法で，スタイルのファイル（\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx}，および \file{lbx/} の中の\textbf{すべて}の \file{*.lbx}。\file{japanese.lbx} を含みます）を，TeX が見つけられる場所に置きます。
 
 \begin{enumerate}
 \item \textbf{texmf に置く}（すべての文書で使う場合）。\file{TEXMFHOME} の下の \file{tex/latex/jsr-biblatex/} にコピーし，\file{mktexlsr} を実行します。
@@ -38,7 +38,7 @@ cp -R jsr.bbx jsr.cbx jsr.dbx lbx \
   "$(kpsewhich -var-value=TEXMFHOME)/tex/latex/jsr-biblatex/"
 mktexlsr "$(kpsewhich -var-value=TEXMFHOME)"
 \end{ltxexample}
-\item \textbf{文書と同じフォルダに置く}（その文書だけで使う場合）。\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx} と，\file{lbx/} の中の \file{*-jsr.lbx} を，文書のフォルダに\textbf{平置き}にします。\file{lbx/} の下は TeX が探さないためです。
+\item \textbf{文書と同じフォルダに置く}（その文書だけで使う場合）。\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx} と，\file{lbx/} の中の \file{*.lbx} をすべて，文書のフォルダに\textbf{平置き}にします（\texttt{cp jsr.bbx jsr.cbx jsr.dbx lbx/*.lbx 文書のフォルダ/}）。\file{lbx/} の下は TeX が探さないためです。
 \item \textbf{リポジトリのまま使う}（開発・試用）。\file{TEXINPUTS} にリポジトリを指定します：\texttt{TEXINPUTS="/path/to/jsr-biblatex//:" lualatex doc.tex}
 \end{enumerate}
 

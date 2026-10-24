@@ -1,6 +1,6 @@
 # jsr-biblatex：Claude Code 向けの引き継ぎ
 
-社会学評論スタイルガイド（第3版）に準拠した biblatex スタイル（`style=jsr`）。
+社会学評論スタイルガイド（第3版）に準拠した biblatex スタイル（`style=jsr`）。芝田征司氏の biblatex-jpa（日本心理学会風、LPPL 1.3 以降）を元にした改変版で、ヘッダー・LICENSE・マニュアルの謝辞に明記している。
 フェーズA（バグ修正）とフェーズB（仕様への対応）は完了している。現在はフェーズC（提案書への対応、構造・保守性）。提案書（`docs/proposals/`）への対応は、report・学位論文・学会報告・DOI・電子書籍・訳書・新聞・MRDF まで実装済み（`docs/PROGRESS.md`）。
 
 ## 進め方
@@ -25,6 +25,7 @@ claude.ai のプロジェクト「社会学評論スタイルガイド準拠bibl
 ## ファイル
 - `jsr.bbx`（文献リスト）、`jsr.cbx`（文献注）、`jsr.dbx`（データモデルの追加：jsrsortrole など）、`lbx/`（言語ごとの文字列）
 - `tests/`：回帰テスト（`tests/README.md`）
+- `manual/`：マニュアル（`jsr-biblatex.tex`、`examples/*.bib`、組版した `jsr-biblatex.pdf`。`sh manual/build.sh`）。出力を変える変更をしたら、マニュアルの記述と出力例も確かめて、PDF を組み直す。
 - 作業確認用の文書は親フォルダにある：`../test.tex`（`../preamble/`、`../bib/*.bib`）。bib には文書側マクロ `\jq` が入っているので、`\nocite{*}` で組むと `\jq` の未定義エラーが出る（スタイルとは無関係。test.tex のプリアンブルでは定義済み）。
 
 ## テスト
@@ -56,7 +57,7 @@ bib の各エントリは、単独で完結した正しい書誌として biblat
 1. （完了）`\mkbibfparens` を bbx に移した。
 2. （完了）ハードコードの bibstring 化（`urlseen`、`newspaperpage`、`totalprefix`、`totalvolumes`、`origpublished`）。
 3. （完了）全角の閉じ丸カッコ「）」が行頭に来る問題：現在のスタイルでは再現しない（改行前のノード列で、「．」と「）」の間に改行できる位置がない）。禁則のテスト `kinsoku` を足した。原因は以前のスタイルの、「）」の直前の改行可能な glue と考えられる。
-4. ヘッダーの版情報、README。書くこと：使い方、オプション（`firstfull`、`doi`）、ウェブページは `@online`＋`titleaddon`、`\parencite[78=86]{訳書}`、欧文タイトルの大文字化はデータ側の責任、エンジンの前提、bib の書き方（新聞は `entrysubtype`＋`issue`＋`note`、電子書籍は `origdate`＋`origpublisher`＋`note`、訳書は原典のエントリを作って `related` でつなぐ、報告書所収の論文は `crossref`）、`\footcite` は使わず `\parencite`／`\textcite` を使う、電子書籍は紙版の年の位置に並ぶ。
+4. （完了）ヘッダーの版情報、README（`README.md`）、マニュアル（`manual/`、日本語のみ。第1〜8章と更新履歴）。マニュアルは ltxdockit／btxdockit の環境を使い、出力例は `\bibexample` で実際に組む（手書きしない）。`sh manual/build.sh` が組版と自動検査（エラー・Overfull・余白・フォント埋め込みなど）を行う。インストール手順（TEXMFHOME、文書フォルダへの平置き）は、まっさらな TEXMFHOME で確かめた（平置きには `lbx/*.lbx` をすべて置く。`japanese.lbx` を忘れると `Language 'japanese' not found`）。
 5. （完了）独自フィールドの置き換え：新聞は `entrysubtype`＋`issue`＋`note`、ウェブサイト名は `titleaddon`、オンラインで取得した報告書は `@online`。旧形式（`webpagetitle`、`type=onlinereport`、`type=newspaper`、`version`）のうち、`webpagetitle` と `onlinereport` は読み替えて警告を出す。次の版で警告を外す。
 6. texmf 側クローンと作業コピーの二重管理（latexmkrc か `TEXINPUTS`）。
 7. 小さな未解決：`date={1956-}`（終了年のない範囲）の年が解釈されず n.d. になる（`../bib` の Saitama1956埼玉県議会史mv）。欧文の報告書所収論文（crossref）の書式は未テスト。TeX Live 2023／biblatex 3.19 での再確認は未実施。

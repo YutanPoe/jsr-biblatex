@@ -120,3 +120,10 @@
 - `jsrdoc.sty`：`longtable` を読み込む。
 - 確認：`manual/build.sh` 全項目合格（55ページ）、`tests/run-tests.sh` 全件一致。p.34、41、49、52、55 を画像で確認した。
 - 未解決：第7章に挙げた点（`date={1956-}`、欧文の報告書所収論文、TeX Live 2023 での再確認）。README、`CLAUDE.md` の更新、PDF のコミットは次の区間。
+
+## マニュアルの作り直し（区間5：README、仕上げ）
+- `README.md` を書いた（英語の概要、免責、マニュアルへの案内、インストール、最小の使用例、テスト、ライセンスと謝辞）。詳しい説明はマニュアルを指す。
+- インストール手順を、まっさらな `TEXMFHOME`（`TEXMFLOCAL` も空にして、古い texmf-local の写しが読まれないようにした）で試した。TEXMFHOME に置く方法は通った。文書フォルダへの平置きは、`japanese.lbx` を置いていないと `Language 'japanese' not found` で止まることがわかり、マニュアル第1章と README を直した（`lbx/*.lbx` をすべて置く）。
+- `CLAUDE.md` のフェーズC作業4を完了にし、マニュアルの記述を足した。`manual/jsr-biblatex.pdf` を組み直してコミットする。
+- 確認：`manual/build.sh` 全項目合格、`tests/run-tests.sh` 全件一致。
+- 未解決（第7章と同じ）：`date={1956-}`、欧文の報告書所収論文、TeX Live 2023 での再確認、texmf 側クローンと作業コピーの二重管理（フェーズC作業6）。要確認：著作権者名（Takuya MASUDA）、版（v1.0）、免責の文面、biblatex-jpa の作者への連絡。
