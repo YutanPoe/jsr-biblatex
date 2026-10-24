@@ -10,3 +10,6 @@
 % 同一著者の並び順（単著→単独編書→共著→共編書）のためのソート用フィールド。bbx の sourcemap が設定する
 \DeclareDatamodelFields[type=field,datatype=integer]{jsrsortrole}
 \DeclareDatamodelEntryfields{jsrsortrole}
+% sortname の書き忘れの検出用。bbx の sourcemap が，sortname のないエントリに 1 を設定する
+\DeclareDatamodelFields[type=field,datatype=integer]{jsrnosortname}
+\DeclareDatamodelEntryfields{jsrnosortname}

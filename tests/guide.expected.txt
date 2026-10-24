@@ -87,11 +87,15 @@ Bourdieu, Pierre, 1983, “Vous avez dit ‘populaire’?,” Actes de la recher
 ————, 1989, La noblesse d'état: Grandes écoles et esprit de corps, Paris: Les Editions de Minuit. (Lauretta Clough, trans., 1996, The State Nobility: Elite Schools in the Field of Power, Oxford: Polity Press.)
 Broadbent, Jeffrey, 1998, Environmental Politics in Japan: Networks of Power and Protest, New York: Cambridge University Press.
 Cohen, Jean L. and Andrew Arato, 1981, Test Book on Civil Society, Cambridge: Test Press.
+# 4.2(7) 欧文の編書論文でも，所収書の版を出す
+Cole, Anna, 2009, “Test Chapter,” Ben Dale ed., Big Book, 2nd ed., London: Test Press, 1-20.
 # 4.5.3 ブログ（欧文）
 DeLong, Brad, 2007, “Thomas Piketty and Emmanuel Saez Give Their Current View on American Income Inequality,” The Brad DeLong Blog, January 7, 2007, (Retrieved January 9, 2007, http://econ161.berkeley.edu/movable_type).
 Douglas, Jack ed., 1970, Understanding Everyday Life, Chicago: Aldine.
 # 4.4(6) 翻訳書（原典も直接引用しているが、単独では載らない）
 Fromm, Erich, 1941, Escape from Freedom, New York: Reinehart and Winston.（日高六郎訳，1951，『自由からの逃走』東京創元社．）
+# 4.5.1 電子書籍：取得日があるときだけ（取得日，URL）を出す（紙媒体の情報は別に対応）
+藤竹暁，2008，『図説 日本のマスメディア（上）新聞・放送・出版』電子書店パピレス，（2009年1月10日取得，http://www.papy.co.jp/sc/list/genre/030-043-020-000）．
 # 4.1 同一著者：単著 → 単独編書 → 共著 → 共編書
 舩橋晴俊，1998，「環境問題の未来と社会変動——社会の自己破壊性と自己組織性」舩橋晴俊・飯島伸子編『講座社会学12 環境』東京大学出版会，191-224．
 舩橋晴俊・長谷川公一・飯島伸子編，1998，『テスト共編書A』テスト出版．
@@ -141,6 +145,10 @@ National Center for Health Statistics, 2007, “Faststats, A to Z,” (Retrieved
 ————，2009，日本社会学会ホームページ，（2009年2月2日取得，http://www.gakkai.ne.jp/jss）．
 # series：和文は書名の前に出し，欧文は出さない（フェーズB 決定）
 西村二郎，1990，『テスト講座 3 テスト講座本』テスト出版．
+# 4.4(1) 版は書名に含める（第2版，新版）。url だけで取得日がない書籍は URL を出さない
+野村二郎，2010，『社会学入門』テスト出版．
+————，2015，『社会学入門 第2版』テスト出版．
+————，2020，『社会学入門 新版』テスト出版．
 Norton, Alan, 2004, Test Book in a Series, Oxford: Test Press.
 # 同一著者・同年の著書と編書（a, b を付けない）
 小田一，1991，『テスト単著書C』テスト出版．
@@ -150,6 +158,8 @@ Norton, Alan, 2004, Test Book in a Series, Oxford: Test Press.
 奥田道大・広田康生，1982，『テスト共著書』テスト出版．
 # 欧文誌の publisher は出さない（フェーズB 決定）
 Owen, Brian, 2010, “Test Article with Publisher,” Journal of Testing, 5(2): 10-20.
+# 標準のエントリ型（manual、booklet）は book と同じ書式
+Rivera, Carlos, 2001, Test Manual, London: Test Press.
 Rubington, Earl and Martin Weinberg eds., 1965, Deviance: The International Perspective, New York: Macmillan.
 # 4.4(5) 号のみの雑誌・発行元の記載
 桜井厚，1993，「ライフヒストリー調査雑感」『三色旗』慶應通信，549: 11-4．
@@ -158,6 +168,7 @@ Rubington, Earl and Martin Weinberg eds., 1965, Deviance: The International Pers
 Schafer, Daniel W. and Fred L. Ramsey, 2003, “Teaching the Craft of Data Analysis,” Journal of Statistics Education, 11(1), (Retrieved December 12, 2006, http://www.amstat.org/publications/jse/v11n1/schafer.html).
 # 4.5.2.2 データベース経由
 Scott, Lionel D., Jr. and Laura E. House, 2005, “Relationship of Distress and Perceived Control to Coping with Perceived Racial Discrimination among Black Youth,” Journal of Black Psychology, 31(3): 254-72, (Retrieved December 16, 2006, JSTOR).
+清水三郎，1999，『テスト小冊子』．
 静岡県，1972，『第8次静岡県総合開発計画』．
 # 4.2(7) 初版の出版年
 Simpson, George Eaton and J. Milton Yinger, [1953] 1972, Racial and Cultural Minorities: An Analysis of Prejudice and Discrimination, 4th ed., New York: Harper & Row.

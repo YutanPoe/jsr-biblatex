@@ -472,6 +472,81 @@
   langid      = {american},
 }
 
+%% 4.4(1) 版：「第2版」「新版」は書名に含め，半角スペースで区切る（欧文は 2nd ed.）
+%% url だけで取得日（urldate）がない場合は，URL を出さない
+@book{Nomura2010,
+  author    = {野村,二郎},
+  sortname  = {Nomura, Jiro},
+  date      = {2010},
+  title     = {社会学入門},
+  publisher = {テスト出版},
+  url       = {http://example.com/nomura2010},
+  langid    = {japanese},
+}
+
+@book{Nomura2015,
+  author    = {野村,二郎},
+  sortname  = {Nomura, Jiro},
+  date      = {2015},
+  title     = {社会学入門},
+  edition   = {2},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@book{Nomura2020,
+  author    = {野村,二郎},
+  sortname  = {Nomura, Jiro},
+  date      = {2020},
+  title     = {社会学入門},
+  edition   = {新版},
+  publisher = {テスト出版},
+  langid    = {japanese},
+}
+
+@incollection{Cole2009,
+  author    = {Cole, Anna},
+  editor    = {Dale, Ben},
+  date      = {2009},
+  title     = {Test Chapter},
+  booktitle = {Big Book},
+  edition   = {2},
+  location  = {London},
+  publisher = {Test Press},
+  pages     = {1--20},
+  langid    = {american},
+}
+
+%% 4.5.1 電子書籍：取得日（urldate）があるときだけ（取得日，URL）を出す
+@book{Fujitake2008,
+  author    = {藤竹,暁},
+  sortname  = {Fujitake, Akira},
+  date      = {2008},
+  title     = {図説 日本のマスメディア（上）新聞・放送・出版},
+  publisher = {電子書店パピレス},
+  urldate   = {2009-01-10},
+  url       = {http://www.papy.co.jp/sc/list/genre/030-043-020-000},
+  langid    = {japanese},
+}
+
+%% 標準のエントリ型（booklet、manual）は book と同じ書式で出す
+@booklet{Shimizu1999,
+  author   = {清水,三郎},
+  sortname = {Shimizu, Saburo},
+  date     = {1999},
+  title    = {テスト小冊子},
+  langid   = {japanese},
+}
+
+@manual{Rivera2001,
+  author    = {Rivera, Carlos},
+  date      = {2001},
+  title     = {Test Manual},
+  location  = {London},
+  publisher = {Test Press},
+  langid    = {american},
+}
+
 %% (9) 政府刊行物
 @report{Naikakufu2009,
   author   = {{内閣府国民生活局}},

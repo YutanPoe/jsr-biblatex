@@ -93,6 +93,11 @@ language=auto,%
       \step[fieldsource=relatedtype, match=\regexp{\A(translationof|reprintof)\Z}, final]%
       \step[fieldset=relatedoptions, fieldvalue={skipbiblist}]%
     }%
+    % sortname がない：書き忘れの警告用の印（bbl には sortname が出力されないので，biber の段階で印を付ける）
+    \map{%
+      \step[notfield=sortname, final]%
+      \step[fieldset=jsrnosortname, fieldvalue={1}]%
+    }%
     % ソート用：著者がいれば 1，編者のみなら 2
     \map{%
       \step[fieldsource=author, final]%
@@ -151,9 +156,20 @@ language=auto,%
 % 引用されるごとの処理
 \AtEveryBibitem{%
   \usebibmacro{checkLang}%言語の判定
+  \jsr@chksortname% 和文の文献の sortname の書き忘れの検出
   \jsr@scankata% カタカナ名の判定
   \setboolean{reversenamebool}{true}%氏名反転をOnに
 }%
+
+% 和文（CJK）の文献で，著者・編者がいるのに sortname がないときは警告を出す。
+% ローマ字は自動では作れないので，漢字のコード順で並び，ローマ字順の並びから外れる（書き忘れの検出だけ行う）。
+\newcommand*{\jsr@chksortname}{%
+  \ifboolexpr{ bool {CJK}
+    and ( not test {\ifnameundef{author}} or not test {\ifnameundef{editor}} )
+    and not test {\iffieldundef{jsrnosortname}} }
+    {\blx@warning@noline{jsr: entry '\thefield{entrykey}' has no sortname\MessageBreak
+       (CJK entries are sorted by character code without it)}}
+    {}}
 
 \newbibmacro*{checkLang}{%CJKの判断と、langidがない場合はとりあえずamericanにする処理
   \ifboolexpr{%
@@ -350,6 +366,14 @@ language=auto,%
 \DeclareFieldFormat[article]{volume}{#1}%雑誌記事や新聞記事における日付はlong表示
 \DeclareFieldFormat{part}
   {\ifthenelse{\boolean{CJK}}{\addspace#1}{.#1}}% physical part of a logical volume
+
+% 版：欧文は 2nd ed. / Revised ed.，和文は 第2版 / 新版（奥付どおり。ガイド 4.4(1)）
+\DeclareFieldFormat{edition}{%
+  \ifinteger{#1}
+    {\ifbool{CJK}
+       {\bibstring{prenumber}#1\bibstring{edition}}
+       {\mkbibordedition{#1}~\bibstring{edition}}}
+    {\ifbool{CJK}{#1}{#1\isdot}}}
 
 \DeclareFieldFormat{urldate}%
   {\ifthenelse{\boolean{CJK}}%
@@ -574,6 +598,12 @@ language=auto,%
 
 %%% 書籍タイトル %%%
 
+% 和文の版（第2版，新版）は書名に含め，半角スペースで区切る（ガイド 4.4(1)）。欧文は書名の後に別に出す。
+\newbibmacro*{edition:cjk}{%
+  \ifbool{CJK}
+    {\iffieldundef{edition}{}{\setunit{\addspace}\printfield{edition}\clearfield{edition}}}
+    {}}
+
 % 叢書名（series）は和文だけ書名の前に出す（『講座社会学 12 環境』）。欧文では出さない（2026-10-24 決定）
 \newcommand*{\jsr@ifseries}{%
   \ifboolexpr{ bool {CJK} and not test {\iffieldundef{series}} }}
@@ -649,6 +679,7 @@ language=auto,%
         \iffieldundef{title}{}{%
           \usebibmacro*{printtitle}{}%
         }%
+        \usebibmacro{edition:cjk}%
         \iffieldundef{volume}{}{%
           \setunit{\addspace}%
           \usebibmacro{volume+part}%
@@ -668,6 +699,7 @@ language=auto,%
         \iffieldundef{title}{}{%
           \usebibmacro*{printtitle}{}%
         }%
+        \usebibmacro{edition:cjk}%
       }%
     }%
     \setunit{\printdelim{titledelim}}%
@@ -696,6 +728,7 @@ language=auto,%
       \iffieldundef{booktitle}{}{%
         \usebibmacro*{printtitle}{book}%
       }%
+      \usebibmacro{edition:cjk}%
     }%
     \setunit{\printdelim{titledelim}}%
   }%
@@ -940,6 +973,9 @@ language=auto,%
     \setunit*{\addcolon\space}}%
   % 出版社（著者・編者と同じなら省く）
   \usebibmacro{publisher:print}%
+  % 電子書籍など：取得日があるときだけ（取得日，URL）を出す
+  \setunit*{\printdelim{fhcomma}}%
+  \usebibmacro{urldate+eprint/doi/url}%
   \printdelim{findelim}%
 }%
 
@@ -986,6 +1022,10 @@ language=auto,%
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
   \usebibmacro{eprintbook}%
+  % 欧文の版（和文は書名に含めた）
+  \ifthenelse{\boolean{CJK}}{}%
+    {\printfield{edition}%
+    \newunit}%
   % 報告書所収の論文：報告書の種類・番号・研究機関名
   \usebibmacro{report:parent}%
   % 出版都市名
@@ -997,6 +1037,9 @@ language=auto,%
   \setunit*{\printdelim{fhcomma}}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{pages}%
+  % ダウンロード版の章など：取得日があるときだけ（取得日，URL）を出す
+  \setunit*{\printdelim{fhcomma}}%
+  \usebibmacro{urldate+eprint/doi/url}%
   \printdelim{findelim}%
 }%
 
@@ -1487,3 +1530,19 @@ language=auto,%
 
 %% iv) 新聞記事および雑誌記事の引用（howpublished に朝刊・夕刊などを入れた misc は article と同じ書式）
 \DeclareBibliographyAlias{misc}{article}%
+
+%% 標準のエントリ型のうち，専用の書式を持たないものの別名（既定のドライバには日付がなく，年が出ないため）
+\DeclareBibliographyAlias{booklet}{book}%
+\DeclareBibliographyAlias{manual}{book}%
+\DeclareBibliographyAlias{reference}{book}%
+\DeclareBibliographyAlias{proceedings}{book}%
+\DeclareBibliographyAlias{bookinbook}{book}%
+\DeclareBibliographyAlias{inreference}{incollection}%
+\DeclareBibliographyAlias{suppbook}{incollection}%
+\DeclareBibliographyAlias{suppcollection}{incollection}%
+\DeclareBibliographyAlias{mvreference}{mvbook}%
+\DeclareBibliographyAlias{mvproceedings}{mvbook}%
+\DeclareBibliographyAlias{software}{article}%
+\DeclareBibliographyAlias{patent}{article}%
+\DeclareBibliographyAlias{dataset}{article}% 専用ドライバは別に作る（提案2 E）
+\DeclareBibliographyAlias{unpublished}{inproceedings}% 専用ドライバは別に作る（提案1 C）

@@ -49,3 +49,10 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **先頭の名前**：author → editor（「編」を付ける）→ institution の順。editor を先頭に出したときは、研究機関名（institution）を課題名・種類・番号の後に出す。institution を先頭に出したときは、後ろで繰り返さない。
 - **欧文の種類と番号**：`Technical Report TR-12`（type と number を空白でつなぐ）。type が bibstring のキー（techreport）のときは、略さず `Technical Report` と出す（american／english／british の jsr.lbx で上書き）。
 - **報告書所収の論文**：`@incollection` に `crossref` で親の `@report` を指す。親の title／subtitle は booktitle／booksubtitle として引き継ぐ（`\DeclareDataInheritance` は bbx に書く。dbx の読み込み時には使えない）。親から引き継いだ institution があるときだけ、書名の後に type、（number）、institution を出す。
+
+## 判断不要の修正（提案2 #1〜#5、2026-10-24 実装）
+- **#1 和文書籍の edition**：書名の中、書名の後に半角スペースで区切る。数字なら「第n版」（`prenumber`＋数字＋`edition` の bibstring）、文字ならそのまま：『社会学入門 第2版』『社会学入門 新版』。多巻本は書名の後（巻の前）。奥付どおりに「2版」などと出したいときは、edition に文字で書く。
+- **#2 欧文の編書論文の edition**：所収書名の後に `2nd ed.`。
+- **#3 book／incollection の URL と取得日**：末尾に（取得日，URL）。urldate があるときだけ出す（url だけの書誌 URL は出さない）。
+- **#4 ドライバのないエントリ型**：booklet／manual／reference／proceedings／bookinbook→book、inreference／suppbook／suppcollection→incollection、mvreference／mvproceedings→mvbook、software／patent／dataset→article（dataset は提案2 E で専用ドライバに替える）、unpublished→inproceedings（提案1 C で専用ドライバに替える）。
+- **#5 sortname の書き忘れ**：和文（CJK）で著者・編者がいるのに sortname がない文献は、組版時に警告を出す（`jsr: entry '…' has no sortname`）。sortname は bbl に出力されないので、sourcemap で印のフィールド `jsrnosortname`（jsr.dbx で宣言）を付けて検出する。

@@ -33,3 +33,9 @@
 - テスト：guide.bib／guide.tex／guide.expected.txt に、分担者あり（山本 1998）、親の報告書（碓井 1997）、所収論文（岩本 1993・1997）、欧文の技術報告書（Taylor 2005）、文献注2件（C61、C62）を追加。`run-tests.sh` は期待値にない行の数も表示する。
 - 結果：guide・noextra ともに全件一致。`compare-real.sh` は差分なし（実データの出力は変わらない）。
 - 未解決：欧文の報告書所収論文（crossref）の書式は、テストしていない。`type=onlinereport` はフェーズC 作業5で扱う。
+
+## 2026-10-24 区切り3：提案2 の #1〜#5
+- #1 和文の edition（第n版／文字）、#2 欧文の編書論文の edition、#3 book／incollection の URL と取得日（urldate があるときだけ）、#4 エントリ型の別名、#5 sortname の警告（sourcemap の印 `jsrnosortname`）を実装。
+- テスト：guide.bib／guide.tex／guide.expected.txt に、野村（版・url のみ）、Cole（欧文の編書論文の版）、藤竹（電子書籍の取得日・URL）、清水（booklet）、Rivera（manual）を追加。結果：guide・noextra ともに全件一致。
+- 実データ：`compare-real.sh`（test.tex）は差分なし。`../bib` の全エントリを `\nocite{*}` で組んだ変更前後の比較では、差分は意図した2種類のみ：(1) 中山 1933 の『モダン語新式辞典 改訂版』、(2) Saitama1956埼玉県議会史mv の urldate を持つ『埼玉県議会史』4件に（取得日，URL）が付いた。
+- 未解決：sortname のない和文の文献が実データに5件ある（SaitamaHistory1991新編埼玉県史通史編7、Saitama1986埼玉県議会史12、Saitama1989埼玉県議会史13、Saitama1989埼玉県議会史13資料編、Saitama1989埼玉県議会史14）。bib の直しは了承を得てから行う。
