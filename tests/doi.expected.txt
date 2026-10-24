@@ -1,0 +1,6 @@
+# jsr-biblatex 回帰テストの期待値：オプション doi=true
+== BIBLIOGRAPHY ==
+阿部四郎，2020，「テスト論文」『社会学評論』71(1): 1-10，（https://doi.org/10.0000/test.2020）．
+Gray, Tim, 2019, “Test Article,” Journal of Testing, 3(2): 5-15, (https://doi.org/10.0000/test.2019).
+# 取得日がある文献は従来どおり（取得日，URL）
+Schafer, Daniel W. and Fred L. Ramsey, 2003, “Teaching the Craft of Data Analysis,” Journal of Statistics Education, 11(1), (Retrieved December 12, 2006, http://www.amstat.org/publications/jse/v11n1/schafer.html).

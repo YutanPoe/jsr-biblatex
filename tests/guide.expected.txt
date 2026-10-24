@@ -81,6 +81,10 @@ C61 （碓井編 1997）
 C62 （岩本 1997）
 == BIBLIOGRAPHY ==
 Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
+# DOI：既定（doi=false）では取得日がないと出さない（doi=true の場合は tests/doi.tex）
+阿部四郎，2020，「テスト論文」『社会学評論』71(1): 1-10．
+# 4.5.4.2 コンピュータファイル（MRDF，欧文）
+American Institute of Public Opinion, 1976, Gallup Public Opinion Poll #965[MRDF], Princeton, NJ: American Institute of Public Opinion [producer]. New Haven, CT: Roper Public Opinion Research Center, Yale University [distributor].
 Berger, Peter L. and Brigitte Berger, 1972, Sociology: A Biographical Approach, New York: Basic Books.
 # 4.2(6) 英訳文献（原典は単独では載らない）
 Bourdieu, Pierre, 1983, “Vous avez dit ‘populaire’?,” Actes de la recherche en sciences sociales, 46: 98-105. (Gino Raymond and Matthew Adamson, trans., 1991, “Did You Say ‘Popular’?,” John Thompson ed., Language and Symbolic Power, Cambridge: Harvard University Press, 90-102.)
@@ -103,6 +107,7 @@ Fromm, Erich, 1941, Escape from Freedom, New York: Reinehart and Winston.（日�
 舩橋晴俊・長谷川公一・飯島伸子編，1998，『テスト共編書A』テスト出版．
 Goffman, Erving, 1961a, Asylums: Essays on the Social Situation of Mental Patients and Other Inmates, Garden City: Anchor Books.（石黒毅訳，1984，『アサイラム——施設被収容者の日常世界』誠信書房．）
 ————, 1961b, Encounters: Two Studies in the Sociology of Interaction, Indianapolis: Bobbs-Merrill.
+Gray, Tim, 2019, “Test Article,” Journal of Testing, 3(2): 5-15.
 Hall, Stuart ed., 1979, Test Edited Volume, London: Test Press.
 # 4.5.3 ウェブページ（欧文）
 ICPSR, 2009, “Mission Statement,” Ann Arbor, MI: University of Michigan, (Retrieved February 2, 2009, http://www.icpsr.umich.edu/ICPSR/org/mission.html).
@@ -161,6 +166,8 @@ Norton, Alan, 2004, Test Book in a Series, Oxford: Test Press.
 小熊英二，1995，『単一民族神話の起源——〈日本人〉の自画像の系譜』新曜社．
 奥田道大，1983，『都市コミュニティの理論』東京大学出版会．
 奥田道大・広田康生，1982，『テスト共著書』テスト出版．
+# 4.5.4.2 コンピュータファイル（MRDF，和文）。提供機関は作成者と同じでも省かない
+大阪商業大学比較地域研究所・東京大学社会科学研究所，2003，『日本版 General Social Surveys〈JGSS-2003〉面接票 0350』[MRDF]，大阪商業大学比較地域研究所・東京大学社会科学研究所，東京大学社会科学研究所附属日本社会研究情報センターより入手．
 # 欧文誌の publisher は出さない（フェーズB 決定）
 Owen, Brian, 2010, “Test Article with Publisher,” Journal of Testing, 5(2): 10-20.
 # 刊行された予稿集の論文は編書論文と同じ形

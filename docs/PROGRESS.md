@@ -46,3 +46,9 @@
 - テスト：欧文の博士・修士論文、和文の博士論文、学会報告（type あり・なし）、@unpublished、欧文の学会報告（ASA）、予稿集の論文を追加。guide・noextra ともに全件一致。
 - 実データ：`compare-real.sh` は差分なし。`../bib` 全エントリの比較では 1 件：test.bib の川口 2018（@inproceedings、booktitle＋eventtitle＋type=ポスター発表）が、予稿集の論文として『…報告要旨集』45-6．の形になり、type と eventtitle は出なくなった（決定どおり）。
 - bib のブランチ：`../bib`（別リポジトリ）に作業ブランチ `jsr-phase-c` を切った。bib の書き直しはこのブランチで行い、確認後に main へマージする。
+
+## 2026-10-24 区切り4b-1：DOI オプションと MRDF（提案2 A・E）
+- `doi` オプション（既定 false。doi=true で取得日がなくても DOI を出す）。`@dataset` の専用ドライバ。`producer` を全言語の lbx に追加。
+- テスト：guide に MRDF（和文・欧文）と DOI のある論文（和文・欧文、既定では DOI が出ないこと）を追加。`tests/doi.tex`／`doi.expected.txt` を追加（doi=true）。`run-tests.sh` は guide・noextra・doi の3文書を組む。結果：全件一致。
+- 実データ：`compare-real.sh`、`../bib` 全エントリの比較ともに差分なし（実データに @dataset はなく、doi は既定のまま）。
+- 決定事項からの変更：MRDF の提供機関は作成者と同じでも省かない（ガイドの例に合わせた）。

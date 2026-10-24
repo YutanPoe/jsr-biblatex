@@ -79,6 +79,7 @@ citecounter=true,
 citetracker=true,
 autolang=other,%
 language=auto,%
+doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出す。doi=true で，取得日がなくても出す
 }%
 
 %%% 訳書・再録の原典（related 先）の複製を，文献リストの代表として扱えるようにする %%%
@@ -746,14 +747,17 @@ language=auto,%
 
 %%% doiと取得日 %%%
 % 表示マクロ
+% 取得日があるときは（取得日，DOI／URL）。取得日がなくても，doi=true なら DOI だけを（DOI）の形で出す
 \newbibmacro*{urldate+eprint/doi/url}{%
-  \iffieldundef{urlyear}{}{%
-    \printtext[fhparens]{%
-      \printtext{\printurldate}%
-      \newunit%
-      \usebibmacro{eprint/doi/url}%
-    }%
-  }%
+  \iffieldundef{urlyear}
+    {\iftoggle{bbx:doi}
+       {\iffieldundef{doi}{}{\printtext[fhparens]{\printfield{doi}}}}
+       {}}
+    {\printtext[fhparens]{%
+       \printtext{\printurldate}%
+       \newunit%
+       \usebibmacro{eprint/doi/url}%
+     }}%
 }%
 
 %%% データベースまたはdoiまたはurl %%%
@@ -1518,6 +1522,35 @@ language=auto,%
 
 
 
+%% 4.5.4.2 コンピュータファイル（MRDF）
+%%  和文：ファイル作成者名，作成年，『ファイル名称』[データ形式]，提供機関名，入手先．
+%%  欧文：Author, year, Title[データ形式], 所在地: 提供機関名 [producer]. 入手先（所在地: 名称 [distributor]）.
+%%  データ形式＝type，提供機関＝publisher（作成者と同じでも省かない。ガイドの例に合わせる），入手先＝howpublished。
+\DeclareBibliographyDriver{dataset}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{translator/author/editor}%
+  \usebibmacro{date+extradate}%
+  \ifthenelse{\boolean{CJK}}
+    {\usebibmacro{maintitle+title}}
+    {\usebibmacro{printtitle}{}}%
+  % データ形式は書名にくっつける（書名の後に保留されている副題の区切りは消す）
+  \iffieldundef{type}{}{\setunit{}\printfield[brackets]{type}}%
+  \ifthenelse{\boolean{CJK}}
+    {\setunit*{\printdelim{fhcomma}}%
+     \printlist{publisher}%
+     \setunit*{\printdelim{fhcomma}}%
+     \printfield{howpublished}}
+    {\setunit*{\addcomma\space}%
+     \printlist{location}%
+     \iflistundef{publisher}{}{%
+       \setunit*{\addcolon\space}%
+       \printlist{publisher}%
+       \printtext{\addspace\mkbibbrackets{\bibstring{producer}}}}%
+     \setunit*{\adddot\space}%
+     \printfield{howpublished}}%
+  \usebibmacro{finentry}%
+}%
+
 %%% おまけ %%%
 %% v) 数巻にわたる書籍
 \DeclareBibliographyDriver{mvbook}{%
@@ -1555,5 +1588,4 @@ language=auto,%
 \DeclareBibliographyAlias{mvproceedings}{mvbook}%
 \DeclareBibliographyAlias{software}{article}%
 \DeclareBibliographyAlias{patent}{article}%
-\DeclareBibliographyAlias{dataset}{article}% 専用ドライバは別に作る（提案2 E）
 \DeclareBibliographyAlias{unpublished}{inproceedings}% 未刊行の口頭報告は学会報告と同じ書式（booktitle がなければ conference）

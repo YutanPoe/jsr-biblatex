@@ -63,3 +63,10 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
   - 和文：「題」eventtitle＋type。type を書いたときだけ eventtitle の後に続ける。
   - 欧文（ASA）：Paper presented at the eventtitle, 月 日, venue.。開催日は eventdate の月日（年は著者の後に出している）。「Paper presented at the」は bibstring `paperpresented`（全言語の jsr.lbx に定義）。type を書くと、type で置き換える（Poster presented at the など）。
 - **予稿集の論文**（`@inproceedings` に booktitle がある）は、編書論文と同じ形で出す。eventtitle と type は出ない。
+
+## DOI と MRDF（提案2 A・E、2026-10-24 実装）
+- **A. DOI**：オプション名は biblatex 標準の `doi`（jsr の既定は `doi=false`）。既定では、取得日（urldate）があるときだけ「（取得日，DOI／URL）」を出す。`doi=true` にすると、取得日がなくても DOI だけを（DOI）の形で出す：…71(1): 1-10，（https://doi.org/…）．／…, 3(2): 5-15, (https://doi.org/…).。
+- **E. MRDF**：`@dataset` に専用ドライバ。データ形式＝`type`、提供機関＝`publisher`、入手先＝`howpublished`。
+  - 和文：作成者，年，『名称』[MRDF]，提供機関，入手先．
+  - 欧文：Author, year, Title[MRDF], 所在地: 提供機関 [producer]. 入手先．（「producer」は bibstring。入手先は howpublished に「所在地: 名称 [distributor]」まで書く）
+  - **提供機関が作成者と同じでも省かない**（ガイド 4.5.4.2 の例が省いていないため。2026-10-24 の「作成者と同じなら自動省略」の決定から変更。省略したいときは、publisher を書かなければよい）。

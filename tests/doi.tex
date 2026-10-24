@@ -1,0 +1,21 @@
+%% jsr-biblatex 回帰テスト：オプション doi=true
+%% 既定（doi=false）では，取得日（urldate）のない文献に DOI は出ない（guide.tex で確かめる）。
+%% doi=true では，取得日がなくても DOI を（DOI）の形で出す。
+\documentclass[paper={1500mm,1000mm},line_length=1450mm,number_of_lines=150]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd,doi=true]{biblatex}
+\addbibresource{guide.bib}
+\AtBeginBibliography{\raggedright}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\directlua{dofile(kpse.find_file('textdump.lua'))}
+
+\begin{document}
+\raggedright
+== BIBLIOGRAPHY ==\par
+\nocite{Abe2020,Gray2019,Schafer2003}
+\printbibliography[heading=none]
+\end{document}
