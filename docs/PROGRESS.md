@@ -67,3 +67,10 @@
 - bib（ブランチ `jsr-phase-c`、未コミット）：newspaper.bib、magazine.bib、test.bib の `type={newspaper/magazine}` 64件を `entrysubtype` に、`version` 44件を `note` に、空の `version={}` 4件を削除。旧スタイル＋main の bib と、新スタイル＋ブランチの bib で、新聞・雑誌の出力は完全に一致した。
 - フェーズC 作業5 のうち、新聞の `type`／`issue`／`version` の転用は解消。`webpagetitle` と report の `type=onlinereport` は未着手。
 - 未確認：magazine.bib の `Miyazato1929デイゼルエンヂン` ほか `type={}`（空）のエントリ（books.bib 1件、article.bib 4件、magazine.bib 1件）は、今のまま（通常の論文として出る）。
+
+## 2026-10-24 フェーズC 作業5（残り）：webpagetitle と type=onlinereport
+- 提案書 `docs/proposals/2026-10-24-webpagetitle-onlinereport.md` を残し、決定した（`titleaddon`、`@online`、旧形式は読み替え＋警告）。
+- jsr.bbx：online ドライバでサイト名を titleaddon から出す。report ドライバから onlinereport と webpagetitle の分岐を削除。sourcemap で旧形式を読み替え（`\pertype{report}` で対象を絞る。`typesource` だけの step はエントリ型を空にするので使えない）。警告マクロ `jsr@chklegacy`。jsr.dbx：webpagetitle を削除、`jsrlegacy` を追加。
+- テスト：guide.bib の webpagetitle を titleaddon に。旧形式（webpagetitle、onlinereport）の確認用に2件追加。全件一致。旧形式のとき `guide.log` に警告が出る。
+- 実データ：`compare-real.sh` は差分なし。旧スタイル＋main の bib と新スタイル＋ブランチの bib、新スタイル＋main の bib（旧形式）と新スタイル＋ブランチの bib の、どちらも差分なし。旧形式の bib の警告は2件、書き直した bib は0件。
+- bib（ブランチ `jsr-online`、未コミット）：others.bib の NDL2013本の万華鏡（webpagetitle→titleaddon）と UIC2018HighSpeedRail（@report＋onlinereport→@online）。

@@ -94,6 +94,24 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[fieldsource=relatedtype, match=\regexp{\A(translationof|reprintof)\Z}, final]%
       \step[fieldset=relatedoptions, fieldvalue={skipbiblist}]%
     }%
+    % 旧形式の読み替え（2026-10-24）。警告用の印（jsrlegacy）を付けてから読み替える。
+    %  ・webpagetitle（ウェブサイト名）→ titleaddon
+    %  ・@report＋type=onlinereport（オンラインで取得した報告書）→ @online（institution→organization，type は消す）
+    \map{%
+      \step[fieldsource=webpagetitle, final]%
+      \step[fieldset=jsrlegacy, fieldvalue={webpagetitle}]%
+    }%
+    \map{%
+      \step[fieldsource=webpagetitle, fieldtarget=titleaddon]%
+    }%
+    \map[overwrite=true]{%
+      \pertype{report}%
+      \step[fieldsource=type, match=\regexp{\Aonlinereport\Z}, final]%
+      \step[fieldset=jsrlegacy, fieldvalue={onlinereport}]%
+      \step[fieldsource=institution, fieldtarget=organization]%
+      \step[fieldset=type, null=true]%
+      \step[typesource=report, typetarget=online]%
+    }%
     % sortname がない：書き忘れの警告用の印（bbl には sortname が出力されないので，biber の段階で印を付ける）
     % crossref／xref で親から継承する項目は，この段階では継承前なので対象外にする
     \map{%
@@ -161,6 +179,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \AtEveryBibitem{%
   \usebibmacro{checkLang}%言語の判定
   \jsr@chksortname% 和文の文献の sortname の書き忘れの検出
+  \jsr@chklegacy% 旧形式の bib の検出
   \jsr@scankata% カタカナ名の判定
   \setboolean{reversenamebool}{true}%氏名反転をOnに
 }%
@@ -185,6 +204,15 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     {\blx@warning@noline{jsr: entry '\thefield{entrykey}' has no sortname\MessageBreak
        (CJK entries are sorted by character code without it)}}
     {}}
+
+% 旧形式の bib（webpagetitle、@report＋type=onlinereport）は sourcemap で読み替えるが、書き換えを促す警告を出す。
+\newcommand*{\jsr@chklegacy}{%
+  \iffieldundef{jsrlegacy}{}{%
+    \iffieldequalstr{jsrlegacy}{webpagetitle}
+      {\blx@warning@noline{jsr: entry '\thefield{entrykey}' uses deprecated 'webpagetitle'\MessageBreak
+         (use titleaddon for the website name)}}
+      {\blx@warning@noline{jsr: entry '\thefield{entrykey}' uses deprecated 'type=onlinereport'\MessageBreak
+         (use @online with organization instead of @report)}}}}
 
 \newbibmacro*{checkLang}{%CJKの判断と、langidがない場合はとりあえずamericanにする処理
   \ifboolexpr{%
@@ -1494,19 +1522,17 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \usebibmacro{date+extradate}%
   \newunit%
   % 表題
-  \iffieldequalstr{type}{onlinereport}
-    {\usebibmacro{title}}%
-    {\usebibmacro{maintitle+title}}%
+  \usebibmacro{maintitle+title}%
   % 報告書の種類・課題番号・研究機関名
   %  和文：『課題名』報告書の種類（課題番号），研究機関名
   %  欧文：Title, Technical Report TR-12, 所在地: 機関名
   \ifthenelse{\boolean{CJK}}{%
-    \iffieldequalstr{type}{onlinereport}{}{\printfield{type}}%
+    \printfield{type}%
     \iffieldundef{number}{}{\printtext[fparens]{\printfield{number}}}%
     \ifbool{jsr@instfirst}{}{%
       \iflistundef{institution}{}{\newunit\printlist{institution}}}%
   }{%
-    \iffieldequalstr{type}{onlinereport}{}{\usebibmacro{report:typenumber}}%
+    \usebibmacro{report:typenumber}%
   }%
   % 発行元
   %  ・発行元が「国立印刷局」（旧・大蔵省印刷局）である場合，
@@ -1516,9 +1542,6 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     \setunit*{\addhnspace}%
     \usebibmacro{publisher:print}%
   }%
-  \newunit%
-  % ウェブサイト名（不明な場合は省略）
-  \printfield{webpagetitle}%
   \newunit%
   \usebibmacro{location+institution}%
   % 取得日・URL（オンラインで取得した場合のみ出力。urldate/urlが未指定なら何も出力しない）
@@ -1563,11 +1586,15 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \usebibmacro{author}%
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}% 出版年
+  % ウェブサイト名・ブログ名は titleaddon に書く。title マクロは titleaddon を書名の中に出すので，退避して書名の後に出す
+  \let\jsr@sitename\@empty
+  \savefield{titleaddon}{\jsr@sitename}%
+  \clearfield{titleaddon}%
   % 表題
   \usebibmacro{title}%
   \newunit%
   % ウェブサイト名（不明な場合は省略）
-  \printfield{webpagetitle}%
+  \ifdefvoid\jsr@sitename{}{\printtext{\jsr@sitename}}%
   \newunit%
   % ブログの記事作成日：日付に日まであれば出す（ガイド 4.5.3，2026-10-24 決定）
   \iffieldundef{day}{}{\printtext{\mkbibdatelong{year}{month}{day}}}%

@@ -127,6 +127,8 @@ Hall, Stuart ed., 1979, Test Edited Volume, London: Test Press.
 # 4.5.3 ウェブページ（欧文）
 ICPSR, 2009, “Mission Statement,” Ann Arbor, MI: University of Michigan, (Retrieved February 2, 2009, http://www.icpsr.umich.edu/ICPSR/org/mission.html).
 稲上毅，1981，『労使関係の社会学』東京大学出版会．
+# 旧形式（@report＋type=onlinereport）は @online に読み替える。ウェブ文書として「題」の形で出す（ガイド 4.5.3 の Johns Hopkins University の例と同じ）
+International Union of Railways, 2018, “High Speed Rail: Fast Track to Sustainable Mobility,” Paris: International Union of Railways, (Retrieved June 1, 2018, http://example.com/uic.pdf).
 伊藤太郎，1990，『テスト単著書』テスト出版．
 伊藤太郎・佐藤花子，1991，『テスト共著書二』テスト出版．
 Iversen, Solveig, forthcoming, “Speculative Infrastructures,” Journal of Futures Studies.
@@ -143,6 +145,8 @@ Johnston, Hank and Bert Klandermans eds., 1995, Social Movements and Culture, Mi
 高坂健次・厚東洋輔編，1998，『講座社会学1 理論と方法』東京大学出版会．
 倉沢進編，1990，『テスト編書B』テスト出版．
 栗原彬編，1996，『テスト編書A』テスト出版．
+# 旧形式（webpagetitle）は titleaddon に読み替える
+旧形式テスト，2010，「旧形式のページ」，旧形式ホームページ，（2010年2月2日取得，http://example.com/legacy）．
 # 原典を引用しない訳書：原典の複製が代表になり，extradate は原典の年で判定（フェーズB）
 Lane, Robert, 1970a, Alpha Book, London: Test Press.（山本花子訳，1980，『アルファの本』テスト出版．）
 ————, 1970b, Beta Book, London: Test Press.

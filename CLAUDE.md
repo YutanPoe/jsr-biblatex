@@ -56,7 +56,7 @@ bib の各エントリは、単独で完結した正しい書誌として biblat
 1. `\mkbibfparens`（cbx で定義、bbx で使用）を bbx に移す。
 2. ハードコードの bibstring 化：「取得」「Retrieved」「面」「全」「巻」「vols.」「刊」（電子書籍の紙媒体情報）。
 3. 全角の閉じ丸カッコ「）」が行頭に来る問題（`../bib/test.bib` の Ashworth の訳書。`\nobreak` では直らなかった。luatexja の禁則とノードの並びを調べる）。
-4. ヘッダーの版情報、README。書くこと：使い方、オプション（`firstfull`、`doi`）、`\parencite[78=86]{訳書}`、欧文タイトルの大文字化はデータ側の責任、エンジンの前提、bib の書き方（新聞は `entrysubtype`＋`issue`＋`note`、電子書籍は `origdate`＋`origpublisher`＋`note`、訳書は原典のエントリを作って `related` でつなぐ、報告書所収の論文は `crossref`）、`\footcite` は使わず `\parencite`／`\textcite` を使う、電子書籍は紙版の年の位置に並ぶ。
-5. **要判断（提案書を書く）**：独自フィールド `webpagetitle` と report の `type=onlinereport` を、標準フィールドに置き換える案。bib の書き方が変わる。（新聞の `type`/`issue`/`version` の転用は解消済み。）
+4. ヘッダーの版情報、README。書くこと：使い方、オプション（`firstfull`、`doi`）、ウェブページは `@online`＋`titleaddon`、`\parencite[78=86]{訳書}`、欧文タイトルの大文字化はデータ側の責任、エンジンの前提、bib の書き方（新聞は `entrysubtype`＋`issue`＋`note`、電子書籍は `origdate`＋`origpublisher`＋`note`、訳書は原典のエントリを作って `related` でつなぐ、報告書所収の論文は `crossref`）、`\footcite` は使わず `\parencite`／`\textcite` を使う、電子書籍は紙版の年の位置に並ぶ。
+5. （完了）独自フィールドの置き換え：新聞は `entrysubtype`＋`issue`＋`note`、ウェブサイト名は `titleaddon`、オンラインで取得した報告書は `@online`。旧形式（`webpagetitle`、`type=onlinereport`、`type=newspaper`、`version`）のうち、`webpagetitle` と `onlinereport` は読み替えて警告を出す。次の版で警告を外す。
 6. texmf 側クローンと作業コピーの二重管理（latexmkrc か `TEXINPUTS`）。
 7. 小さな未解決：`date={1956-}`（終了年のない範囲）の年が解釈されず n.d. になる（`../bib` の Saitama1956埼玉県議会史mv）。欧文の報告書所収論文（crossref）の書式は未テスト。TeX Live 2023／biblatex 3.19 での再確認は未実施。

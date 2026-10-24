@@ -6,9 +6,9 @@
 %%  - 訳書・再録は related ＋ relatedtype でつなぎ、ソート用に origdate（原著の刊行年）を書く。
 %%  - skipbib など、出力を制御するための指定はしない。
 %%  - 「テスト」「Test」を含む書名は、文献注の例を再現するための架空の書誌。
-%%  - 4.5.1 電子書籍、4.5.4.2 MRDF はフィールドの割り当てが未決のため未収録。
-%%  - ウェブサイト名は暫定的に独自フィールド webpagetitle を使う（見直し予定）。
-%%  - 新聞記事は暫定的に type/issue を使う（見直し予定）。
+%%  - ウェブサイト名・ブログ名は titleaddon、新聞・雑誌は entrysubtype（issue は朝刊・夕刊、note は版・地域版）、
+%%    電子書籍の紙媒体情報は origdate＋origpublisher、フォーマットは note に書く。
+%%  - 旧形式（webpagetitle、@report＋type=onlinereport、type=newspaper）も読み替えて同じ出力になることを確かめる。
 %% =====================================================================
 
 %% ---------------------------------------------------------------------
@@ -713,6 +713,31 @@
   langid     = {japanese},
 }
 
+%% 旧形式（読み替えて同じ出力になり，警告が出る）：webpagetitle は titleaddon に，@report＋type=onlinereport は @online に
+@online{LegacyWeb2010,
+  author       = {{旧形式テスト}},
+  sortname     = {{Kyukeishiki Tesuto}},
+  date         = {2010},
+  title        = {旧形式のページ},
+  webpagetitle = {旧形式ホームページ},
+  urldate      = {2010-02-02},
+  url          = {http://example.com/legacy},
+  langid       = {japanese},
+}
+
+@report{LegacyReport2018,
+  author      = {{International Union of Railways}},
+  institution = {{International Union of Railways}},
+  location    = {Paris},
+  type        = {onlinereport},
+  date        = {2018},
+  title       = {High Speed Rail},
+  subtitle    = {Fast Track to Sustainable Mobility},
+  urldate     = {2018-06-01},
+  url         = {http://example.com/uic.pdf},
+  langid      = {american},
+}
+
 %% 4.5.4.2 コンピュータファイル（MRDF）：データ形式＝type，提供機関＝publisher，入手先＝howpublished
 @dataset{JGSS2003,
   author       = {{大阪商業大学比較地域研究所・東京大学社会科学研究所}},
@@ -813,7 +838,7 @@
   sortname     = {{Nihon Shakai Gakkai}},
   date         = {2006},
   title        = {日本社会学会倫理綱領にもとづく研究指針},
-  webpagetitle = {日本社会学会ホームページ},
+  titleaddon   = {日本社会学会ホームページ},
   url          = {http://www.gakkai.ne.jp/jss/about/shishin.pdf},
   urldate      = {2009-02-02},
   langid       = {japanese},
@@ -823,7 +848,7 @@
   author       = {{日本社会学会}},
   sortname     = {{Nihon Shakai Gakkai}},
   date         = {2009},
-  webpagetitle = {日本社会学会ホームページ},
+  titleaddon   = {日本社会学会ホームページ},
   url          = {http://www.gakkai.ne.jp/jss},
   urldate      = {2009-02-02},
   langid       = {japanese},
@@ -834,7 +859,7 @@
   sortname     = {Yamanaka, Hayato},
   date         = {2004},
   title        = {なにが人質を解放させたのか},
-  webpagetitle = {Yamanaka Research Office},
+  titleaddon   = {Yamanaka Research Office},
   url          = {http://www.asahi-net.or.jp/~cr1h-ymnk/kaiho.html},
   urldate      = {2009-02-02},
   langid       = {japanese},
@@ -869,7 +894,7 @@
   sortname     = {Watanabe, Jun},
   date         = {2009-01-05},
   title        = {スポーツの値段},
-  webpagetitle = {珈琲をもう一杯 film\&tv},
+  titleaddon   = {珈琲をもう一杯 film\&tv},
   url          = {http://www.tku.ac.jp/~juwat/blog/film_blog/2009/01/post_54.html},
   urldate      = {2009-02-02},
   langid       = {japanese},
@@ -879,7 +904,7 @@
   author       = {DeLong, Brad},
   date         = {2007-01-07},
   title        = {Thomas Piketty and Emmanuel Saez Give Their Current View on American Income Inequality},
-  webpagetitle = {The Brad DeLong Blog},
+  titleaddon   = {The Brad DeLong Blog},
   url          = {http://econ161.berkeley.edu/movable_type},
   urldate      = {2007-01-09},
   langid       = {american},

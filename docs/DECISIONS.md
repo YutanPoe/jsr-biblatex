@@ -81,3 +81,9 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **フィールド**：朝刊・夕刊は `issue`、版・地域版（第3版、東京都版、全国版）は `note`。`version` は読まなくなった（既存の bib は `note` に書き換える）。
 - **和文**：文献リストは 1975年3月17日夕刊，全国版，3面。文献注は （『毎日新聞』1999.3.15 夕刊，第3版，東京都版，5面）。
 - **欧文の署名記事**（ASA）：Smith, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.。日付は月日だけ（年は著者の後に出している）。ページの前に p.／pp.（biblatex の `\mkpageprefix` は A1 のような数字でないページには付けないので、`\jsr@pgprefix` で範囲かどうかを調べて付ける）。
+
+## webpagetitle と type=onlinereport（フェーズC 作業5、2026-10-24 決定・実装）
+提案書：`docs/proposals/2026-10-24-webpagetitle-onlinereport.md`。
+- **ウェブサイト名・ブログ名は `titleaddon`**（`@online` の標準フィールド。Zotero も同じ）。欧文の所在地・運営機関名は `location`＋`organization` のまま。
+- **オンラインで取得した報告書は `@online` で書く**（`type=onlinereport` の目印は使わない。`institution` は `organization` に）。
+- **旧形式（`webpagetitle`、`@report`＋`type=onlinereport`）は当面そのまま読める**。biber の sourcemap で読み替え、組版時に警告を出す。次の版で警告を外す。

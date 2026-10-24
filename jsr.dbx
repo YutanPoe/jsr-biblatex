@@ -5,11 +5,12 @@
 \DeclareDatamodelEntryfields{translatora}
 \DeclareDatamodelFields[type=field,datatype=literal]{translatortype}
 \DeclareDatamodelFields[type=field,datatype=literal]{translatoratype}
-\DeclareDatamodelFields[type=field, datatype=literal, label=true]{webpagetitle}
-\DeclareDatamodelEntryfields{webpagetitle}
 % 同一著者の並び順（単著→単独編書→共著→共編書）のためのソート用フィールド。bbx の sourcemap が設定する
 \DeclareDatamodelFields[type=field,datatype=integer]{jsrsortrole}
 \DeclareDatamodelEntryfields{jsrsortrole}
 % sortname の書き忘れの検出用。bbx の sourcemap が，sortname のないエントリに 1 を設定する
 \DeclareDatamodelFields[type=field,datatype=integer]{jsrnosortname}
 \DeclareDatamodelEntryfields{jsrnosortname}
+% 旧形式の bib（webpagetitle、@report＋type=onlinereport）の検出用。bbx の sourcemap が，読み替える前に印を付ける
+\DeclareDatamodelFields[type=field,datatype=literal]{jsrlegacy}
+\DeclareDatamodelEntryfields{jsrlegacy}
