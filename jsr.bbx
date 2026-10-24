@@ -148,14 +148,30 @@ language=auto,%
     or
     test {\iffieldequalstr{langid}{korean}}
   }{\setboolean{CJK}{true}}{\setboolean{CJK}{false}}%
-  % langid がない，または babel に読み込まれていない言語（french など）の欧文は american で組む
+  % langid がない，または文書に読み込まれていない言語（french など）の欧文は american で組む
   \iffieldundef{langid}
     {\selectlanguage{american}}
-    {\ifcsundef{date\thefield{langid}}
-       {\ifbool{CJK}
+    {\xifinlist{\thefield{langid}}\jsr@doclangs
+       {}
+       {% biblatex の autolang はこのあと langid の言語に切り替えるので，langid を消してそれを止める
+        \clearfield{langid}%
+        \ifbool{CJK}
           {\ifcsundef{datejapanese}{}{\selectlanguage{japanese}}}% chinese／korean が未読み込みなら japanese で組む
-          {\selectlanguage{american}}}
-       {}}}%
+          {\selectlanguage{american}}}}}%
+
+% プリアンブル終了時に読み込まれている言語の一覧。
+% 新しい babel は未読み込みの言語も \select@language の中で読み込むため，date<言語> の有無では判定できない。
+\def\jsr@doclangs{}
+\def\jsr@addlang#1{\listxadd\jsr@doclangs{#1}}
+\AtEndPreamble{%
+  \ifdef\bbl@loaded
+    {\expandafter\forcsvlist\expandafter\jsr@addlang\expandafter{\bbl@loaded}}{}%
+  \ifdef\bbl@ini@loaded
+    {\expandafter\forcsvlist\expandafter\jsr@addlang\expandafter{\bbl@ini@loaded}}{}%
+  \ifdef\xpg@bloaded
+    {\expandafter\forcsvlist\expandafter\jsr@addlang\expandafter{\xpg@bloaded}}
+    {\ifdef\xpg@loaded
+       {\expandafter\forcsvlist\expandafter\jsr@addlang\expandafter{\xpg@loaded}}{}}}%
 
 %%% カタカナ書きの外国人名（ガイド 4.4(2)）%%%
 % 和文の文献で，カタカナ書きの外国人名は「名・姓」の順に中黒でつなぐ（ロス・マオア）。

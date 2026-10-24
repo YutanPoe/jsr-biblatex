@@ -22,3 +22,9 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **3名以上**：割注も本文中の引用も「ほか」「et al.」（B-10）。
 - **原書と訳書の両方のページ（B-12）**：`\parencite[78=86]{訳書}` →（Goffman 1961a: 78=1984: 86）。
 - 著者のいない報告書の割注は機関名。
+
+## 言語の扱い
+- **2026-10-24 未読み込みの言語の判定（C-0）**：`langid` が文書に読み込まれていない言語（french など）の欧文は american で組む。方針は従来どおり。判定方式を替えた。
+  - 従来は `date<言語>` の有無で判定していた。新しい babel（26.11）は、未読み込みの言語も `\select@language` の中で読み込むため、この判定が効かなくなった。
+  - 現在は、プリアンブル終了時の言語一覧（`\jsr@doclangs`。babel の `\bbl@loaded`／`\bbl@ini@loaded`、polyglossia の `\xpg@bloaded`）に `langid` があるかで判定する。
+  - 一覧にない言語の項目は `langid` を消す。`checkLang` は biblatex の autolang（`\blx@beglang`）より前に動くので、`\selectlanguage` だけでは、あとから `langid` の言語に上書きされるため。

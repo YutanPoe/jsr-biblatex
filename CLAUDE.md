@@ -29,11 +29,11 @@ claude.ai のプロジェクト「社会学評論スタイルガイド準拠bibl
 
 ## テスト
 ```sh
-sh tests/run-tests.sh      # OK: all cases match ／ NG: n line(s) … （差分は tests/guide.diff）
+sh tests/run-tests.sh      # biber が PATH にないときは BIBER=パス を付ける。OK: all cases match ／ NG: n line(s) … （差分は tests/guide.diff）
 ```
 - 必要なもの：lualatex、biber、python3。リポジトリの bbx/cbx/lbx を `TEXINPUTS` で優先して読む。
 - 変更のたびに実行する。出力を変える変更をしたら、`tests/guide.bib`／`guide.tex`／`guide.expected.txt` の3つをそろえて更新する（期待値はスタイルガイドに準拠させる。実際の出力に合わせて期待値を書き換えない）。
-- 実データでの確認：`../test.tex` を変更前後で組み、pdftotext の差分が意図した変更だけか確かめる。
+- 実データでの確認：`sh tests/compare-real.sh [REV]` が、`../test.tex` を REV（既定 HEAD）のスタイルと作業コピーのスタイルで組み、組版された行を比べる（差分は `tests/real.diff`）。意図した変更だけか確かめる。行単位の比較なので、改行位置が変わると後続の行も差分に出る。pdftotext は使わない（手元の環境にない）。
 - フェーズBまでは TeX Live 2023（biblatex 3.19、biber 2.19）で確認した。手元の版が違う場合は最初にテストを流して結果を記録する。
 
 ## 実装上の注意（フェーズBで入った仕組み）
@@ -42,6 +42,7 @@ sh tests/run-tests.sh      # OK: all cases match ／ NG: n line(s) … （差分
   - biblatex の内部名（`blx@dlist@entry@…`、`blx@data@…`、`\blx@bbl@enddlist`）に依存している。biblatex の更新で壊れたら、まずここを疑う。
 - `\savebox` の中で `\printnames` を使うとき（発行元の判定、カタカナ名の判定）は、`\jsr@savepunct`／`\jsr@restorepunct` で句読点の状態を退避する。しないと保留中の区切りが消える。
 - ループで `\do` を使い回すと入れ子で壊れる。新しいループには専用のハンドラ（`\forcsvlist\jsr@…@i`）を使う。
+- 言語の判定（`checkLang`）は、プリアンブル終了時の言語一覧 `\jsr@doclangs` に依存する。babel の `\bbl@loaded`／`\bbl@ini@loaded`、polyglossia の `\xpg@bloaded`／`\xpg@loaded` を読むので、これらの内部名が変わったら壊れる。一覧にない言語の項目は `langid` を消して american で組む（biblatex の autolang は `checkLang` のあとに `langid` の言語へ切り替えるため）。
 - カタカナ名の判定は Unicode 前提（LuaTeX／XeTeX／upTeX）。
 
 ## bib の方針

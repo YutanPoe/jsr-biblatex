@@ -9,8 +9,20 @@ sh tests/run-tests.sh
 ```
 
 - 必要なもの：lualatex、biber、python3
+- biber は PATH 上のものを使う。別の場所のものを使うときは環境変数 `BIBER` で指定する（例：cpan で入れた biber は `PERL5LIB=$HOME/perl5/lib/perl5 BIBER=$HOME/perl5/bin/biber sh tests/run-tests.sh`）。
 - このリポジトリの `jsr.bbx`／`jsr.cbx`／`lbx/` を、texmf にインストールしたものより優先して読み込む（`TEXINPUTS` で指定）。
 - 結果は `OK` か `NG: n expected line(s) not matched` と表示される。差分は `tests/guide.diff` に出る（`-` が期待値、`+` が実際の出力）。
+
+## 実データの変更前後比較
+
+```sh
+sh tests/compare-real.sh [REV]
+```
+
+- `../test.tex`（親フォルダ）を、REV（既定 `HEAD`）のスタイルと作業コピーのスタイルで組み、組版された各行の文字列を比べる。差分は `tests/real.diff` に出る（`<` が REV、`>` が作業コピー）。
+- 出力を変える変更をしたあとに、意図した変更だけが差分に出ているかを確かめるために使う。回帰テストの代わりにはならない。
+- 行単位の比較なので、改行位置が変わると後続の行も差分に出る。pdftotext は使わない。
+- 必要なもの：lualatex、biber（`BIBER` で場所を指定できる）、git
 
 ## 仕組み
 
@@ -26,6 +38,7 @@ sh tests/run-tests.sh
 | `guide.tex` | 文献注（C01〜）と文献リストを出力する文書 |
 | `guide.expected.txt` | 期待値（スタイルガイドに準拠） |
 | `run-tests.sh` | 実行スクリプト |
+| `compare-real.sh` | 実データ（`../test.tex`）の変更前後比較 |
 | `textdump.lua`、`normalize.py` | 出力の取り出しと正規化 |
 
 ## 期待値を変えるとき
