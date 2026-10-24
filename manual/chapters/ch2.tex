@@ -268,7 +268,7 @@ bib ファイルは UTF-8 のテキストファイルで，文献1件ごとに�
 \begin{fieldlist}
 \fielditem{date}{date}
 
-刊行年です。\texttt{2015}，または \texttt{1975-03-17}（新聞・雑誌・ブログ）と書きます。年が不明なときは書きません（\texttt{n.d.} と出ます）。
+刊行年です。\texttt{2015}，または \texttt{1975-03-17}（新聞・雑誌・ブログ）と書きます。年が不明なときは書きません（\texttt{n.d.} と出ます）。刊行中の叢書・多巻本のように終了年がないときは，\texttt{1956/} と書きます（\texttt{1956-} ではありません。biblatex の書き方です）。年は開始年（1956）だけが出ます。
 
 \fielditem{origdate}{date}
 
@@ -378,7 +378,7 @@ URL です。取得日（\bibfield{urldate}）がないと出ません。\bibfie
 \end{itemize}
 
 \subsubsection{日付とページ}
-年は \bibfield{date} に書きます（\texttt{date = \{2015\}}）。BibTeX の \bibfield{year}・\bibfield{month} も読めますが，\bibfield{date} を勧めます。新聞・雑誌・ブログは年月日（\texttt{1975-03-17}）で書きます。ページの範囲は \texttt{10--20}（ハイフン2つ）で書きます。
+年は \bibfield{date} に書きます（\texttt{date = \{2015\}}）。BibTeX の \bibfield{year}・\bibfield{month} も読めますが，\bibfield{date} を勧めます。新聞・雑誌・ブログは年月日（\texttt{1975-03-17}）で書きます。刊行中で終了年のない文献は \texttt{1956/} です。ページの範囲は \texttt{10--20}（ハイフン2つ）で書きます。
 
 \subsubsection{タイトルの大文字と小文字}
 スタイルは，欧文タイトルの大文字小文字を変えません。書いたとおりに出ます。データ側で，ガイドの書き方（主要な語の先頭を大文字にするなど）にそろえてください。bib の中で大文字を保ちたい語は，波括弧で囲みます（\texttt{\{Tokyo\}}）。

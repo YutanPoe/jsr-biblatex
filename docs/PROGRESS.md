@@ -127,3 +127,13 @@
 - `CLAUDE.md` のフェーズC作業4を完了にし、マニュアルの記述を足した。`manual/jsr-biblatex.pdf` を組み直してコミットする。
 - 確認：`manual/build.sh` 全項目合格、`tests/run-tests.sh` 全件一致。
 - 未解決（第7章と同じ）：`date={1956-}`、欧文の報告書所収論文、TeX Live 2023 での再確認、texmf 側クローンと作業コピーの二重管理（フェーズC作業6）。要確認：著作権者名（Takuya MASUDA）、版（v1.0）、免責の文面、biblatex-jpa の作者への連絡。
+
+## フェーズC 作業7：小さな未解決の解消（欧文の報告書所収論文、終了年のない範囲）
+- `.gitignore`（`manual/.gitignore`）：一時ファイルは既に無視されていた。`*.fls`、`*.fdb_latexmk`、`*.synctex.gz`、`*.xdv`、`*.bak` を追加。
+- **欧文の報告書所収論文**：テスト（guide の Lowe2003／Vance2003）を足して実際の出力を見たところ、「…, University of Fiction, Chicago: 12-30.」と、出版地の後に発行元がない形になっていた。`jsr.bbx` の `report:parent`／`incollection` を直し、「Chicago: University of Fiction, 12-30.」にした（`jsr@locdone` で出版地の重複出力を止める）。
+- **終了年のない範囲**：「1956-」は「1956/」の誤記だった。`date={1956/}` は年の位置に「1956/」がそのまま出ていた（`labeldatesource` が空のため `\printlabeldateextra` が範囲全体を印刷する）。`jsr@printdateextra`（bbx、cbx から使用）で、終了年のフィールドが空のときは開始年と extradate だけを出すようにした。テスト C70 と文献リストの行を追加。a／b が付くこと、終了年のある範囲（1960/1970）が従来どおりなことは、別の小さな文書で確かめた（回帰テストには入れていない）。
+- `../bib`：ブランチ `jsr-date-open-range` で `Saitama1956埼玉県議会史mv` の `date={1956-}` を `{1956/}` に直し、「埼玉県議会史編さん委員会編，1956，『埼玉県議会史』埼玉県議会．」と出ることを確かめた（main へのマージは確認後）。
+- マニュアル：第2章に `1956/`、第4章に欧文の報告書所収論文と `1956/` の例を追加し、第7章の未解決から2件を外した。
+- 確認：`tests/run-tests.sh` 全件一致、`manual/build.sh` 全項目合格。
+- TeX Live 2023 での再確認：別の TeX Live をダウンロードして入れる必要があるため、行わないことにした（2026-10-24 ユーザー判断）。確認した版は TeX Live 2026（biblatex 3.22、biber 2.23 beta）のみ。
+- texmf 側の写し（`~/Library/TinyTeX/texmf-local/tex/latex/jsr-biblatex`）：git の pull で更新できるので、当面はそのままにする（ユーザー判断）。

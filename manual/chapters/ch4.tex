@@ -84,6 +84,10 @@
 
 \bibexample{lewis2001}
 
+刊行中で終了年のない多巻本は，\bibfield{date} を \texttt{1956/} の形で書きます。年は開始年だけが出ます。
+
+\bibexample{kenshi1956}
+
 \subsection{編書論文}\label{sec:incollection}
 編書・論文集の中の1つの章・論文は \bibtype{incollection} です（スタイルガイド 4.2(4)，4.4(4) に対応します）。雑誌論文との違い（\bibtype{article} と使い分ける理由）は\ref{sec:artcoll}節，所収書の情報を1か所にまとめる \bibfield{crossref} は\ref{sec:crossref}節を見てください。
 
@@ -302,6 +306,10 @@
 報告書所収の論文は \bibtype{incollection} で書き，親の報告書を \bibfield{crossref} で指します。親の報告書は \bibtype{report} ですが，編者名と報告書名が引き継がれます。
 
 \bibexample{iwamoto1997}
+
+欧文の場合は，報告書の種類・番号の後に，出版地と機関名を「出版地: 機関名」の形で出します（単独の欧文の報告書と同じ並びです）。
+
+\bibexample{lowe2003}
 
 \subsection{学位論文・学会報告}\label{sec:thesis}
 学位論文は \bibtype{thesis}（スタイルガイド 4.4(10) に対応します）で，\bibfield{type} に種類を書きます。\texttt{phdthesis}，\texttt{mathesis} のようなキーを書くと，言語に応じた表記（博士論文／Ph.D. dissertation など）に置き換わります。「2019年度修士論文」のような自由な文字列も書けます。

@@ -60,4 +60,4 @@ bib の各エントリは、単独で完結した正しい書誌として biblat
 4. （完了）ヘッダーの版情報、README（`README.md`）、マニュアル（`manual/`、日本語のみ。第1〜8章と更新履歴）。マニュアルは ltxdockit／btxdockit の環境を使い、出力例は `\bibexample` で実際に組む（手書きしない）。`sh manual/build.sh` が組版と自動検査（エラー・Overfull・余白・フォント埋め込みなど）を行う。インストール手順（TEXMFHOME、文書フォルダへの平置き）は、まっさらな TEXMFHOME で確かめた（平置きには `lbx/*.lbx` をすべて置く。`japanese.lbx` を忘れると `Language 'japanese' not found`）。
 5. （完了）独自フィールドの置き換え：新聞は `entrysubtype`＋`issue`＋`note`、ウェブサイト名は `titleaddon`、オンラインで取得した報告書は `@online`。旧形式（`webpagetitle`、`type=onlinereport`、`type=newspaper`、`version`）のうち、`webpagetitle` と `onlinereport` は読み替えて警告を出す。次の版で警告を外す。
 6. texmf 側クローンと作業コピーの二重管理（latexmkrc か `TEXINPUTS`）。
-7. 小さな未解決：`date={1956-}`（終了年のない範囲）の年が解釈されず n.d. になる（`../bib` の Saitama1956埼玉県議会史mv）。欧文の報告書所収論文（crossref）の書式は未テスト。TeX Live 2023／biblatex 3.19 での再確認は未実施。
+7. （完了）小さな未解決：`date={1956/}`（終了年のない範囲。`1956-` は誤記）は開始年だけを出す。欧文の報告書所収論文は「出版地: 機関名」の順（テスト済み）。TeX Live 2023／biblatex 3.19 での再確認は、ダウンロードが必要なため行わないことにした（確認済みの版は TeX Live 2026 のみ。2023 以前の動作は保証しない）。
