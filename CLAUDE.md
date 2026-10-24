@@ -36,7 +36,7 @@ sh tests/run-tests.sh      # biber が PATH にないときは BIBER=パス を�
 - 変更のたびに実行する。出力を変える変更をしたら、`tests/guide.bib`／`guide.tex`／`guide.expected.txt` の3つをそろえて更新する（期待値はスタイルガイドに準拠させる。実際の出力に合わせて期待値を書き換えない）。
 - 実データでの確認：`sh tests/compare-real.sh [REV]` が、`../test.tex` を REV（既定 HEAD）のスタイルと作業コピーのスタイルで組み、組版された行を比べる（差分は `tests/real.diff`）。意図した変更だけか確かめる。行単位の比較なので、改行位置が変わると後続の行も差分に出る。pdftotext は使わない（手元の環境にない）。
 - `../bib` は別のリポジトリ。bib を書き直すときは作業ブランチ（`jsr-phase-c`）で行い、確認してから main にマージする。bib の書き直しの影響は、同じスタイルで main の bib とブランチの bib を `\nocite{*}` で組んで比べる（`compare-real.sh` は `../test.tex` が引用する分だけ）。
-- フェーズBまでは TeX Live 2023（biblatex 3.19、biber 2.19）で確認した。現在は TeX Live 2026（biblatex 3.22、biber 2.23 beta）。手元の版が違う場合は最初にテストを流して結果を記録する。
+- 確認した環境は、TeX Live 2023（biblatex 3.19、biber 2.19）と TeX Live 2026（biblatex 3.22、biber 2.23 beta）。手元は TeX Live 2026。TeX Live 2023 での確認は claude.ai 側のクラウドで行った（回帰テスト全件一致、`manual/build.sh` も合格。TeX Live 2023 には JuliaMono がなく Latin Modern Mono で組まれる）。手元の版が違う場合は最初にテストを流して結果を記録する。
 
 ## 実装上の注意（フェーズBで入った仕組み）
 - **原典を代表にする方式**：訳書・再録（related ＋ relatedtype=translationof／reprintof）は単独の項目にせず、原典の項目に添える。原典が引用されていなければ biber の複製（clone）が代表になる。
@@ -60,4 +60,4 @@ bib の各エントリは、単独で完結した正しい書誌として biblat
 4. （完了）ヘッダーの版情報、README（`README.md`）、マニュアル（`manual/`、日本語のみ。第1〜8章と更新履歴）。マニュアルは ltxdockit／btxdockit の環境を使い、出力例は `\bibexample` で実際に組む（手書きしない）。`sh manual/build.sh` が組版と自動検査（エラー・Overfull・余白・フォント埋め込みなど）を行う。インストール手順（TEXMFHOME、文書フォルダへの平置き）は、まっさらな TEXMFHOME で確かめた（平置きには `lbx/*.lbx` をすべて置く。`japanese.lbx` を忘れると `Language 'japanese' not found`）。
 5. （完了）独自フィールドの置き換え：新聞は `entrysubtype`＋`issue`＋`note`、ウェブサイト名は `titleaddon`、オンラインで取得した報告書は `@online`。旧形式（`webpagetitle`、`type=onlinereport`、`type=newspaper`、`version`）のうち、`webpagetitle` と `onlinereport` は読み替えて警告を出す。次の版で警告を外す。
 6. （完了）texmf 側クローンと作業コピーの二重管理：`~/Library/TinyTeX/texmf-local/tex/latex/jsr-biblatex` は、このリポジトリ（`origin`：GitHub の YutanPoe/jsr-biblatex）の git クローン。更新は、作業コピーで push してから、クローン側で `git pull` する（2026-10-24 に pull して作業コピーと同じ内容になっていることを確認した）。pull し忘れると、`../test.tex` などを普通に組んだときに古いスタイルが読まれる。作業中の確認は、`TEXINPUTS` で作業コピーを優先して読む（`tests/`、`manual/build.sh` は自動でそうなっている）。
-7. （完了）小さな未解決：`date={1956/}`（終了年のない範囲。`1956-` は誤記）は開始年だけを出す。欧文の報告書所収論文は「出版地: 機関名」の順（テスト済み）。TeX Live 2023／biblatex 3.19 での再確認は、ダウンロードが必要なため行わないことにした（確認済みの版は TeX Live 2026 のみ。2023 以前の動作は保証しない）。
+7. （完了）小さな未解決：`date={1956/}`（終了年のない範囲。`1956-` は誤記）は開始年だけを出す。欧文の報告書所収論文は「出版地: 機関名」の順（テスト済み）。TeX Live 2023／biblatex 3.19 での再確認は、claude.ai 側のクラウドで行った（上の「テスト」の節）。
