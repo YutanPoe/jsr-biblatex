@@ -1151,7 +1151,8 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \ifthenelse{\boolean{CJK}}{\printlist{publisher}}{}%
   \setunit*{\printdelim{fhcomma}}%
   %\usebibmacro{yyyymmdd}%
-  \jsr@ifnewsmag{\usebibmacro{news:date}\newunit}{}%
+  % 新聞・雑誌の日付は，月があるときだけ出す（年だけの記事では，著者の後の年と重複する）
+  \jsr@ifnewsmag{\iffieldundef{month}{}{\usebibmacro{news:date}\newunit}}{}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{vol+pages}%
   % doi,url,database

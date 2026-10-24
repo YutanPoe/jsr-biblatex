@@ -115,6 +115,8 @@ Doe, Jane, 2012, “A Test Dissertation,” PhD dissertation, University of Wisc
 Douglas, Jack ed., 1970, Understanding Everyday Life, Chicago: Aldine.
 # 4.5.1 電子書籍：フォーマットは note に書き，末尾の括弧に出す
 遠藤健太郎，2021，『デジタル時代の移動論』架空デジタル出版，（Kindle版）．
+# 年だけの署名入り雑誌記事（欧文）：月がないときは日付を出さない
+Fenn, Ada, 1931, “Early Radio Days,” The Test Weekly, 7(12): 138-41.
 # 4.4(6) 翻訳書（原典も直接引用しているが、単独では載らない）
 Fromm, Erich, 1941, Escape from Freedom, New York: Reinehart and Winston.（日高六郎訳，1951，『自由からの逃走』東京創元社．）
 # 4.5.1 電子書籍（和文）：紙媒体の刊行年・出版社は origdate＋origpublisher，取得日があるときだけ（取得日，URL）
@@ -172,6 +174,8 @@ Meyer, Dana, 2007, The Acceptance and Diffusion of Innovation, Washington, DC: A
 ————，1984，『新版 現代日本の精神構造』弘文堂．
 宮島喬・梶田孝道・伊藤るり，1985，『先進社会のジレンマ』有斐閣．
 宮島喬・梶田孝道編，1991，『テスト共編書B』テスト出版．
+# 年だけの署名入り雑誌記事（和文）：商業雑誌でも，月がないときは日付（1929年）を重ねて出さない
+宮内良，1929，「テスト機関の話」『月刊テスト』テスト社，7(12): 138-41．
 # 4.4(10) 和文の博士論文（type はキー）
 森田三郎，2018，「テスト博士論文」東京大学大学院人文社会系研究科博士論文．
 # 4.4(9) 政府刊行物
