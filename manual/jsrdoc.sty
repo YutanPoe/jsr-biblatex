@@ -141,7 +141,10 @@
   \g@addto@macro\@listI{\parsep=.5\baselineskip plus .1\baselineskip\relax}%
   \let\@listi\@listI
   % listings の環境の上下の空き（ltxexample の aboveskip＝1.5\lstenvsep）。読み込み時は 0 になっている
-  \setlength{\lstenvsep}{.4\baselineskip}}
+  \setlength{\lstenvsep}{.4\baselineskip}
+% 表（center 環境）の前後に余白を入れる（見出しや本文に接しないように）
+\pretocmd{\center}{\par\addvspace{.6\baselineskip}}{}{}
+\apptocmd{\endcenter}{\par\addvspace{\baselineskip}}{}{}}
 
 %% \cmditem を重ねたとき，2行目以降が詰まらないようにする（ltxdockit の定義の itemsep だけを替える）。
 %% 同じ段落に続く項目は，\parskip（＝リストの \parsep）を打ち消して，通常の行送りで並べる。
