@@ -1,0 +1,42 @@
+%% マニュアル作成要件（2026-10-24-manual-spec.md）§1 の確認に使った最小の文書。
+%% jlreq（oneside，版面 37zw）＋ btxdockit で，ltxdockit の環境が和文と一緒に動くことを確かめた。
+%% 組版：lualatex docs/proposals/2026-10-24-manual-spike.tex
+\documentclass[a4paper,10pt,line_length=37zw,number_of_lines=40,oneside]{jlreq}
+\usepackage{luatexja}
+\usepackage[haranoaji]{luatexja-preset}
+\usepackage{fontspec}
+\setmainfont{Libertinus Serif}\setsansfont{Libertinus Sans}
+\usepackage{btxdockit}
+\renewcommand*{\marglistfont}{\spotcolor\sffamily\small}
+\renewcommand*{\optionlistfont}{\spotcolor\sffamily\ttfamily}
+\renewcommand*{\ltxsyntaxlabelfont}{\spotcolor\ttfamily}
+\hypersetup{colorlinks,linkcolor=spot,urlcolor=spot}
+\begin{document}
+\section{エントリ型}
+\begin{typelist}
+\typeitem{book} 単著・共著の書籍。
+\reqitem{author, title, date}
+\optitem{subtitle, edition, publisher, location}
+\end{typelist}
+\begin{fieldlist}
+\fielditem{origpublisher}{literal} 紙媒体の出版社。電子書籍で使う。
+\listitem{location}{literal} 出版地。欧文だけ出す。
+\end{fieldlist}
+\begin{optionlist}
+\boolitem[true]{firstfull} 文献注で，初出の人物をフルネームで出す。
+\optitem[false]{doi}{\opt{true}, \opt{false}} 取得日がない文献にも DOI を出す。
+\end{optionlist}
+\begin{ltxsyntax}
+\cmditem{parencite}[prenote][postnote]{key} 全角丸括弧で囲む文献注。
+\end{ltxsyntax}
+\begin{keymarglist}
+\item[translationof] 訳書。原典の項目に添える。
+\item[reprintof] 再録・再刊。
+\end{keymarglist}
+\begin{ltxexample}
+@book{aoki2015,
+  author = {青木,太郎},
+  title  = {日本語の書名},
+}
+\end{ltxexample}
+\end{document}
