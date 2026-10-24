@@ -89,6 +89,8 @@ C67 （『毎日新聞』1999.3.15 夕刊，第3版，東京都版，5面）
 # 3.7 署名入りの新聞記事は文献注もつける
 C68 （中岡 1975）
 C69 （Walsh 1998）
+# 刊行中の多巻本：date={1956/}（終了年なし）は開始年だけを出す
+C70 （架空県議会史編さん委員会編 1956）
 == BIBLIOGRAPHY ==
 Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
 # DOI：既定（doi=false）では取得日がないと出さない（doi=true の場合は tests/doi.tex）
@@ -142,6 +144,8 @@ Johnston, Hank and Bert Klandermans eds., 1995, Social Movements and Culture, Mi
 # 再刊（原典が書籍）／和文原典の英訳（フェーズB）
 加来一郎，[1960] 2000，『テスト初版書』テスト文庫社．
 ————，1975，『テスト社会論』テスト出版．(Jane Smith, trans., 1980, Test Society, London: Test Press.)
+# 刊行中の多巻本：date={1956/}
+架空県議会史編さん委員会編，1956，『架空県議会史』架空県議会．
 # 4.4(8) 調査報告書
 神原文子，1999，『同和地区における子育ての現状と課題に関する実証研究』1996-1998年度科学研究費補助金研究成果報告書（08451041），相愛大学．
 高坂健次・厚東洋輔編，1998，『講座社会学1 理論と方法』東京大学出版会．
@@ -153,6 +157,8 @@ Johnston, Hank and Bert Klandermans eds., 1995, Social Movements and Culture, Mi
 Lane, Robert, 1970a, Alpha Book, London: Test Press.（山本花子訳，1980，『アルファの本』テスト出版．）
 ————, 1970b, Beta Book, London: Test Press.
 Lee, Sam, 2014, “A Test Thesis,” MA thesis, Test University.
+# 4.4(8) の欧文版：報告書所収の論文は，報告書の種類・番号，出版地: 機関名の順（単独の欧文の報告書と同じ並び）
+Lowe, Ruth, 2003, “Mapping Local Networks,” Hal Vance ed., Urban Neighborhood Study, Technical Report TR-31, Chicago: University of Fiction, 12-30.
 # 4.4(1) 同一著者・同一年
 真木悠介，1977a，『現代社会の存立構造』筑摩書房．
 ————，1977b，『気流の鳴る音』筑摩書房．

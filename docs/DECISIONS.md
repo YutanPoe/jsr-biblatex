@@ -87,3 +87,7 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **ウェブサイト名・ブログ名は `titleaddon`**（`@online` の標準フィールド。Zotero も同じ）。欧文の所在地・運営機関名は `location`＋`organization` のまま。
 - **オンラインで取得した報告書は `@online` で書く**（`type=onlinereport` の目印は使わない。`institution` は `organization` に）。
 - **旧形式（`webpagetitle`、`@report`＋`type=onlinereport`）は当面そのまま読める**。biber の sourcemap で読み替え、組版時に警告を出す。次の版で警告を外す。
+
+## 欧文の報告書所収論文と終了年のない範囲（2026-10-24 決定・実装）
+- **欧文の報告書所収論文**（`@incollection` が `crossref` で親の `@report` を指す）：書名の後に、種類・番号、出版地、機関名の順に出す。出版地と機関名は「出版地: 機関名」の形（単独の欧文の報告書と同じ並び）：Lowe, Ruth, 2003, “Mapping Local Networks,” Hal Vance ed., Urban Neighborhood Study, Technical Report TR-31, Chicago: University of Fiction, 12-30.。以前は「機関名, 出版地:」の順になっていた（出版地の後に発行元がなく読み取れない）。ガイドに規定がないため、単独の欧文の報告書（4.4(8)）にそろえた。
+- **終了年のない範囲は `date={1956/}`**（biblatex の書き方。`1956-` は誤り）：刊行中の叢書・多巻本。年は開始年だけを出す（a、b も付く）。以前は範囲全体（1956/）がそのまま出ていた（`1956-` と書くと年が解釈されず n.d. になる）。終了年のある範囲（`1960/1970`）は従来どおり。

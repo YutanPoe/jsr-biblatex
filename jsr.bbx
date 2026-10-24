@@ -521,12 +521,21 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 %%% ==================================================================
 
 %%% 出版年 %%%
+% 終了年のない範囲（刊行中の叢書・多巻本。date={1956/}）は，開始年（と a，b）だけを出す。
+% 標準の \printlabeldateextra は範囲全体（1956/）を出してしまう。
+% 終了年のフィールドが定義されていて空なら，終了年のない範囲。
+\newrobustcmd*{\jsr@printdateextra}{%
+  \ifcsdef{abx@field@endyear}%
+    {\ifcsempty{abx@field@endyear}%
+      {\printtext{\thefield{year}}\printfield{extradate}}%
+      {\printlabeldateextra}}%
+    {\printlabeldateextra}}
 \renewbibmacro*{date+extradate}%
 {\ifboolexpr{ test {\iffieldundef{year}} and not test {\iffieldundef{pubstate}} }%
   {\printfield{pubstate}%
     \setunit*{\printdelim{datetitledelim}}}%
   {\iffieldundef{labelyear}{}%
-    {\printtext{\iflabeldateisdate{\printlabeldateextra}{\printlabeldateextra}}%
+    {\printtext{\iflabeldateisdate{\jsr@printdateextra}{\jsr@printdateextra}}%
       \setunit*{\printdelim{datetitledelim}}%
     }%
   }%
@@ -1024,8 +1033,10 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 % 報告書所収の論文（親の @report を crossref で指す @incollection）で，書名の後に出す報告書の情報。
 % 親から引き継いだ institution があるときだけ出す。
 %   和文：『書名』1995-1996年度科学研究費補助金研究成果報告書（課題番号），金沢大学文学部，
-%   欧文：Title, Technical Report TR-12, University of Chicago,
+%   欧文：Title, Technical Report TR-12, Chicago: University of Chicago,
+\newbool{jsr@locdone}% 欧文の報告書所収論文で，出版地を機関名の前に出したか（出したなら incollection では繰り返さない）
 \newbibmacro*{report:parent}{%
+  \global\boolfalse{jsr@locdone}%
   \iflistundef{institution}{}{%
     \ifthenelse{\boolean{CJK}}
       {\printfield{type}%
@@ -1034,6 +1045,10 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
        \newunit
        \printlist{institution}}
       {\usebibmacro{report:typenumber}%
+       \iflistundef{location}{}{%
+         \printlist{location}%
+         \setunit*{\addcolon\space}%
+         \global\booltrue{jsr@locdone}}%
        \printlist{institution}}%
     \setunit*{\printdelim{fhcomma}}}}
 
@@ -1173,10 +1188,11 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \usebibmacro{translator:after}%
   % 報告書所収の論文：報告書の種類・番号・研究機関名
   \usebibmacro{report:parent}%
-  % 出版都市名
+  % 出版都市名（欧文の報告書では report:parent が出した）
   \ifthenelse{\boolean{CJK}}{}%
-    {\printlist{location}%
-    \setunit*{\addcolon\space}}%
+    {\ifbool{jsr@locdone}{}{%
+       \printlist{location}%
+       \setunit*{\addcolon\space}}}%
   % 出版社
   \usebibmacro{publisher:print}%
   \setunit*{\printdelim{fhcomma}}%

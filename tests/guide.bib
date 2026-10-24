@@ -1385,3 +1385,35 @@
   publisher = {テスト出版},
   langid    = {japanese},
 }
+
+%% (8) 欧文の報告書所収の論文（親の @report を crossref で指す）
+@report{Vance2003,
+  editor      = {Vance, Hal},
+  date        = {2003},
+  title       = {Urban Neighborhood Study},
+  type        = {techreport},
+  number      = {TR-31},
+  institution = {University of Fiction},
+  location    = {Chicago},
+  langid      = {american},
+}
+
+@incollection{Lowe2003,
+  author   = {Lowe, Ruth},
+  date     = {2003},
+  title    = {Mapping Local Networks},
+  pages    = {12--30},
+  crossref = {Vance2003},
+  langid   = {american},
+}
+
+%% 刊行中の叢書・多巻本：終了年のない範囲は date={1956/}（biblatex の書き方）。年は開始年を出す
+@mvbook{Kenshi1956,
+  editor    = {{架空県議会史編さん委員会}},
+  sortname  = {{Kakuukengikaishi Hensan Iinkai}},
+  date      = {1956/},
+  title     = {架空県議会史},
+  publisher = {架空県議会},
+  langid    = {japanese},
+}
+

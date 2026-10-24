@@ -478,7 +478,7 @@ language=auto,%
 {\iffieldequalstr{relatedtype}{reprintof}%
   {\usebibmacro{cbx:descend}{%
     \usebibmacro{cite:translationof}%
-    \printtext[brackets]{\printlabeldateextra}\space}}%
+    \printtext[brackets]{\jsr@printdateextra}\space}}%
   {}%
 }%
 % relatedtypeがtranslationofの場合の処理
@@ -487,7 +487,7 @@ language=auto,%
   {\usebibmacro{cbx:descend}{%
     \usebibmacro{cite:reprintof}%
     \usebibmacro{cite:origyear}%
-    \printtext{\printlabeldateextra}%
+    \printtext{\jsr@printdateextra}%
     \ifbool{cbx:dualpages}% 原書のページ
       {\setunit{\printdelim{postnotedelim}}\printtext[postnote]{\cbx@pn@orig}}
       {}%
@@ -515,13 +515,13 @@ language=auto,%
   {\iffieldundef{year}%dateで設定されたyearがあるの場合の分岐
   %なければ印刷状態を出力
     {\iffieldundef{pubstate}%
-      {\printlabeldateextra}%
+      {\jsr@printdateextra}%
       {\printfield{pubstate}}}%
     {\usebibmacro{cite:origyear}%再販情報のみ（origyear記載）があった場合
     %翻訳書・再録の場合
     \usebibmacro{cite:reprintof}%
     \usebibmacro{cite:translationof}%
-    \printlabeldateextra%
+    \jsr@printdateextra%
   }}%
 
 % citeauthorの場合の処理 apa.cbxのものを修正
