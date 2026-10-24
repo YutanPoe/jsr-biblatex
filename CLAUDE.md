@@ -42,6 +42,7 @@ sh tests/run-tests.sh      # biber が PATH にないときは BIBER=パス を�
   - biblatex の内部名（`blx@dlist@entry@…`、`blx@data@…`、`\blx@bbl@enddlist`）に依存している。biblatex の更新で壊れたら、まずここを疑う。
 - `\savebox` の中で `\printnames` を使うとき（発行元の判定、カタカナ名の判定）は、`\jsr@savepunct`／`\jsr@restorepunct` で句読点の状態を退避する。しないと保留中の区切りが消える。
 - ループで `\do` を使い回すと入れ子で壊れる。新しいループには専用のハンドラ（`\forcsvlist\jsr@…@i`）を使う。
+- etoolbox のループ（`\forlistcsloop`／`\dolistcsloop`）に未定義のリストを渡すと `\relax` が項目として処理される。リストが空になりうる箇所は `\jsr@forlistcs`／`\jsr@dolistcs` を使う。
 - 言語の判定（`checkLang`）は、プリアンブル終了時の言語一覧 `\jsr@doclangs` に依存する。babel の `\bbl@loaded`／`\bbl@ini@loaded`、polyglossia の `\xpg@bloaded`／`\xpg@loaded` を読むので、これらの内部名が変わったら壊れる。一覧にない言語の項目は `langid` を消して american で組む（biblatex の autolang は `checkLang` のあとに `langid` の言語へ切り替えるため）。
 - カタカナ名の判定は Unicode 前提（LuaTeX／XeTeX／upTeX）。
 

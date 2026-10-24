@@ -1,0 +1,26 @@
+%% jsr-biblatex 回帰テスト：a、b の付く文献が1つもない文書
+%% extradate の振り直しで使うリストが一度も登録されない場合に，エラーが出ないことを確かめる。
+%% guide.tex は a、b を含むので，これだけでは検出できない。
+\documentclass[paper={1500mm,1000mm},line_length=1450mm,number_of_lines=150]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\addbibresource{guide.bib}
+\AtBeginBibliography{\raggedright}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\newcommand*{\case}[2]{#1 #2\par}
+\directlua{dofile(kpse.find_file('textdump.lua'))}
+
+\begin{document}
+\raggedright
+== CITATIONS ==\par
+\case{N01}{\textcite{Inagami1981}}
+\case{N02}{\parencite{Abbott1995}}
+\case{N03}{\parencite{SatoY1998}}
+== BIBLIOGRAPHY ==\par
+\nocite{Abbott1995,Inagami1981,SatoY1998}
+\printbibliography[heading=none]
+\end{document}

@@ -20,3 +20,8 @@
 - 実データ（`../test.tex`）：変更前後の差分は2件で、どちらも未読み込みの言語（Bourdieu 1989、Latour 2005）のコロン前の空白が消えただけ。意図した変更。
 - 実データの比較は、手元に pdftotext がないため `tests/compare-real.sh` にした（`tests/textdump.lua` で組版後の行を書き出して比べる）。同じ差分が再現できることを確認した。
 - 未解決：`\jsr@doclangs` に重複が入る（無害）。TeX Live 2023 / biblatex 3.19 での再確認はしていない。
+
+## 2026-10-24 区切り1：空リストのバグ修正
+- `docs/proposals/2026-10-24-fix-empty-lists.patch` を適用した（`\jsr@forlistcs`／`\jsr@dolistcs`）。a、b の付く文献が1つもない文書で、`\enddatalist` に `Missing \endcsname` が出る不具合の修正。
+- `tests/noextra.tex`／`noextra.expected.txt` を追加し、`run-tests.sh` は guide と noextra の2文書を組むようにした。LaTeX のエラーもログで検出する。
+- 確認：パッチなしで noextra が失敗する（エラー再現）。パッチ後は guide・noextra ともに全件一致。`compare-real.sh` は差分なし。
