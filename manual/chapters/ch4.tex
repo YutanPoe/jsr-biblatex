@@ -1,4 +1,408 @@
 \section{書式と例}\label{sec:examples}
-\subsection{調査報告書・政府刊行物}\label{sec:report}
+この章は，文献の種類ごとに，ひな形・記入例・実際の出力を並べます。出力はすべて，この文書の中で実際に組んだものです。記入例のキーや書誌は架空のものです。
+
+どの例も，先に「ひな形」（\texttt{<\ >} の部分に値を入れます。\texttt{※} 以下は注意書きです），次に実際の記入例，その下に「出力」の順です。ひな形に示したフィールドのうち，必須でないものは省いてかまいません（必須・任意の一覧は\ref{sec:types}節）。どの例にも \bibfield{langid} を書きます。和文の著者・編者には \bibfield{sortname} も書きます。
+
+\subsection{書籍}\label{sec:book}
+単著・共著・編著の書籍は \bibtype{book}，編者だけで著者のいない本は \bibtype{collection} です（スタイルガイド 4.4(1) に対応します）。著者が複数のときは，\texttt{and} でつなぎます。
+
+\begin{bibtemplate}
+@book{<キー>,
+  author    = {<姓>,<名>},
+  sortname  = {<Family>, <Given>},   ※ 和文のみ
+  date      = {<出版年>},
+  title     = {<書名>},
+  subtitle  = {<副題>},              ※ 任意。書名の後に「——」でつないで出る
+  edition   = {<版>},                ※ 任意。数字（2）か，文字（新版）
+  publisher = {<出版社>},
+  langid    = {japanese},
+}
+\end{bibtemplate}
+
+和文の書籍（副題つき）：
+
+\bibexample{sakai2012}
+
+版は，数字で書くと「第2版」の形で出ます。「新版」のような文字は，そのまま書名の後に出ます。
+
+\bibexample{sakai2016}
+\bibexample{sakai2019}
+
+叢書名と叢書番号は，和文では書名の前に出ます。
+
+\bibexample{sakai2021}
+
+編者だけの本は \bibtype{collection} で，編者の後に「編」が付いて出ます。
+
+\bibexample{sakaied2014}
+
+団体が著者のときは，団体名を二重の波括弧で囲んで書きます（姓と名に分かれません）。なお，発行元が著者と同じとき，または「国立印刷局」のときは，出版社は自動的に省かれます（スタイルガイド 4.4(9)）。下の例は，後者の場合です。
+
+\bibexample{nippon2012}
+
+欧文の書籍では，出版地（\bibfield{location}）も書きます。版は \texttt{3rd ed.} の形で出ます。
+
+\bibexample{rowe2010}
+
+\begin{caution}
+和文の書籍に \bibfield{location} を書いても，出力には出ません（欧文だけが出版地を出します）。
+\end{caution}
+
+\subsection{多巻本}\label{sec:volumes}
+数巻にわたる書籍の全体は \bibtype{mvbook}（巻数を \bibfield{volumes} に書く）です。1つの巻を引用するときは \bibtype{book} に書き，全体の書名を \bibfield{maintitle}，巻数を \bibfield{volume} に書きます。
+
+\begin{bibtemplate}
+@mvbook{<キー>,
+  author    = {<姓>,<名>},
+  date      = {<出版年>},
+  title     = {<全体の書名>},
+  volumes   = {<巻数>},
+  publisher = {<出版社>},
+  langid    = {japanese},
+}
+
+@book{<キー>,
+  author    = {<姓>,<名>},
+  date      = {<出版年>},
+  maintitle = {<全体の書名>},
+  title     = {<その巻の書名>},
+  volume    = {<巻の番号>},
+  publisher = {<出版社>},
+  langid    = {japanese},
+}
+\end{bibtemplate}
+
+全体を引用する場合：
+
+\bibexample{kuroda1998}
+
+1つの巻を引用する場合：
+
+\bibexample{kuroda1998v2}
+
+欧文の多巻本：
+
+\bibexample{lewis2001}
+
+\subsection{編書論文}\label{sec:incollection}
+編書・論文集の中の1つの章・論文は \bibtype{incollection} です。雑誌論文との違い（\bibtype{article} と使い分ける理由）は\ref{sec:artcoll}節，所収書の情報を1か所にまとめる \bibfield{crossref} は\ref{sec:crossref}節を見てください。
+
+\begin{bibtemplate}
+@incollection{<キー>,
+  author    = {<姓>,<名>},
+  sortname  = {<Family>, <Given>},   ※ 和文のみ
+  editor    = {<姓>,<名> and <姓>,<名>},   ※ 所収書の編者
+  date      = {<出版年>},
+  title     = {<論文名>},
+  booktitle = {<所収書の書名>},
+  edition   = {<版>},                ※ 任意（所収書の版）
+  publisher = {<出版社>},
+  pages     = {<開始ページ>--<終了ページ>},
+  langid    = {japanese},
+}
+\end{bibtemplate}
+
+和文：
+
+\bibexample{ono2014}
+
+所収書に版があれば，欧文・和文とも所収書の版が出ます。
+
+\bibexample{ono2016}
+\bibexample{fox2013}
+
+\subsection{雑誌論文}\label{sec:article}
+雑誌・紀要・年報などの論文は \bibtype{article} です。巻（\bibfield{volume}）・号（\bibfield{number}）・ページを書きます。
+
+\begin{bibtemplate}
+@article{<キー>,
+  author       = {<姓>,<名>},
+  sortname     = {<Family>, <Given>},   ※ 和文のみ
+  date         = {<出版年>},
+  title        = {<論文名>},
+  subtitle     = {<副題>},              ※ 任意
+  journaltitle = {<雑誌名>},
+  volume       = {<巻>},
+  number       = {<号>},
+  pages        = {<開始ページ>--<終了ページ>},
+  langid       = {japanese},
+}
+\end{bibtemplate}
+
+\bibexample{mori2018}
+
+巻がなく号だけの雑誌は，号を \bibfield{number} に書きます。出版社（\bibfield{publisher}）があれば出ます。
+
+\bibexample{mori2019}
+
+欧文の雑誌論文：
+
+\bibexample{reed2016}
+
+共著（2名）の欧文：
+
+\bibexample{reed2017}
+
+\paragraph{URL と DOI}
+オンラインで読んだ論文で，取得日（\bibfield{urldate}）を書いたときは，URL（と取得日）が出ます。取得日がない文献の URL と DOI は，既定では出しません。DOI を出すには，オプション \opt{doi} を使います（\ref{sec:options}節）。
+
+\bibexample{mori2022}
+
+\subsection{新聞・雑誌記事}\label{sec:news}
+新聞記事は \bibtype{article} に \bibfield{entrysubtype} \texttt{= \{newspaper\}} を書きます。商業雑誌の記事は \texttt{magazine} です（スタイルガイド 3.7 に対応します）。朝刊・夕刊は \bibfield{issue}，版・地域版は \bibfield{note} に書きます。署名のない記事（\bibfield{author}，\bibfield{title} がない）は文献リストには載らず，文献注にだけ出ます。
+
+\begin{bibtemplate}
+@article{<キー>,
+  date         = {<年-月-日>},
+  journaltitle = {<新聞名>},
+  entrysubtype = {newspaper},
+  issue        = {<朝刊／夕刊>},
+  note         = {<版，地域版>},   ※ 任意
+  pages        = {<面>},            ※ 任意
+  langid       = {japanese},
+}
+\end{bibtemplate}
+
+署名のない記事は，文献リストに載りません。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
+
+\bibexampleonly{asahi1998}
+\bibexampleonly{asahi1999}
+
+署名入りの記事は，著者・記事名・副題を書き，文献リストにも載せます：
+
+\bibexample{kawai1975}
+
+商業雑誌（\texttt{magazine}）：
+
+\bibexample{shukan1964}
+
+欧文の新聞記事：
+
+\bibexample{walsh1998}
+
 \subsection{翻訳書・再録・再刊}\label{sec:trans}
+翻訳書・再録・再刊は，元になった文献（原典）との関係を \bibfield{related} と \bibfield{relatedtype} で書きます。原典のエントリは，それだけで完結した書誌として別に書きます（\ref{sec:related}節）。
+
+\begin{bibtemplate}
+@book{<原典のキー>,
+  author    = {<Family>, <Given>},
+  date      = {<原典の出版年>},
+  title     = {<原典の書名>},
+  publisher = {<出版社>},
+  langid    = {american},
+}
+
+@book{<訳書のキー>,
+  author      = {<姓>,<名>},
+  translator  = {<姓>,<名>},
+  date        = {<訳書の出版年>},
+  title       = {<訳書の書名>},
+  publisher   = {<出版社>},
+  langid      = {japanese},
+  related     = {<原典のキー>},
+  relatedtype = {translationof},   ※ 再録・再刊は reprintof
+}
+\end{bibtemplate}
+
+\paragraph{翻訳書（原典のエントリがある）}
+文献リストでは，原典を先に，訳書を続けて1項目にまとめて出します（スタイルガイド 4.4(6) に対応します）。訳書だけを引用しても，原典が引用されたかのように代表になります（下の例は訳書だけを引用しています）。
+
+\bibexample{hale1985}
+
+原典と訳書の両方を引用した場合も，出力は同じ1項目です。
+
+\bibexample{hale1962,hale1985}
+
+\paragraph{翻訳書（原典のエントリがない）}
+原典を引用しないときは，訳書のエントリだけを書き，原典の出版年を \bibfield{origdate} に書きます。著者を先頭にし，訳者は書名の後に出ます。
+
+\bibexample{beck1998}
+
+英訳された文献も同じです。
+
+\bibexample{beck1992}
+
+\paragraph{再録}
+論文集に再録された論文などは，再録のエントリを \bibfield{relatedtype} \texttt{= \{reprintof\}} で書きます（スタイルガイド 4.2(8) に対応します）。著者名と論文名が重なるときは，重複が省かれます。
+
+\bibexample{ito1990}
+
+原典の論文も同時に引用すれば，両方が1項目にまとまります。
+
+\bibexample{ito1974,ito1990}
+
+\paragraph{再刊}
+同じ書籍の再刊（原典が書籍）：
+
+\bibexample{hirose2000}
+
+\subsection{電子書籍}\label{sec:ebook}
+電子書籍は \bibtype{book} に書きます（スタイルガイド 4.5.1 に対応します）。紙媒体の刊行年と出版社があるときは \bibfield{origdate}，\bibfield{origpublisher} に書き，電子書籍の出版年・出版社を \bibfield{date}，\bibfield{publisher} に書きます。文献注には電子書籍の年だけが出ます。
+
+\begin{bibtemplate}
+@book{<キー>,
+  author        = {<姓>,<名>},
+  date          = {<電子書籍の出版年>},
+  origdate      = {<紙媒体の出版年>},    ※ 任意
+  title         = {<書名>},
+  origpublisher = {<紙媒体の出版社>},    ※ 任意
+  publisher     = {<電子書籍の出版社>},
+  urldate       = {<取得日>},            ※ 取得日があるときだけ URL が出る
+  url           = {<URL>},
+  note          = {<フォーマット>},      ※ 任意。末尾の括弧に出る
+  langid        = {japanese},
+}
+\end{bibtemplate}
+
+紙媒体の情報つき，取得日と URL つき：
+
+\bibexample{fuji2008}
+
+フォーマット（Kindle 版など）を \bibfield{note} に書く例：
+
+\bibexample{endo2021}
+
+欧文（CD-ROM のみの刊行）：
+
+\bibexample{meyer2007}
+
+\subsection{調査報告書・政府刊行物}\label{sec:report}
+調査報告書・政府刊行物は \bibtype{report} です（スタイルガイド 4.4(8)，4.4(9) に対応します）。著者がいれば \bibfield{author}，代表者に「編」を付けたいときは \bibfield{editor}，団体の刊行物は \bibfield{institution} か団体名の \bibfield{author} です。報告書の種類（「○○年度科学研究費補助金研究成果報告書」など）は \bibfield{type}，報告書番号は \bibfield{number} に書きます。
+
+\begin{bibtemplate}
+@report{<キー>,
+  author      = {<姓>,<名>},         ※ 代表者を「編」としたいときは editor
+  sortname    = {<Family>, <Given>}, ※ 和文のみ
+  date        = {<年>},
+  title       = {<報告書名>},
+  type        = {<報告書の種類>},
+  number      = {<報告書番号>},      ※ 任意
+  institution = {<機関>},
+  langid      = {japanese},
+}
+\end{bibtemplate}
+
+研究成果報告書（代表者が著者）：
+
+\bibexample{kanbara1999}
+
+代表者に「編」を付ける場合は，\bibfield{author} の代わりに \bibfield{editor} を書きます。
+
+\bibexample{yamamoto1998}
+
+団体が著者の政府刊行物（白書など）は，団体名を二重の波括弧で囲んで \bibfield{author} に書きます。
+
+\bibexample{whitepaper2009}
+
+欧文のテクニカルレポート：
+
+\bibexample{taylor2005}
+
+\paragraph{報告書の中の論文}
+報告書所収の論文は \bibtype{incollection} で書き，親の報告書を \bibfield{crossref} で指します。親の報告書は \bibtype{report} ですが，編者名と報告書名が引き継がれます。
+
+\bibexample{iwamoto1997}
+
+\subsection{学位論文・学会報告}\label{sec:thesis}
+学位論文は \bibtype{thesis}（スタイルガイド 4.4(10) に対応します）で，\bibfield{type} に種類を書きます。\texttt{phdthesis}，\texttt{mathesis} のようなキーを書くと，言語に応じた表記（博士論文／Ph.D. dissertation など）に置き換わります。「2019年度修士論文」のような自由な文字列も書けます。
+
+\begin{bibtemplate}
+@thesis{<キー>,
+  author      = {<姓>,<名>},
+  sortname    = {<Family>, <Given>},   ※ 和文のみ
+  date        = {<提出年>},
+  title       = {<論文名>},
+  institution = {<大学・研究科>},
+  type        = {<phdthesis／mathesis／自由な文字列>},
+  langid      = {japanese},
+}
+\end{bibtemplate}
+
+\bibexample{tanabe2020}
+\bibexample{morita2018}
+\bibexample{doe2012}
+\bibexample{lee2014}
+
+学会報告は \bibtype{inproceedings}（刊行されていない報告は \bibtype{unpublished}）で，大会名を \bibfield{eventtitle} に書きます。
+
+\begin{bibtemplate}
+@inproceedings{<キー>,
+  author     = {<姓>,<名>},
+  date       = {<年>},
+  title      = {<報告題目>},
+  eventtitle = {<大会名>},
+  type       = {<報告原稿など>},   ※ 任意
+  eventdate  = {<年-月-日>},        ※ 任意
+  venue      = {<開催地>},          ※ 任意
+  langid     = {japanese},
+}
+\end{bibtemplate}
+
+\bibexample{tanaka2022}
+\bibexample{sato2019}
+\bibexample{roe2015}
+
+予稿集に載った報告（\bibfield{booktitle} がある場合）は，\bibtype{incollection} と同じ形で出ます。
+
+\bibexample{park2018}
+
+\subsection{ウェブ・データベース}\label{sec:web}
+ウェブページ・ブログ・オンラインデータベース・オンラインで取得した報告書は \bibtype{online} です（スタイルガイド 4.5.3，4.5.4.1 に対応します）。ページのタイトルは \bibfield{title}，サイト名（ホームページ名，ブログ名）は \bibfield{titleaddon}，団体名は \bibfield{organization}，取得日は \bibfield{urldate} に書きます。
+
+\begin{bibtemplate}
+@online{<キー>,
+  author     = {<姓>,<名>},      ※ 団体は {{<団体名>}}
+  sortname   = {<Family>, <Given>},   ※ 和文のみ
+  date       = {<年>または<年-月-日>},
+  title      = {<ページのタイトル>},
+  titleaddon = {<サイト名>},      ※ 任意
+  urldate    = {<取得日>},
+  url        = {<URL>},
+  langid     = {japanese},
+}
+\end{bibtemplate}
+
+ホームページ上の文書（団体）：
+
+\bibexample{kakuugakkai2006}
+
+ブログ記事：
+
+\bibexample{nakano2009}
+
+\bibexample{delong2007}
+
+オンラインデータベース（統計）：
+
+\bibexample{stat2007}
+
+団体のウェブページ（欧文，所在地つき）：
+
+\bibexample{icpsr2009}
+
+オンラインで取得した報告書（欧文）：
+
+\bibexample{ghsr2003}
+
+\subsection{コンピュータファイル}\label{sec:dataset}
+コンピュータで読み取れるデータファイル（MRDF）は \bibtype{dataset} です（スタイルガイド 4.5.4.2 に対応します）。ファイルの種類（MRDF）を \bibfield{type}，入手先を \bibfield{howpublished} に書きます。
+
+\begin{bibtemplate}
+@dataset{<キー>,
+  author       = {{<団体名>}},
+  date         = {<年>},
+  title        = {<データの名称>},
+  type         = {MRDF},
+  publisher    = {<発行元>},
+  howpublished = {<入手先>},
+  langid       = {japanese},
+}
+\end{bibtemplate}
+
+\bibexample{jgss2003}
+
+欧文：
+
+\bibexample{gallup1976}
+
 \section{旧い書き方からの移行}\label{sec:migrate}
