@@ -52,3 +52,11 @@
 - テスト：guide に MRDF（和文・欧文）と DOI のある論文（和文・欧文、既定では DOI が出ないこと）を追加。`tests/doi.tex`／`doi.expected.txt` を追加（doi=true）。`run-tests.sh` は guide・noextra・doi の3文書を組む。結果：全件一致。
 - 実データ：`compare-real.sh`、`../bib` 全エントリの比較ともに差分なし（実データに @dataset はなく、doi は既定のまま）。
 - 決定事項からの変更：MRDF の提供機関は作成者と同じでも省かない（ガイドの例に合わせた）。
+
+## 2026-10-24 区切り4b-2：電子書籍と単独の訳書（提案2 B・C）
+- 電子書籍：`ebook:orig`（紙媒体の年・出版社）、`ebook:note`（末尾の括弧）。`eprintbook` は廃止。origpublisher があるとき [初版年] を出さない（bbx の originaldate、cbx の cite:origyear）。
+- 単独の訳書：`translator/author/editor` を、添え物（`bbx:inattach`）か著者なしのときだけ訳者を先頭にするよう変更。`translator:after` で書名の後に訳者を出す。cbx は translator があれば （著者 原典の年=訳書の年）。
+- sortname の警告：crossref／xref を持つ項目を対象外にした（実データの5件は誤検出だった）。
+- テスト：電子書籍（和文の紙媒体情報つき、Kindle版、CD-ROM）、単独の訳書（和文・欧文）、文献注3件（C63〜C65）を追加。全件一致。
+- 実データ：`compare-real.sh` は差分なし。`../bib` 全エントリの比較で、変更は意図したもののみ：Cho2015夢（単独訳書）が「張彧暋，2015，『…』山岡由美訳，朝日新聞出版．」に、note（電子書籍版、OCLC、Section）が末尾の括弧に。ほかに、行数が1行増えたため、ページ先頭の項目で同一著者のダッシュが出入りした（standard.bbx の \iffirstonpage の仕様。不具合ではない）。
+- bib（ブランチ `jsr-phase-c`、未コミット）：books.bib の OCLC 等の note 2件と、Saitama1956埼玉県議会史mv の urldate を削除。main との比較で、これらの表示だけが消えることを確認した。副作用：その mvbook の親を単独で出すと、年が「2026」（urldate 由来）から n.d. になる（date={1956-} が年として解釈されていない）。

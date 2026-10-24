@@ -95,8 +95,11 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[fieldset=relatedoptions, fieldvalue={skipbiblist}]%
     }%
     % sortname がない：書き忘れの警告用の印（bbl には sortname が出力されないので，biber の段階で印を付ける）
+    % crossref／xref で親から継承する項目は，この段階では継承前なので対象外にする
     \map{%
       \step[notfield=sortname, final]%
+      \step[notfield=crossref, final]%
+      \step[notfield=xref, final]%
       \step[fieldset=jsrnosortname, fieldvalue={1}]%
     }%
     % ソート用：著者がいれば 1，編者のみなら 2
@@ -476,8 +479,14 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     {\printnames[default]{#1}}}%
 
 %% 翻訳者→著者→編集者の順番にあるかどうかを判断し、ある場合はそのマクロを指定する
+% 訳者を先頭に出すのは，原典に添える訳書（添え物）か，著者がいないとき。
+% 原典のエントリがない単独の訳書は，著者を先頭にし，訳者は書名の後に出す（translator:after。2026-10-24 決定）。
 \newbibmacro*{translator/author/editor}{%
-  \ifnameundef{translator}%
+  \ifboolexpr{%
+    test {\ifnameundef{translator}}
+    or
+    ( not bool {bbx:inattach} and test \ifuseauthor and not test {\ifnameundef{author}} )
+  }%
     {\ifboolexpr{%
        test \ifuseauthor
        and
@@ -485,7 +494,11 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
      }%
        {\usebibmacro{author}}%
        {\usebibmacro{editor}}}%
-    {\usebibmacro{translator}}}%
+    {\usebibmacro{translator}}}
+
+% 書名の後の訳者（単独の訳書）。先頭に出した訳者は消えているので，残っているときだけ出す
+\newbibmacro*{translator:after}{%
+  \ifnameundef{translator}{}{\usebibmacro{translator}}}%
 
 %%% 著者名 + authortype(あれば) %%%
 \renewbibmacro*{author}%
@@ -735,15 +748,26 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   }%
 }%
 
-%%% 電子書籍の原著情報 %%%
-\newbibmacro*{eprintbook}{%
-  \iffieldundef{note}{}{%
+%%% 電子書籍（ガイド 4.5.1）%%%
+% 紙媒体の刊行年・出版社は origdate＋origpublisher で書く。書名の後に出す。
+%   和文：『タイトル』（2005，日本放送出版協会刊），電子媒体出版社，…
+%   欧文：Title (2005, Washington, DC: Publisher), …（所在地は origlocation）。和文では origlocation は出さない
+% origpublisher があるときは，再刊の [初版年] 形式にしない（originaldate、cite:origyear）。
+\newbibmacro*{ebook:orig}{%
+  \iflistundef{origpublisher}{}{%
     \printtext[fhparens]{%
-      \printfield{note}%
-    }%
-    \newunit%
-  }%
-}%
+      \thefield{origyear}%
+      \ifthenelse{\boolean{CJK}}
+        {\printdelim{fhcomma}\printlist{origpublisher}刊}
+        {\addcomma\space
+         \iflistundef{origlocation}{}{\printlist{origlocation}\addcolon\space}%
+         \printlist{origpublisher}}}%
+    \setunit{\printdelim{fhcomma}}}}
+% フォーマット（Kindle版，Available on CD-ROM only など）は note に書き，末尾の括弧に出す
+\newbibmacro*{ebook:note}{%
+  \iffieldundef{note}{}{%
+    \setunit*{\printdelim{fhcomma}}%
+    \printtext[fhparens]{\printfield{note}}}}
 
 %%% doiと取得日 %%%
 % 表示マクロ
@@ -976,7 +1000,9 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
      \printtext[brackets]{%
        \jsr@orig@year
        \ifdefvoid\jsr@orig@extradate{}{\mknumalph{\jsr@orig@extradate}}}\addthinspace}%
-    {\ifboolexpr{ test {\iffieldundef{origyear}} or not test {\iffieldundef{related}} }{}{%
+    {\ifboolexpr{ test {\iffieldundef{origyear}} or not test {\iffieldundef{related}}
+                   or not test {\iflistundef{origpublisher}}
+                   or ( not test {\ifnameundef{translator}} and not test {\ifnameundef{author}} ) }{}{%
        \printtext[brackets]{%
          \thefield{origyear}%
        }\addthinspace}}%
@@ -994,20 +1020,23 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   %\usebibmacro{title}{fhdkakko}{}%
   \usebibmacro{maintitle+title}%
   % 電子書籍の場合の処理
-  \usebibmacro{eprintbook}%
+  \usebibmacro{ebook:orig}%
   % 版数
   \ifthenelse{\boolean{CJK}}{}%
     {\printfield{edition}%
     \newunit}%
+  % 単独の訳書の訳者（原典のエントリがない訳書）
+  \usebibmacro{translator:after}%
   % 出版都市名
   \ifthenelse{\boolean{CJK}}{}%
     {\printlist{location}%
     \setunit*{\addcolon\space}}%
   % 出版社（著者・編者と同じなら省く）
   \usebibmacro{publisher:print}%
-  % 電子書籍など：取得日があるときだけ（取得日，URL）を出す
+  % 電子書籍など：取得日があるときだけ（取得日，URL）を出す。フォーマットは note
   \setunit*{\printdelim{fhcomma}}%
   \usebibmacro{urldate+eprint/doi/url}%
+  \usebibmacro{ebook:note}%
   \printdelim{findelim}%
 }%
 
@@ -1053,11 +1082,13 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \usebibmacro{maintitle+booktitle}%
   %\setunit{\printdelim{titledelim}}%
   % 電子書籍の場合の処理
-  \usebibmacro{eprintbook}%
+  \usebibmacro{ebook:orig}%
   % 欧文の版（和文は書名に含めた）
   \ifthenelse{\boolean{CJK}}{}%
     {\printfield{edition}%
     \newunit}%
+  % 単独の訳書の訳者
+  \usebibmacro{translator:after}%
   % 報告書所収の論文：報告書の種類・番号・研究機関名
   \usebibmacro{report:parent}%
   % 出版都市名
@@ -1069,9 +1100,10 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \setunit*{\printdelim{fhcomma}}%
   % 巻数・引用ページ（オンライン早期公開かどうかを確認してから処理）
   \usebibmacro{pages}%
-  % ダウンロード版の章など：取得日があるときだけ（取得日，URL）を出す
+  % ダウンロード版の章など：取得日があるときだけ（取得日，URL）を出す。フォーマットは note
   \setunit*{\printdelim{fhcomma}}%
   \usebibmacro{urldate+eprint/doi/url}%
+  \usebibmacro{ebook:note}%
   \printdelim{findelim}%
 }%
 

@@ -79,12 +79,19 @@ C60 （小田編 1991）
 # 4.4(8) 報告書：代表者に編を付けた報告書と，その所収論文
 C61 （碓井編 1997）
 C62 （岩本 1997）
+# 4.5.1 電子書籍（紙媒体の情報があっても，文献注は電子書籍の年だけ）／原典のエントリがない訳書は（著者 原典の年=訳書の年）
+C63 （藤竹 2008）
+C64 （ベック 1986=1998）
+C65 （Beck 1986=1992）
 == BIBLIOGRAPHY ==
 Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
 # DOI：既定（doi=false）では取得日がないと出さない（doi=true の場合は tests/doi.tex）
 阿部四郎，2020，「テスト論文」『社会学評論』71(1): 1-10．
 # 4.5.4.2 コンピュータファイル（MRDF，欧文）
 American Institute of Public Opinion, 1976, Gallup Public Opinion Poll #965[MRDF], Princeton, NJ: American Institute of Public Opinion [producer]. New Haven, CT: Roper Public Opinion Research Center, Yale University [distributor].
+# 原典のエントリがない訳書：著者を先頭にし，訳者は書名の後（原典の年は出さない）
+Beck, Ulrich, 1992, Risk Society, Mark Ritter, trans., London: Sage.
+ウルリッヒ・ベック，1998，『危険社会』東廉・伊藤美登里監訳，法政大学出版局．
 Berger, Peter L. and Brigitte Berger, 1972, Sociology: A Biographical Approach, New York: Basic Books.
 # 4.2(6) 英訳文献（原典は単独では載らない）
 Bourdieu, Pierre, 1983, “Vous avez dit ‘populaire’?,” Actes de la recherche en sciences sociales, 46: 98-105. (Gino Raymond and Matthew Adamson, trans., 1991, “Did You Say ‘Popular’?,” John Thompson ed., Language and Symbolic Power, Cambridge: Harvard University Press, 90-102.)
@@ -98,10 +105,12 @@ DeLong, Brad, 2007, “Thomas Piketty and Emmanuel Saez Give Their Current View 
 # 4.4(10) 欧文の博士論文・修士論文（ASA：括弧なし）
 Doe, Jane, 2012, “A Test Dissertation,” PhD dissertation, University of Wisconsin-Madison.
 Douglas, Jack ed., 1970, Understanding Everyday Life, Chicago: Aldine.
+# 4.5.1 電子書籍：フォーマットは note に書き，末尾の括弧に出す
+遠藤健太郎，2021，『デジタル時代の移動論』架空デジタル出版，（Kindle版）．
 # 4.4(6) 翻訳書（原典も直接引用しているが、単独では載らない）
 Fromm, Erich, 1941, Escape from Freedom, New York: Reinehart and Winston.（日高六郎訳，1951，『自由からの逃走』東京創元社．）
-# 4.5.1 電子書籍：取得日があるときだけ（取得日，URL）を出す（紙媒体の情報は別に対応）
-藤竹暁，2008，『図説 日本のマスメディア（上）新聞・放送・出版』電子書店パピレス，（2009年1月10日取得，http://www.papy.co.jp/sc/list/genre/030-043-020-000）．
+# 4.5.1 電子書籍（和文）：紙媒体の刊行年・出版社は origdate＋origpublisher，取得日があるときだけ（取得日，URL）
+藤竹暁，2008，『図説 日本のマスメディア（上）新聞・放送・出版』（2005，日本放送出版協会刊），電子書店パピレス，（2009年1月10日取得，http://www.papy.co.jp/sc/list/genre/030-043-020-000）．
 # 4.1 同一著者：単著 → 単独編書 → 共著 → 共編書
 舩橋晴俊，1998，「環境問題の未来と社会変動——社会の自己破壊性と自己組織性」舩橋晴俊・飯島伸子編『講座社会学12 環境』東京大学出版会，191-224．
 舩橋晴俊・長谷川公一・飯島伸子編，1998，『テスト共編書A』テスト出版．
@@ -140,6 +149,7 @@ Mayer, Margit and Poland Roth, 1995, “New Social Movements and the Transformat
 # 4.2(8) 再録（重複する著者名・論文タイトルは省略）／4.4(6) 同じ原典の和訳
 # 同じ原典の再録と和訳をともに引用した場合は 1 項目にまとめ，添え物を年順に並べる（2026-10-24 決定）
 McCarthy, John D. and Mayer N. Zald, 1977, “Resource Mobilization and Social Movements: A Partial Theory,” American Journal of Sociology, 82(6): 1212-41. Reprinted in: Mayer N. Zald and John D. McCarthy eds., 1987, Social Movements in an Organizational Society: Collected Essays, New Brunswick: Transaction Publishers, 15-42.（片桐新自訳，1989，「社会運動の合理的理論」塩原勉編『資源動員と組織戦略——運動論の新パラダイム』新曜社，21-58．）
+Meyer, Dana, 2007, The Acceptance and Diffusion of Innovation, Washington, DC: American Sociological Association, (Available on CD-ROM only).
 見田宗介，1979，『現代社会の社会意識』弘文堂．
 ————，1984，『新版 現代日本の精神構造』弘文堂．
 宮島喬・梶田孝道・伊藤るり，1985，『先進社会のジレンマ』有斐閣．

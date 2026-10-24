@@ -476,11 +476,17 @@ language=auto,%
   {}%
 }%
 % 再販情報のみ（origyear記載）があった場合の処理
+% 電子書籍（origpublisher あり）は原典の年を出さない。原典のエントリがない訳書（translator あり）は
+% （ベック 1986=1998）の形、それ以外の再刊は（吉田 [1974] 1990）の形。
 \newbibmacro*{cite:origyear}%
-{\ifboolexpr{ test {\iffieldundef{origyear}} or not test {\iffieldundef{related}} }{}%
+{\ifboolexpr{ test {\iffieldundef{origyear}} or not test {\iffieldundef{related}}
+               or not test {\iflistundef{origpublisher}} }{}%
   {\usebibmacro{cite:translationof}%
-  \printtext[brackets]{\thefield{origyear}}%
-  \setunit{\addthinspace}%
+   \ifnameundef{translator}
+     {\printtext[brackets]{\thefield{origyear}}%
+      \setunit{\addthinspace}}
+     {\printtext{\thefield{origyear}}%
+      \setunit{\printdelim{transeq}}}%
   }%
 }%
 
