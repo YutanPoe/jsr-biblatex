@@ -132,6 +132,25 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[fieldset=type, null=true]%
       \step[typesource=report, typetarget=online]%
     }%
+    % 値が空白だけのフィールド（author = {} など）は，書かれていないものとして消す（2026-10-25）。
+    % biber の notfield は「フィールドが存在するか」を調べるので，空の値を残すと，後ろの規則
+    % （sortname の警告，署名のない記事の除外）が効かない。
+    \map{%
+      \step[fieldsource=author, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=author, null=true]%
+    }%
+    \map{%
+      \step[fieldsource=editor, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=editor, null=true]%
+    }%
+    \map{%
+      \step[fieldsource=translator, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=translator, null=true]%
+    }%
+    \map{%
+      \step[fieldsource=sortname, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=sortname, null=true]%
+    }%
     % sortname がない：書き忘れの警告用の印（bbl には sortname が出力されないので，biber の段階で印を付ける）
     % crossref／xref で親から継承する項目は，この段階では継承前なので対象外にする
     \map{%
@@ -140,32 +159,42 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[notfield=xref, final]%
       \step[fieldset=jsrnosortname, fieldvalue={1}]%
     }%
-    % 署名のない新聞・雑誌記事（author がない）は文献リストに載せない（文献注にだけ出る）。
-    % skipbib を加えると，リストに空の項目（空行）ができない。ラベルは通常どおり付くので，文献注の
-    % extradate には影響しない。entrysubtype と互換の type=、options が既にあるときとないときで 4 つに分ける。
-    % （options があるときは，overwrite を立てて追記する。biber は値をそのまま連結するので先頭にコンマを付ける）
+    % article ドライバを使う型（article、misc、software、patent）で author がないものは，文献リストに載せない
+    % （文献注にだけ出る）。ドライバは author がなければ何も出さないので，載せると空の項目（空行）ができる（2026-10-25）。
+    % 印（jsrnoauthor）を付け，印のあるものに skipbib を加える。skipbib があるとリストに空の項目ができない。
+    % ラベルは通常どおり付くので，文献注の extradate には影響しない。
+    % 印の値は，新聞・雑誌（entrysubtype と互換の type=）が news，それ以外が 1。1 のものは，bbx の
+    % \jsr@datainput が警告を出す（署名のない新聞・雑誌は仕様どおりなので警告しない）。
+    % crossref／xref で親から author を継承する項目は，この段階では継承前なので対象外にする。
+    % options が既にあるときとないときで分ける（あるときは，overwrite を立てて追記する。
+    % biber は値をそのまま連結するので先頭にコンマを付ける）。
     \map{%
+    \pertype{article}\pertype{misc}\pertype{software}\pertype{patent}%
       \step[notfield=author, final]%
-      \step[notfield=options, final]%
+      \step[notfield=crossref, final]%
+      \step[notfield=xref, final]%
+      \step[fieldset=jsrnoauthor, fieldvalue={1}]%
+    }%
+    \map[overwrite=true]{%
+      \step[fieldsource=jsrnoauthor, final]%
       \step[fieldsource=entrysubtype, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=jsrnoauthor, fieldvalue={news}]%
+    }%
+    \map[overwrite=true]{%
+      \step[fieldsource=jsrnoauthor, final]%
+      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=jsrnoauthor, fieldvalue={news}]%
+    }%
+    \map{%
+    \pertype{article}\pertype{misc}\pertype{software}\pertype{patent}%
+      \step[fieldsource=jsrnoauthor, final]%
+      \step[notfield=options, final]%
       \step[fieldset=options, fieldvalue={skipbib}]%
     }%
     \map[overwrite=true]{%
-      \step[notfield=author, final]%
+    \pertype{article}\pertype{misc}\pertype{software}\pertype{patent}%
+      \step[fieldsource=jsrnoauthor, final]%
       \step[fieldsource=options, final]%
-      \step[fieldsource=entrysubtype, match=\regexp{\A(newspaper|magazine)\Z}, final]%
-      \step[fieldset=options, fieldvalue={,skipbib}, append]%
-    }%
-    \map{%
-      \step[notfield=author, final]%
-      \step[notfield=options, final]%
-      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
-      \step[fieldset=options, fieldvalue={skipbib}]%
-    }%
-    \map[overwrite=true]{%
-      \step[notfield=author, final]%
-      \step[fieldsource=options, final]%
-      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
       \step[fieldset=options, fieldvalue={,skipbib}, append]%
     }%
     % ソート用：著者がいれば 1，編者のみなら 2
@@ -228,6 +257,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \usebibmacro{checkLang}%言語の判定
   \jsr@chksortname% 和文の文献の sortname の書き忘れの検出
   \jsr@chklegacy% 旧形式の bib の検出
+  \jsr@chkperiodical% 編者のない @periodical の検出
   \jsr@scankata% カタカナ名の判定
   \setboolean{reversenamebool}{true}%氏名反転をOnに
 }%
@@ -251,6 +281,14 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     and not test {\iffieldundef{jsrnosortname}} }
     {\blx@warning@noline{jsr: entry '\thefield{entrykey}' has no sortname\MessageBreak
        (CJK entries are sorted by character code without it)}}
+    {}}
+
+% @periodical（雑誌の号全体）に編者がないときは警告を出す（出力は，名前なしで誌名・年の順）。
+\newcommand*{\jsr@chkperiodical}{%
+  \ifentrytype{periodical}
+    {\ifboolexpr{ test {\ifnameundef{editor}} and test {\ifnameundef{author}} }
+       {\blx@warning@noline{jsr: periodical '\thefield{entrykey}' has no editor}}
+       {}}
     {}}
 
 % 旧形式の bib（webpagetitle、@report＋type=onlinereport）は sourcemap で読み替えるが、書き換えを促す警告を出す。
@@ -452,11 +490,14 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \DeclareFieldAlias{booksubtitle}{subtitle}%
 \DeclareFieldAlias{journaltitle}{fhdkakko}%journaltitleのみnumberの扱いが異るためこちらで指定
 \DeclareFieldAlias{journalsubtitle}{subtitle}%
+\DeclareFieldAlias{issuetitle}{title}%@periodical の特集名（論文のタイトルと同じ書式）
+\DeclareFieldAlias{issuesubtitle}{subtitle}%
 \DeclareFieldAlias{series}{title}%
 \DeclareFieldFormat[article]{date}{\mkbibdatelong{year}{month}{day}}%雑誌記事や新聞記事における日付はlong表示
 \DeclareFieldFormat{volume}
   {\ifthenelse{\boolean{CJK}}{\bibstring{prenumber}#1\bibstring{volume}}{\bibstring{volume}\addspace#1}}%雑誌記事や新聞記事における日付はlong表示
 \DeclareFieldFormat[article]{volume}{#1}%雑誌記事や新聞記事における日付はlong表示
+\DeclareFieldFormat[periodical]{volume}{#1}%雑誌の号全体（@periodical）も同じ
 \DeclareFieldFormat{part}
   {\ifthenelse{\boolean{CJK}}{\addspace#1}{.#1}}% physical part of a logical volume
 
@@ -597,6 +638,23 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 % 書名の後の訳者（単独の訳書）。先頭に出した訳者は消えているので，残っているときだけ出す
 \newbibmacro*{translator:after}{%
   \ifnameundef{translator}{}{\usebibmacro{translator}}}%
+
+%%% 同一著者のダッシュの判定 %%%
+% authoryear.bbx の定義から，ページの先頭の項目では名前を出し直す条件（not test \iffirstonpage）だけを除いた。
+% 同一著者は，ページに関係なく常にダッシュにする（2026-10-25 決定）。ほかの条件（直前と同じ fullhash，
+% セット内の扱い）は標準のまま。TeX Live 2026（biblatex 3.22）の authoryear.bbx で確認した。
+\renewbibmacro*{bbx:dashcheck}[2]{%
+  \ifboolexpr{
+    test {\iffieldequals{fullhash}{\bbx@lasthash}}
+    and
+    (
+       not bool {bbx@inset}
+       or
+       test {\iffieldequalstr{entrysetcount}{1}}
+    )
+  }
+    {#1}
+    {#2}}
 
 %%% 著者名 + authortype(あれば) %%%
 \renewbibmacro*{author}%
@@ -1170,6 +1228,46 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 }%
 
 
+%%% 雑誌の号全体（特集号。@periodical）%%%
+% 和文：編者，刊行年，「特集 特集名」『誌名』巻(号)．
+% 欧文：Editor ed., year, "Issue title," Special issue, Journal, vol(no).
+% スタイルガイドに規定がないので，APA 第7版 10.1 の例12 と Chicago の special issue に倣った jsr の決定（2026-10-25）。
+% bib は biblatex 標準のとおり（title が誌名，issuetitle が特集名，editor が編集主体）。
+% 編者（と著者）がないときは名前を出さず，誌名の後に年を出す（「特集 X」『誌名』39(2)，1988）。
+\newbool{jsr@pernoname}
+\newbibmacro*{periodical}{%
+  \unspace%
+  \ifboolexpr{ test {\ifnameundef{author}} and test {\ifnameundef{editor}} }
+    {\booltrue{jsr@pernoname}}{\boolfalse{jsr@pernoname}}%
+  \usebibmacro{translator/author/editor}%
+  \ifbool{jsr@pernoname}{}{\usebibmacro{date+extradate}}%
+  \usebibmacro{periodical:issuetitle}%
+  \usebibmacro{periodical:title}%
+  \usebibmacro{vol+pages}%
+  \ifbool{jsr@pernoname}%
+    {\setunit{\printdelim{fhcomma}}\usebibmacro{date+extradate}}{}%
+  \newunit%
+  \usebibmacro{urldate+eprint/doi/url}%
+  \printdelim{findelim}%
+}%
+% 特集名：和文は「特集 X」（標識は鉤括弧の中，半角空白），欧文は "X," Special issue,（標識は鉤括弧の後）
+\newbibmacro*{periodical:issuetitle}{%
+  \ifboolexpr{ test {\iffieldundef{issuetitle}} and test {\iffieldundef{issuesubtitle}} }
+    {}{%
+    \ifbool{CJK}
+      {\printtext[fhkakko]{\bibstring{specialissue}\addspace\usebibmacro{printtitle}{issue}}%
+       \setunit{\printdelim{titledelim}}}
+      {\printtext[fhkakko]{\usebibmacro{printtitle}{issue}}%
+       \setunit{\printdelim{titledelim}}%
+       \printtext{\bibstring{specialissue}}%
+       \setunit{\printdelim{fhcomma}}}}}
+% 誌名（title）を，雑誌記事の誌名（journaltitle）と同じ書式で出す
+\newbibmacro*{periodical:title}{%
+  \ifboolexpr{ test {\iffieldundef{title}} and test {\iffieldundef{subtitle}} }
+    {}{%
+    \printtext[journaltitle]{\usebibmacro{printtitle}{}}%
+    \setunit{\printdelim{titledelim}}}}
+
 %%% 編書・共著本内論文 %%%
 \newbibmacro*{incollection}{%
   \unspace%
@@ -1330,6 +1428,11 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 
 % (1) 読み込み時の記録
 \def\jsr@datainput{%
+  % author がない article 型の項目は文献リストから外れる（sourcemap が skipbib を付ける）ので，警告はここで出す
+  \iffieldequalstr{jsrnoauthor}{1}
+    {\blx@warning@noline{jsr: entry '\abx@field@entrykey' has no author and is omitted from the bibliography\MessageBreak
+       (add entrysubtype=newspaper/magazine if it is an unsigned article)}}
+    {}%
   \edef\jsr@pfx{\the\c@refsection @\blx@dlist@name}%
   \edef\jsr@key{\abx@field@entrykey}%
   % 添え物：原典（複製）のキーごとに，添え物のキーを登録する
@@ -1541,6 +1644,13 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     {\usebibmacro{relatedfield}}}%
   \nopunct%
   %\usebibmacro{finentry}%
+}%
+
+%% 雑誌の号全体（特集号）。related は扱わない
+\DeclareBibliographyDriver{periodical}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{periodical}%
+  \nopunct%
 }%
 
 %%% 以上の3つで(6)翻訳、(7)初出情報などに対応

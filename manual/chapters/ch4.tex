@@ -152,6 +152,43 @@
 
 \bibexample{mori2022}
 
+\subsection{雑誌の号全体（特集号）}\label{sec:periodical}
+雑誌の号全体（特集号）を1つの文献として挙げるときは，\bibtype{periodical} を使います。雑誌の号に著者はいないので，編集主体（学会・編集委員会など）を \bibfield{editor} に書き，出力は「日本都市学会編」のように編書と同じ形になります。
+
+スタイルガイドに規定がないので，特集名を論文のタイトルの位置に置き，「特集」という標識で論文と区別します。APA 第7版（10.1 の例12）と Chicago の special issue に倣った，jsr の決定です。
+
+\begin{bibtemplate}
+@periodical{<キー>,
+  editor     = {{<編集主体>}},
+  sortname   = {{<Romaji>}},     ※ 和文のみ
+  title      = {<誌名>},         ※ 誌名（特集名ではない）
+  volume     = {<巻>},           ※ 任意
+  number     = {<号>},           ※ 任意
+  issuetitle = {<特集名>},       ※ 任意
+  date       = {<年>},
+  langid     = {japanese},
+}
+\end{bibtemplate}
+
+\bibfield{title} は誌名，\bibfield{issuetitle} は特集名です（biblatex 標準のデータモデルのとおりです）。\bibtype{article} の \bibfield{title}（論文名）とは違うので，注意してください。\bibfield{publisher} は書きません（学会が自ら発行しているときに書くと，「日本都市学会編…日本都市学会」と二重に出ます）。巻・号・ページ・DOI・URL・取得日は，\bibtype{article} と同じ書式です。「特集」は \texttt{specialissue} という bibstring で，欧文では \texttt{Special issue} です。
+
+\bibexample{city1985,city1990,shakai1988}
+
+\noindent 欧文：
+
+\bibexample{asr1988}
+
+同じ編集主体の2件目以降は「————編」，同じ年の複数の号は 1985a，1985b のように，編書と同じに扱われます。
+
+\paragraph{編集主体がないとき}
+\bibfield{editor} がないと，警告（\texttt{jsr: periodical 'KEY' has no editor}）が出ます。出力は，名前と年を先頭に出さず，特集名・誌名・巻号・年の順で，文献注は「（『誌名』年）」です（\cmd{parencite}\{noeditor1988\} は {\parencite{noeditor1988}}）：
+
+\bibexample{noeditor1988}
+
+\begin{caution}
+\bibtype{article} から \bibfield{crossref} で号を参照する書き方（号の情報を親の \bibtype{periodical} にまとめる）は，まだ対応していません。
+\end{caution}
+
 \subsection{新聞・雑誌記事}\label{sec:news}
 新聞記事は \bibtype{article} に \bibfield{entrysubtype} \texttt{= \{newspaper\}} を書きます。商業雑誌の記事は \texttt{magazine} です（スタイルガイド 3.7 に対応します）。朝刊・夕刊は \bibfield{issue}，版・地域版は \bibfield{note} に書きます。署名のない記事（\bibfield{author} がない）は文献リストには載らず，文献注にだけ出ます。
 
@@ -167,7 +204,9 @@
 }
 \end{bibtemplate}
 
-署名のない記事は，文献リストに載りません（空行も残りません）。\texttt{skipbib} などを書く必要はありません。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
+署名のない記事は，文献リストに載りません（空行も残りません）。\texttt{skipbib} などを書く必要はありません。\bibfield{author} が空の値（\texttt{author = \{\}}）のときも，書かれていないものとして同じに扱います。
+
+同じ扱いは，\bibtype{article} のドライバを使う型（\bibtype{article}，\bibtype{misc}，\bibtype{software}，\bibtype{patent}）すべてに及びます。\bibfield{author} がない（空の値も含む）これらの項目は，文献リストに載りません。新聞・雑誌（\bibfield{entrysubtype} が \texttt{newspaper}／\texttt{magazine}）以外でこうなったときは，\texttt{jsr: entry 'KEY' has no author and is omitted from the bibliography} という警告が出ます。署名のない記事なら \bibfield{entrysubtype} を書いてください。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
 
 \bibexampleonly{asahi1998}
 \bibexampleonly{asahi1999}

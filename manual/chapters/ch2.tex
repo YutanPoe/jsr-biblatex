@@ -33,6 +33,7 @@ bib ファイルは UTF-8 のテキストファイルで，文献1件ごとに�
 数巻にわたる書籍の全体／その1巻 & \bibtype{mvbook}／\bibtype{book}（\bibfield{volume}） \\
 編書・共著書の中の1つの章・論文 & \bibtype{incollection} \\
 雑誌・紀要の論文 & \bibtype{article} \\
+雑誌の号全体（特集号） & \bibtype{periodical} \\
 新聞・商業雑誌の記事 & \bibtype{article}（\bibfield{entrysubtype}） \\
 翻訳書・再録・再刊 & もとの型（\bibtype{book}，\bibtype{article}，\bibtype{incollection}）＋\bibfield{related} \\
 電子書籍 & \bibtype{book}（\bibfield{origpublisher}，\bibfield{note}） \\
@@ -245,7 +246,11 @@ bib ファイルは UTF-8 のテキストファイルで，文献1件ごとに�
 
 \fielditem{journaltitle}{literal}
 
-誌名・紙名です（\bibtype{article}）。
+誌名・紙名です（\bibtype{article}）。\bibtype{periodical} では \bibfield{title} が誌名です。
+
+\fielditem{issuetitle}{literal}
+
+雑誌の号全体（\bibtype{periodical}）の特集名です。\bibfield{issuesubtitle} は副題です。
 
 \fielditem{edition}{integer または literal}
 

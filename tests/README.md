@@ -49,3 +49,6 @@ sh tests/compare-real.sh [REV]
 ## 期待値を変えるとき
 
 スタイルガイドの解釈を変えた場合や、新しいケースを追加した場合は、`guide.bib`／`guide.tex`／`guide.expected.txt` の 3 つをそろえて更新する。
+
+## dash（同一著者のダッシュ）
+- `dash.tex`／`dash.bib`／`dash.expected.txt`：1 ページ 3 行の小さな紙面に同一著者の 6 件を並べ、ページの先頭に来る項目でも「————」になることを確かめる。`bbx:dashcheck` の再定義を外すと、ページ先頭の項目が名前に戻って NG になる（確認済み）。

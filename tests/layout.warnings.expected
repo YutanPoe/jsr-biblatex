@@ -1,0 +1,10 @@
+jsr: entry 'EmptySortname' has no sortname
+jsr: entry 'NoAuthorMisc' has no author and is omitted
+jsr: entry 'NoAuthorArticle' has no author and is omitted
+jsr: entry 'NoAuthorOptions' has no author and is omitted
+!jsr: entry 'Unsigned1991' has no author
+!jsr: entry 'UnsignedType1994' has no author
+!jsr: entry 'UnsignedTypeOptions1996' has no author
+!jsr: entry 'EmptyAuthorMag' has no author
+!jsr: entry 'Signed1997' has no author
+jsr: periodical 'PerNoEditor' has no editor

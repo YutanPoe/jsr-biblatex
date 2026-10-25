@@ -43,3 +43,28 @@
 @article{Aoki1990b,
   author = {青木, 二}, sortname = {Aoki, Ji}, date = {1990}, title = {記事B},
   journaltitle = {誌B}, volume = {1}, pages = {1--2}, langid = {japanese}}
+% J1：author = {} は書かれていないものとして扱う（空の項目を作らない）
+@article{EmptyAuthorMag,
+  author = {}, journaltitle = {週刊誌}, date = {1993-11-03}, entrysubtype = {magazine},
+  title = {空author雑誌}, langid = {japanese}}
+% sortname = {} の和文エントリ：sortname がないものとして警告が出る
+@book{EmptySortname,
+  author = {空, 太郎}, sortname = {}, date = {2001}, title = {空sortname},
+  publisher = {出版社}, langid = {japanese}}
+% J2：article ドライバを使う型で author がないものは，文献リストに載せない（新聞・雑誌以外は警告）
+@misc{NoAuthorMisc,
+  date = {1930-07-04}, title = {misc無署名}, journaltitle = {架空朝報},
+  howpublished = {夕刊}, pages = {1}, langid = {japanese}}
+@article{NoAuthorArticle,
+  date = {1990}, title = {著者なし論文}, journaltitle = {誌E}, volume = {2}, pages = {3--4}, langid = {japanese}}
+@article{NoAuthorOptions,
+  date = {1991}, title = {optionsつき}, journaltitle = {誌F}, volume = {2}, options = {useprefix=false}, langid = {japanese}}
+% J4：@periodical。同一編者の同一年は a，b が付く。編者がないと警告が出る
+@periodical{PerA1999,
+  editor = {{日本都市学会}}, sortname = {{Nihontoshigakkai}}, title = {日本都市学会年報}, volume = {32},
+  issuetitle = {甲}, date = {1999}, langid = {japanese}}
+@periodical{PerB1999,
+  editor = {{日本都市学会}}, sortname = {{Nihontoshigakkai}}, title = {日本都市学会年報}, volume = {33},
+  issuetitle = {乙}, date = {1999}, langid = {japanese}}
+@periodical{PerNoEditor,
+  title = {誌名のみ}, volume = {1}, date = {1999}, langid = {japanese}}

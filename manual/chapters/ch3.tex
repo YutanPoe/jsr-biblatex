@@ -212,7 +212,7 @@
 \item 共編書
 \end{enumerate}
 
-同じ著者の2つ目以降は，著者名が「————」に置き換わります。同一著者の，同一カテゴリー（単著，編書など）の，同一年度の文献には，年に a，b が付きます（単著と編書は，別のカテゴリーなので付きません）。訳書は，原典の年で判定します。原典の年（\bibfield{origdate}）がある文献は，原典の年で先に並びます。
+同じ著者の2つ目以降は，著者名が「————」に置き換わります。ページの先頭の項目でも，名前には戻しません（biblatex の標準では，ページの先頭で名前を出し直しますが，このスタイルでは変えています）。同一著者の，同一カテゴリー（単著，編書など）の，同一年度の文献には，年に a，b が付きます（単著と編書は，別のカテゴリーなので付きません）。訳書は，原典の年で判定します。原典の年（\bibfield{origdate}）がある文献は，原典の年で先に並びます。
 
 \subsection{警告とメッセージ}
 組版のログには，このスタイルが出す警告があります。
@@ -220,6 +220,12 @@
 \begin{keymarglist}
 \item[has no sortname]
 和文の著者・編者のエントリに，\bibfield{sortname} がありません（\ref{sec:cautions} 節）。\bibfield{crossref} で親を指すエントリは，対象外です。
+
+\item[has no author]
+\bibtype{article}，\bibtype{misc}，\bibtype{software}，\bibtype{patent} で \bibfield{author} がない（空の値を含む）ため，文献リストに載りません。署名のない新聞・雑誌記事なら \bibfield{entrysubtype} を書いてください（\ref{sec:news} 節）。
+
+\item[has no editor]
+\bibtype{periodical}（雑誌の号全体）に \bibfield{editor}（と \bibfield{author}）がありません。名前と年を先頭に出さず，誌名の後に年を出します（\ref{sec:periodical} 節）。
 
 \item[uses deprecated]
 旧い書き方（\bibfield{webpagetitle}，\bibtype{report} の \texttt{type=onlinereport}）で書かれたエントリです。読み替えて組まれますが，新しい書き方に書き換えてください（第\ref{sec:migrate}章）。
