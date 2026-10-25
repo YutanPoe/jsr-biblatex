@@ -167,7 +167,9 @@
 }
 \end{bibtemplate}
 
-署名のない記事は，文献リストに載りません（空行も残りません）。\texttt{skipbib} などを書く必要はありません。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
+署名のない記事は，文献リストに載りません（空行も残りません）。\texttt{skipbib} などを書く必要はありません。\bibfield{author} が空の値（\texttt{author = \{\}}）のときも，書かれていないものとして同じに扱います。
+
+同じ扱いは，\bibtype{article} のドライバを使う型（\bibtype{article}，\bibtype{misc}，\bibtype{software}，\bibtype{patent}）すべてに及びます。\bibfield{author} がない（空の値も含む）これらの項目は，文献リストに載りません。新聞・雑誌（\bibfield{entrysubtype} が \texttt{newspaper}／\texttt{magazine}）以外でこうなったときは，\texttt{jsr: entry 'KEY' has no author and is omitted from the bibliography} という警告が出ます。署名のない記事なら \bibfield{entrysubtype} を書いてください。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
 
 \bibexampleonly{asahi1998}
 \bibexampleonly{asahi1999}

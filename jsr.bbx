@@ -159,32 +159,42 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[notfield=xref, final]%
       \step[fieldset=jsrnosortname, fieldvalue={1}]%
     }%
-    % 署名のない新聞・雑誌記事（author がない）は文献リストに載せない（文献注にだけ出る）。
-    % skipbib を加えると，リストに空の項目（空行）ができない。ラベルは通常どおり付くので，文献注の
-    % extradate には影響しない。entrysubtype と互換の type=、options が既にあるときとないときで 4 つに分ける。
-    % （options があるときは，overwrite を立てて追記する。biber は値をそのまま連結するので先頭にコンマを付ける）
+    % article ドライバを使う型（article、misc、software、patent）で author がないものは，文献リストに載せない
+    % （文献注にだけ出る）。ドライバは author がなければ何も出さないので，載せると空の項目（空行）ができる（2026-10-25）。
+    % 印（jsrnoauthor）を付け，印のあるものに skipbib を加える。skipbib があるとリストに空の項目ができない。
+    % ラベルは通常どおり付くので，文献注の extradate には影響しない。
+    % 印の値は，新聞・雑誌（entrysubtype と互換の type=）が news，それ以外が 1。1 のものは，bbx の
+    % \jsr@datainput が警告を出す（署名のない新聞・雑誌は仕様どおりなので警告しない）。
+    % crossref／xref で親から author を継承する項目は，この段階では継承前なので対象外にする。
+    % options が既にあるときとないときで分ける（あるときは，overwrite を立てて追記する。
+    % biber は値をそのまま連結するので先頭にコンマを付ける）。
     \map{%
+    \pertype{article}\pertype{misc}\pertype{software}\pertype{patent}%
       \step[notfield=author, final]%
-      \step[notfield=options, final]%
+      \step[notfield=crossref, final]%
+      \step[notfield=xref, final]%
+      \step[fieldset=jsrnoauthor, fieldvalue={1}]%
+    }%
+    \map[overwrite=true]{%
+      \step[fieldsource=jsrnoauthor, final]%
       \step[fieldsource=entrysubtype, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=jsrnoauthor, fieldvalue={news}]%
+    }%
+    \map[overwrite=true]{%
+      \step[fieldsource=jsrnoauthor, final]%
+      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=jsrnoauthor, fieldvalue={news}]%
+    }%
+    \map{%
+    \pertype{article}\pertype{misc}\pertype{software}\pertype{patent}%
+      \step[fieldsource=jsrnoauthor, final]%
+      \step[notfield=options, final]%
       \step[fieldset=options, fieldvalue={skipbib}]%
     }%
     \map[overwrite=true]{%
-      \step[notfield=author, final]%
+    \pertype{article}\pertype{misc}\pertype{software}\pertype{patent}%
+      \step[fieldsource=jsrnoauthor, final]%
       \step[fieldsource=options, final]%
-      \step[fieldsource=entrysubtype, match=\regexp{\A(newspaper|magazine)\Z}, final]%
-      \step[fieldset=options, fieldvalue={,skipbib}, append]%
-    }%
-    \map{%
-      \step[notfield=author, final]%
-      \step[notfield=options, final]%
-      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
-      \step[fieldset=options, fieldvalue={skipbib}]%
-    }%
-    \map[overwrite=true]{%
-      \step[notfield=author, final]%
-      \step[fieldsource=options, final]%
-      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
       \step[fieldset=options, fieldvalue={,skipbib}, append]%
     }%
     % ソート用：著者がいれば 1，編者のみなら 2
@@ -1349,6 +1359,11 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 
 % (1) 読み込み時の記録
 \def\jsr@datainput{%
+  % author がない article 型の項目は文献リストから外れる（sourcemap が skipbib を付ける）ので，警告はここで出す
+  \iffieldequalstr{jsrnoauthor}{1}
+    {\blx@warning@noline{jsr: entry '\abx@field@entrykey' has no author and is omitted from the bibliography\MessageBreak
+       (add entrysubtype=newspaper/magazine if it is an unsigned article)}}
+    {}%
   \edef\jsr@pfx{\the\c@refsection @\blx@dlist@name}%
   \edef\jsr@key{\abx@field@entrykey}%
   % 添え物：原典（複製）のキーごとに，添え物のキーを登録する

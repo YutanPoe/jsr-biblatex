@@ -36,3 +36,6 @@
 % 旧形式の bib（webpagetitle、@report＋type=onlinereport）の検出用。bbx の sourcemap が，読み替える前に印を付ける
 \DeclareDatamodelFields[type=field,datatype=literal]{jsrlegacy}
 \DeclareDatamodelEntryfields{jsrlegacy}
+% author のない article 型（article、misc、software、patent）の検出用。bbx の sourcemap が印を付ける（新聞・雑誌は news，それ以外は 1）
+\DeclareDatamodelFields[type=field,datatype=literal]{jsrnoauthor}
+\DeclareDatamodelEntryfields{jsrnoauthor}

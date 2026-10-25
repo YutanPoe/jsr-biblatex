@@ -51,3 +51,11 @@
 @book{EmptySortname,
   author = {空, 太郎}, sortname = {}, date = {2001}, title = {空sortname},
   publisher = {出版社}, langid = {japanese}}
+% J2：article ドライバを使う型で author がないものは，文献リストに載せない（新聞・雑誌以外は警告）
+@misc{NoAuthorMisc,
+  date = {1930-07-04}, title = {misc無署名}, journaltitle = {架空朝報},
+  howpublished = {夕刊}, pages = {1}, langid = {japanese}}
+@article{NoAuthorArticle,
+  date = {1990}, title = {著者なし論文}, journaltitle = {誌E}, volume = {2}, pages = {3--4}, langid = {japanese}}
+@article{NoAuthorOptions,
+  date = {1991}, title = {optionsつき}, journaltitle = {誌F}, volume = {2}, options = {useprefix=false}, langid = {japanese}}

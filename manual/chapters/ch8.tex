@@ -16,7 +16,11 @@
 \bibfield{sortname} は bbl に書き出されません（biber が並べ替えにだけ使います）。TeX 側で有無を調べたいときは，sourcemap で印のフィールド（\bibfield{jsrnosortname}，\bibfield{jsrsortrole}。\file{jsr.dbx} で宣言）を付けます。
 
 \subsection{署名のない記事の除外}
-署名のない新聞・雑誌記事（\bibfield{entrysubtype} または互換の \bibfield{type} が \texttt{newspaper}／\texttt{magazine}で，\bibfield{author} がない）には，sourcemap で \bibfield{options} に \texttt{skipbib} を加えます（\bibfield{options} が既にあるときは追記します）。ドライバが何も出さないだけだと，文献リストに空の項目（空行）が残るためです。\texttt{skipbib} の項目も，ラベルは通常どおり付くので，文献注と extradate には影響しません。
+\bibtype{article} のドライバを使う型（\bibtype{article}，\bibtype{misc}，\bibtype{software}，\bibtype{patent}）で \bibfield{author} がないものには，sourcemap で \bibfield{options} に \texttt{skipbib} を加えます（\bibfield{options} が既にあるときは追記します）。ドライバが何も出さないだけだと，文献リストに空の項目（空行）が残るためです。\texttt{skipbib} の項目も，ラベルは通常どおり付くので，文献注と extradate には影響しません。
+
+新聞・雑誌（\bibfield{entrysubtype} または互換の \bibfield{type} が \texttt{newspaper}／\texttt{magazine}）以外は，警告用の印（\bibfield{jsrnoauthor}）も付け，\cmd{AtDataInput} の処理（\cmd{jsr@datainput}）が警告を出します。\texttt{skipbib} の項目は文献リストに組まれないため，\cmd{AtEveryBibitem} では警告が出せないからです。\bibfield{crossref}／\bibfield{xref} がある項目は，author を親から継承するかもしれないので対象外です。
+
+値が空白だけのフィールド（\texttt{author = \{\}}）は，ほかの規則より前に，sourcemap で消します（\bibfield{author}，\bibfield{editor}，\bibfield{translator}，\bibfield{sortname}）。biber の \texttt{notfield} は「存在するか」を調べるので，空の値が残ると，署名のない記事の除外や sortname の警告が効かないためです。
 
 \subsection{旧形式の読み替え}
 \bibfield{webpagetitle} と \texttt{type=onlinereport} は，sourcemap で読み替えます。このとき，警告用の印（\bibfield{jsrlegacy}）を付けておき，組版時に警告を出します。
