@@ -64,5 +64,19 @@ else
   [ "$status" -eq 0 ] && status=1
 fi
 
+# 警告の確認（layout.log に出るべき警告と，出てはいけない警告。bbx の警告は biblatex の Warning として出る）
+#   layout.warnings.expected は「出るべき行（部分一致）」，先頭が ! の行は「出てはいけない行」
+if [ -f "$name".warnings.expected ]; then
+  warn_ng=0
+  while IFS= read -r pat; do
+    [ -z "$pat" ] && continue
+    case "$pat" in
+      '!'*) if grep -qF -- "${pat#!}" "$name".log; then echo "NG: $name: unexpected warning: ${pat#!}"; warn_ng=1; fi ;;
+      *)    if ! grep -qF -- "$pat" "$name".log; then echo "NG: $name: missing warning: $pat"; warn_ng=1; fi ;;
+    esac
+  done <"$name".warnings.expected
+  if [ "$warn_ng" -eq 0 ]; then echo "OK: $name: warnings as expected"; else [ "$status" -eq 0 ] && status=1; fi
+fi
+
 [ "$status" -eq 0 ] && echo "OK: all cases match"
 exit "$status"

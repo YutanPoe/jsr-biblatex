@@ -132,6 +132,25 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[fieldset=type, null=true]%
       \step[typesource=report, typetarget=online]%
     }%
+    % 値が空白だけのフィールド（author = {} など）は，書かれていないものとして消す（2026-10-25）。
+    % biber の notfield は「フィールドが存在するか」を調べるので，空の値を残すと，後ろの規則
+    % （sortname の警告，署名のない記事の除外）が効かない。
+    \map{%
+      \step[fieldsource=author, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=author, null=true]%
+    }%
+    \map{%
+      \step[fieldsource=editor, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=editor, null=true]%
+    }%
+    \map{%
+      \step[fieldsource=translator, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=translator, null=true]%
+    }%
+    \map{%
+      \step[fieldsource=sortname, match=\regexp{\A\s*\Z}, final]%
+      \step[fieldset=sortname, null=true]%
+    }%
     % sortname がない：書き忘れの警告用の印（bbl には sortname が出力されないので，biber の段階で印を付ける）
     % crossref／xref で親から継承する項目は，この段階では継承前なので対象外にする
     \map{%

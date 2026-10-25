@@ -43,3 +43,11 @@
 @article{Aoki1990b,
   author = {青木, 二}, sortname = {Aoki, Ji}, date = {1990}, title = {記事B},
   journaltitle = {誌B}, volume = {1}, pages = {1--2}, langid = {japanese}}
+% J1：author = {} は書かれていないものとして扱う（空の項目を作らない）
+@article{EmptyAuthorMag,
+  author = {}, journaltitle = {週刊誌}, date = {1993-11-03}, entrysubtype = {magazine},
+  title = {空author雑誌}, langid = {japanese}}
+% sortname = {} の和文エントリ：sortname がないものとして警告が出る
+@book{EmptySortname,
+  author = {空, 太郎}, sortname = {}, date = {2001}, title = {空sortname},
+  publisher = {出版社}, langid = {japanese}}
