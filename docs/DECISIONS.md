@@ -104,3 +104,14 @@
 - **影響**：skipbib はリストから外すだけで、ラベルは通常どおり付く。文献注は従来どおり出る。署名のない記事には labelname がないので extradate は付かず、a・b の振り直しや、訳書・再録をまとめる仕組みにも影響しない（回帰テスト `layout`、`guide`、実データの前後比較で確認）。bib 側の `options = {skipbib=true}` は不要になる。
 - **検査**：空行は文字の比較では見えないので、回帰テスト `layout` が組版された行を調べる（文字のない行がない、「，」の直後の空白が 0.5 全角以下）。
 - 同じ回の修正：同じ著者の 2 件目以降が `@incollection` のとき「————， 2014」と読点の後に空白が入る不具合（`incollection` マクロの `\setboolean{…}{false} %` の `%` の前の空白が原因）。`jsr.dbx` に `translatortype`／`translatoratype` を `\DeclareDatamodelEntryfields` で宣言した（`biber --validate_datamodel` の警告が消える）。
+
+## J1〜J4（2026-10-25 決定・実装。提案：`docs/proposals/2026-10-25-J1-J4-instructions.md`）
+- **J1 空の値（`author = {}` など）は「書かれていない」として扱う**：スタイル側（sourcemap）で吸収する。値が空白だけの `author`、`editor`、`translator`、`sortname` を、ほかの規則より前に消す。biber の `notfield` は「フィールドが存在するか」を調べるので、空の値が残ると、署名のない記事の除外（J2）と sortname の警告が効かなかった。biber が空の値を sourcemap に渡し、`match=\regexp{\A\s*\Z}` が成り立つことを確かめた。
+- **J2 article ドライバを使う型（`article`、`misc`、`software`、`patent`）で author がないものは、文献リストから外す**：S3 の `skipbib` の条件を、新聞・雑誌に限らず、この4つの型に広げた（entrysubtype／type の条件は外した）。新聞・雑誌（entrysubtype または互換の type が newspaper／magazine）以外は、警告（`jsr: entry 'KEY' has no author and is omitted from the bibliography`）を出す。警告用の印は `jsrnoauthor`（新聞・雑誌は `news`、ほかは `1`。`jsr.dbx` で宣言）で、`\AtDataInput` の `\jsr@datainput` が警告を出す（`skipbib` のエントリは文献リストに組まれず、`\AtEveryBibitem` では出せないため）。`crossref`／`xref` のあるエントリは、author を親から継承するかもしれないので対象外（sortname の map と同じ）。文献注の出力は変えない。
+- **J3 同一著者のダッシュは、ページに関係なく常に出す**：`bbx:dashcheck` を `jsr.bbx` で定義し直し、authoryear.bbx の定義から `not test \iffirstonpage` だけを除いた（biblatex の標準では、ページの先頭の項目で名前を出し直す）。文書側の `pagetracker=false` には頼らない。マニュアル第3章の並び順に、標準と異なる旨を書いた。
+- **J4 `@periodical`（雑誌の号全体）**：特集名を論文のタイトルの位置に置き、「特集」という標識で論文と区別する（APA 第7版 10.1 の例12、Chicago の special issue に倣う。ガイドに規定がないので jsr の決定）。bib は biblatex 標準のデータモデルのとおり（`title` は誌名、`issuetitle` は特集名、`editor` は編集主体）。biblatex-apa のように `title` に特集名、`journaltitle` に誌名を入れる書き方は採らない。
+  - 和文：`日本都市学会編，1985，「特集 都市と高速交通」『日本都市学会年報』18．`（特集名がなければ `日本都市学会編，1985，『日本都市学会年報』18．`、巻と号は `39(2)`）。欧文：`Smith, John ed., 1988, "Title of the Issue," Special issue, American Sociological Review, 53(1).`
+  - 「特集」と特集名の間は、スタイルガイド 4.5.2.2 の例（p.28）を画像で確かめて、半角空白にした（和文は鉤括弧の中、欧文は鉤括弧の後に「Special issue」）。「特集」「Special issue」は bibstring `specialissue`（各 lbx）。
+  - 巻・号・ページ・DOI・URL・取得日は article の書式（既存のマクロ）。文献注は `（日本都市学会編 1985）`（編書と同じ形）。並び順は編者だけのエントリと同じ（`jsrsortrole`＝2）。同一編者のダッシュ、a・b も編書と同じ。
+  - 編者（と著者）がないとき：警告（`jsr: periodical 'KEY' has no editor`）。文献リストは `「特集 X」『誌名』39(2)，1988．`（特集名がなければ `『誌名』39(2)，1988．`）、文献注は `（『誌名』1988）`。
+  - `@periodical` は J2 の `skipbib` の対象に入れない。`\DeclareBibliographyAlias` もない。範囲外：`@article` から `crossref` で号を参照する使い方。

@@ -59,3 +59,12 @@
   date = {1990}, title = {著者なし論文}, journaltitle = {誌E}, volume = {2}, pages = {3--4}, langid = {japanese}}
 @article{NoAuthorOptions,
   date = {1991}, title = {optionsつき}, journaltitle = {誌F}, volume = {2}, options = {useprefix=false}, langid = {japanese}}
+% J4：@periodical。同一編者の同一年は a，b が付く。編者がないと警告が出る
+@periodical{PerA1999,
+  editor = {{日本都市学会}}, sortname = {{Nihontoshigakkai}}, title = {日本都市学会年報}, volume = {32},
+  issuetitle = {甲}, date = {1999}, langid = {japanese}}
+@periodical{PerB1999,
+  editor = {{日本都市学会}}, sortname = {{Nihontoshigakkai}}, title = {日本都市学会年報}, volume = {33},
+  issuetitle = {乙}, date = {1999}, langid = {japanese}}
+@periodical{PerNoEditor,
+  title = {誌名のみ}, volume = {1}, date = {1999}, langid = {japanese}}

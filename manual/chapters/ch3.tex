@@ -221,8 +221,11 @@
 \item[has no sortname]
 和文の著者・編者のエントリに，\bibfield{sortname} がありません（\ref{sec:cautions} 節）。\bibfield{crossref} で親を指すエントリは，対象外です。
 
-\item[has no author and is omitted]
+\item[has no author]
 \bibtype{article}，\bibtype{misc}，\bibtype{software}，\bibtype{patent} で \bibfield{author} がない（空の値を含む）ため，文献リストに載りません。署名のない新聞・雑誌記事なら \bibfield{entrysubtype} を書いてください（\ref{sec:news} 節）。
+
+\item[has no editor]
+\bibtype{periodical}（雑誌の号全体）に \bibfield{editor}（と \bibfield{author}）がありません。名前と年を先頭に出さず，誌名の後に年を出します（\ref{sec:periodical} 節）。
 
 \item[uses deprecated]
 旧い書き方（\bibfield{webpagetitle}，\bibtype{report} の \texttt{type=onlinereport}）で書かれたエントリです。読み替えて組まれますが，新しい書き方に書き換えてください（第\ref{sec:migrate}章）。

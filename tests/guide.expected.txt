@@ -91,6 +91,14 @@ C68 （中岡 1975）
 C69 （Walsh 1998）
 # 刊行中の多巻本：date={1956/}（終了年なし）は開始年だけを出す
 C70 （架空県議会史編さん委員会編 1956）
+# 雑誌の号全体（@periodical）：編者があれば編書と同じ形，なければ誌名と年（警告が出る）
+C71 （日本都市学会編 1985）
+C72 （日本都市学会編 2016）
+C73 （日本都市学会編 1990）
+C74 （Miller ed. 1988）
+C75 （日本社会学会編 1988）
+C76 （『社会学評論』1988）
+C77 （『社会学評論』1989）
 == BIBLIOGRAPHY ==
 Abbott, Andrew, 1995, “Things of Boundaries,” Social Research, 62(4): 857-82.
 # DOI：既定（doi=false）では取得日がないと出さない（doi=true の場合は tests/doi.tex）
@@ -170,6 +178,8 @@ Mayer, Margit and Poland Roth, 1995, “New Social Movements and the Transformat
 # 同じ原典の再録と和訳をともに引用した場合は 1 項目にまとめ，添え物を年順に並べる（2026-10-24 決定）
 McCarthy, John D. and Mayer N. Zald, 1977, “Resource Mobilization and Social Movements: A Partial Theory,” American Journal of Sociology, 82(6): 1212-41. Reprinted in: Mayer N. Zald and John D. McCarthy eds., 1987, Social Movements in an Organizational Society: Collected Essays, New Brunswick: Transaction Publishers, 15-42.（片桐新自訳，1989，「社会運動の合理的理論」塩原勉編『資源動員と組織戦略——運動論の新パラダイム』新曜社，21-58．）
 Meyer, Dana, 2007, The Acceptance and Diffusion of Innovation, Washington, DC: American Sociological Association, (Available on CD-ROM only).
+# 雑誌の号全体（欧文）：Editor ed., year, “Issue title,” Special issue, Journal, vol(no).
+Miller, Anne ed., 1988, “Title of the Issue,” Special issue, American Sociological Review, 53(1).
 見田宗介，1979，『現代社会の社会意識』弘文堂．
 ————，1984，『新版 現代日本の精神構造』弘文堂．
 宮島喬・梶田孝道・伊藤るり，1985，『先進社会のジレンマ』有斐閣．
@@ -187,6 +197,11 @@ National Center for Health Statistics, 2007, “Faststats, A to Z,” (Retrieved
 # 4.5.3 ウェブページ（和文）
 日本社会学会，2006，「日本社会学会倫理綱領にもとづく研究指針」，日本社会学会ホームページ，（2009年2月2日取得，http://www.gakkai.ne.jp/jss/about/shishin.pdf）．
 ————，2009，日本社会学会ホームページ，（2009年2月2日取得，http://www.gakkai.ne.jp/jss）．
+# 雑誌の号全体（和文）：編者，年，「特集 特集名」『誌名』巻(号)．（日本社会学会編は直前の日本社会学会と同一著者なのでダッシュ。特集名がなければ『誌名』巻．）
+————編，1988，「特集 社会学と歴史」『社会学評論』39(2)．
+日本都市学会編，1985，「特集 都市と高速交通」『日本都市学会年報』18．
+————編，1990，『日本都市学会年報』23．
+————編，2016，「特集 新幹線を活かした地方都市のまちづくり」『日本都市学会年報』49．
 # series：和文は書名の前に出し，欧文は出さない（フェーズB 決定）
 西村二郎，1990，『テスト講座 3 テスト講座本』テスト出版．
 # 4.4(1) 版は書名に含める（第2版，新版）。url だけで取得日がない書籍は URL を出さない
@@ -269,3 +284,6 @@ Weber, Max, 1920, Test Book M, Tübingen: Mohr.
 吉田民人，1974，「社会システム論における情報——資源処理パラダイムの構想」『現代社会学』1(1): 7-27．（再録：1990，『情報と自己組織性の理論』東京大学出版会，153-72．）
 # 4.2(2) 3 人以上の共著
 Zald, Mayer N., John D. McCarthy and Jackie Smith, 1995, Test Book on Movements, New York: Test Press.
+# 雑誌の号全体で編者がない：編者・年を先頭に出さず，誌名の後に年
+「特集 社会学と歴史」『社会学評論』39(2)，1988．
+『社会学評論』40(1)，1989．

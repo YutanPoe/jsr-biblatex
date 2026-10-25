@@ -7,3 +7,4 @@ jsr: entry 'NoAuthorOptions' has no author and is omitted
 !jsr: entry 'UnsignedTypeOptions1996' has no author
 !jsr: entry 'EmptyAuthorMag' has no author
 !jsr: entry 'Signed1997' has no author
+jsr: periodical 'PerNoEditor' has no editor

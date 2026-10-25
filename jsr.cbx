@@ -449,6 +449,15 @@ language=auto,%
 %% 新聞や雑誌といった誌名を割注内に表示する場合の処理（authorフィールドを省略する）
 %%  和文：（『朝日新聞』1998.11.3 朝刊，第○版，○面）  欧文：（The New York Times, November 3, 1998）
 \newbibmacro*{noauthorcite}{%
+  \ifentrytype{periodical}{\usebibmacro{periodicalcite}}{\usebibmacro{noauthorcite:article}}}
+
+%% 編者のない @periodical：（『誌名』1988）
+\newbibmacro*{periodicalcite}{%
+  \printtext[journaltitle]{\usebibmacro{printtitle}{}}%
+  \setunit{\printdelim{nameyeardelim}}%
+  \usebibmacro{cite:plabelyear+extradate}}
+
+\newbibmacro*{noauthorcite:article}{%
   \usebibmacro{journal}%
   \jsr@ifnewsmag{%
     \ifthenelse{\boolean{CJK}}{\usebibmacro{yyyymmdd}}{\printdate}}{}%

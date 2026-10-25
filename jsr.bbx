@@ -257,6 +257,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
   \usebibmacro{checkLang}%言語の判定
   \jsr@chksortname% 和文の文献の sortname の書き忘れの検出
   \jsr@chklegacy% 旧形式の bib の検出
+  \jsr@chkperiodical% 編者のない @periodical の検出
   \jsr@scankata% カタカナ名の判定
   \setboolean{reversenamebool}{true}%氏名反転をOnに
 }%
@@ -280,6 +281,14 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     and not test {\iffieldundef{jsrnosortname}} }
     {\blx@warning@noline{jsr: entry '\thefield{entrykey}' has no sortname\MessageBreak
        (CJK entries are sorted by character code without it)}}
+    {}}
+
+% @periodical（雑誌の号全体）に編者がないときは警告を出す（出力は，名前なしで誌名・年の順）。
+\newcommand*{\jsr@chkperiodical}{%
+  \ifentrytype{periodical}
+    {\ifboolexpr{ test {\ifnameundef{editor}} and test {\ifnameundef{author}} }
+       {\blx@warning@noline{jsr: periodical '\thefield{entrykey}' has no editor}}
+       {}}
     {}}
 
 % 旧形式の bib（webpagetitle、@report＋type=onlinereport）は sourcemap で読み替えるが、書き換えを促す警告を出す。
@@ -481,11 +490,14 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \DeclareFieldAlias{booksubtitle}{subtitle}%
 \DeclareFieldAlias{journaltitle}{fhdkakko}%journaltitleのみnumberの扱いが異るためこちらで指定
 \DeclareFieldAlias{journalsubtitle}{subtitle}%
+\DeclareFieldAlias{issuetitle}{title}%@periodical の特集名（論文のタイトルと同じ書式）
+\DeclareFieldAlias{issuesubtitle}{subtitle}%
 \DeclareFieldAlias{series}{title}%
 \DeclareFieldFormat[article]{date}{\mkbibdatelong{year}{month}{day}}%雑誌記事や新聞記事における日付はlong表示
 \DeclareFieldFormat{volume}
   {\ifthenelse{\boolean{CJK}}{\bibstring{prenumber}#1\bibstring{volume}}{\bibstring{volume}\addspace#1}}%雑誌記事や新聞記事における日付はlong表示
 \DeclareFieldFormat[article]{volume}{#1}%雑誌記事や新聞記事における日付はlong表示
+\DeclareFieldFormat[periodical]{volume}{#1}%雑誌の号全体（@periodical）も同じ
 \DeclareFieldFormat{part}
   {\ifthenelse{\boolean{CJK}}{\addspace#1}{.#1}}% physical part of a logical volume
 
@@ -1216,6 +1228,46 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 }%
 
 
+%%% 雑誌の号全体（特集号。@periodical）%%%
+% 和文：編者，刊行年，「特集 特集名」『誌名』巻(号)．
+% 欧文：Editor ed., year, "Issue title," Special issue, Journal, vol(no).
+% スタイルガイドに規定がないので，APA 第7版 10.1 の例12 と Chicago の special issue に倣った jsr の決定（2026-10-25）。
+% bib は biblatex 標準のとおり（title が誌名，issuetitle が特集名，editor が編集主体）。
+% 編者（と著者）がないときは名前を出さず，誌名の後に年を出す（「特集 X」『誌名』39(2)，1988）。
+\newbool{jsr@pernoname}
+\newbibmacro*{periodical}{%
+  \unspace%
+  \ifboolexpr{ test {\ifnameundef{author}} and test {\ifnameundef{editor}} }
+    {\booltrue{jsr@pernoname}}{\boolfalse{jsr@pernoname}}%
+  \usebibmacro{translator/author/editor}%
+  \ifbool{jsr@pernoname}{}{\usebibmacro{date+extradate}}%
+  \usebibmacro{periodical:issuetitle}%
+  \usebibmacro{periodical:title}%
+  \usebibmacro{vol+pages}%
+  \ifbool{jsr@pernoname}%
+    {\setunit{\printdelim{fhcomma}}\usebibmacro{date+extradate}}{}%
+  \newunit%
+  \usebibmacro{urldate+eprint/doi/url}%
+  \printdelim{findelim}%
+}%
+% 特集名：和文は「特集 X」（標識は鉤括弧の中，半角空白），欧文は "X," Special issue,（標識は鉤括弧の後）
+\newbibmacro*{periodical:issuetitle}{%
+  \ifboolexpr{ test {\iffieldundef{issuetitle}} and test {\iffieldundef{issuesubtitle}} }
+    {}{%
+    \ifbool{CJK}
+      {\printtext[fhkakko]{\bibstring{specialissue}\addspace\usebibmacro{printtitle}{issue}}%
+       \setunit{\printdelim{titledelim}}}
+      {\printtext[fhkakko]{\usebibmacro{printtitle}{issue}}%
+       \setunit{\printdelim{titledelim}}%
+       \printtext{\bibstring{specialissue}}%
+       \setunit{\printdelim{fhcomma}}}}}
+% 誌名（title）を，雑誌記事の誌名（journaltitle）と同じ書式で出す
+\newbibmacro*{periodical:title}{%
+  \ifboolexpr{ test {\iffieldundef{title}} and test {\iffieldundef{subtitle}} }
+    {}{%
+    \printtext[journaltitle]{\usebibmacro{printtitle}{}}%
+    \setunit{\printdelim{titledelim}}}}
+
 %%% 編書・共著本内論文 %%%
 \newbibmacro*{incollection}{%
   \unspace%
@@ -1592,6 +1644,13 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
     {\usebibmacro{relatedfield}}}%
   \nopunct%
   %\usebibmacro{finentry}%
+}%
+
+%% 雑誌の号全体（特集号）。related は扱わない
+\DeclareBibliographyDriver{periodical}{%
+  \usebibmacro{begentry}%
+  \usebibmacro{periodical}%
+  \nopunct%
 }%
 
 %%% 以上の3つで(6)翻訳、(7)初出情報などに対応
