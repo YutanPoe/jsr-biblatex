@@ -1,1 +1,6 @@
 .DS_Store
+
+# 公開しない作業用の文書（手元には残す）
+/CLAUDE.md
+/docs/PROGRESS.md
+/docs/proposals/

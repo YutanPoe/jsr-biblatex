@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""マニュアルの検収の自動確認（docs/proposals/2026-10-24-manual-spec.md §8）。
+"""マニュアルの検収の自動確認。
 
 使い方: python3 check.py <jobname>   （<jobname>.log と <jobname>.pdf を読む）
 確認する項目:
