@@ -1,0 +1,45 @@
+% jsr-biblatex 回帰テスト layout：文字の比較では見えない組版（空白の幅、空の項目）の確認用
+% S2：同じ著者の 2 件目以降が @incollection のときの「————，年」
+@incollection{Wakabayashi2012,
+  author = {若林, 幹夫}, sortname = {Wakabayashi, Mikio}, date = {2012},
+  title = {本A}, booktitle = {x}, editor = {山田, 太郎}, publisher = {弘文堂},
+  pages = {1--2}, langid = {japanese}}
+@incollection{Wakabayashi2014,
+  author = {若林, 幹夫}, sortname = {Wakabayashi, Mikio}, date = {2014},
+  title = {章B}, booktitle = {論集}, editor = {伊藤, 守}, publisher = {せりか書房},
+  pages = {183--200}, langid = {japanese}}
+@book{Wakabayashi2015,
+  author = {若林, 幹夫}, sortname = {Wakabayashi, Mikio}, date = {2015},
+  title = {本C}, publisher = {せりか書房}, langid = {japanese}}
+@article{Wakabayashi2016,
+  author = {若林, 幹夫}, sortname = {Wakabayashi, Mikio}, date = {2016},
+  title = {記事D}, journaltitle = {誌D}, volume = {1}, pages = {1--2}, langid = {japanese}}
+% S3：署名のない新聞・雑誌記事は文献リストに載せない（空の項目を作らない）
+@article{Aoki1990a,
+  author = {青木, 一}, sortname = {Aoki, Hajime}, date = {1990}, title = {記事A},
+  journaltitle = {誌A}, volume = {1}, pages = {1--2}, langid = {japanese}}
+@article{Unsigned1991,
+  journaltitle = {朝日新聞}, date = {1991-11-03}, entrysubtype = {newspaper},
+  issue = {朝刊}, title = {無署名}, langid = {japanese}}
+@article{Unsigned1992,
+  journaltitle = {朝日新聞}, date = {1992-11-03}, entrysubtype = {newspaper},
+  issue = {朝刊}, langid = {japanese}}
+@article{UnsignedMag1993,
+  journaltitle = {週刊誌}, date = {1993-05-01}, entrysubtype = {magazine},
+  title = {無署名の雑誌記事}, langid = {japanese}}
+@article{UnsignedType1994,
+  journaltitle = {読売新聞}, date = {1994-11-03}, type = {newspaper},
+  issue = {夕刊}, title = {互換形式}, langid = {japanese}}
+@article{UnsignedOptions1995,
+  journaltitle = {毎日新聞}, date = {1995-11-03}, entrysubtype = {newspaper},
+  issue = {朝刊}, title = {オプションつき}, options = {useprefix=false}, langid = {japanese}}
+@article{UnsignedTypeOptions1996,
+  journaltitle = {週刊誌}, date = {1996-05-01}, type = {magazine},
+  title = {互換形式でオプションつき}, options = {useprefix=false}, langid = {japanese}}
+% 署名のある新聞記事は載る
+@article{Signed1997,
+  author = {記者, 太郎}, sortname = {Kisha, Taro}, journaltitle = {朝日新聞}, date = {1997-11-03},
+  entrysubtype = {newspaper}, issue = {朝刊}, title = {署名記事}, langid = {japanese}}
+@article{Aoki1990b,
+  author = {青木, 二}, sortname = {Aoki, Ji}, date = {1990}, title = {記事B},
+  journaltitle = {誌B}, volume = {1}, pages = {1--2}, langid = {japanese}}

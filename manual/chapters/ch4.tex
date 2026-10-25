@@ -153,7 +153,7 @@
 \bibexample{mori2022}
 
 \subsection{新聞・雑誌記事}\label{sec:news}
-新聞記事は \bibtype{article} に \bibfield{entrysubtype} \texttt{= \{newspaper\}} を書きます。商業雑誌の記事は \texttt{magazine} です（スタイルガイド 3.7 に対応します）。朝刊・夕刊は \bibfield{issue}，版・地域版は \bibfield{note} に書きます。署名のない記事（\bibfield{author}，\bibfield{title} がない）は文献リストには載らず，文献注にだけ出ます。
+新聞記事は \bibtype{article} に \bibfield{entrysubtype} \texttt{= \{newspaper\}} を書きます。商業雑誌の記事は \texttt{magazine} です（スタイルガイド 3.7 に対応します）。朝刊・夕刊は \bibfield{issue}，版・地域版は \bibfield{note} に書きます。署名のない記事（\bibfield{author} がない）は文献リストには載らず，文献注にだけ出ます。
 
 \begin{bibtemplate}
 @article{<キー>,
@@ -167,7 +167,7 @@
 }
 \end{bibtemplate}
 
-署名のない記事は，文献リストに載りません。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
+署名のない記事は，文献リストに載りません（空行も残りません）。\texttt{skipbib} などを書く必要はありません。出力は文献注だけです（\cmd{parencite}\{asahi1998\} は {\parencite{asahi1998}}，\cmd{parencite}\{asahi1999\} は {\parencite{asahi1999}}）。
 
 \bibexampleonly{asahi1998}
 \bibexampleonly{asahi1999}

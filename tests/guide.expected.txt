@@ -248,6 +248,9 @@ Taylor, Mary, 2005, Test Technical Report, Technical Report TR-12, Chicago: Univ
 # 4.5.3 ブログ（和文）
 # 4.4(8) 研究分担者がいる報告書は代表者名の後に「編」（親の報告書は，所収の論文から crossref されても単独で載る）
 碓井崧編，1997，『地域組織とネットワーク』1995-1996年度科学研究費補助金研究成果報告書，金沢大学文学部．
+# 同じ著者の 2 件目以降が編書論文：ダッシュの直後に空白を入れない（空白の幅は layout で確かめる）
+若林幹夫，2012，「テスト論文A」山田太郎編『テスト論集』テスト出版，1-2．
+————，2014，「テスト論文B」伊藤守編『テスト論集二』テスト書房，183-200．
 # 3.7 署名入りの新聞記事（欧文，ASA）：ページの前に p.／pp.
 Walsh, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.
 ————, 1999, “Another Test News,” The New York Times, February 14, pp. A12-A13.

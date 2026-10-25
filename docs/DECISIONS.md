@@ -1,6 +1,6 @@
 # 決定事項（ユーザー確認済み）
 
-claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写したもの。新しい決定はここに日付つきで追記する。
+スタイルの設計で決めたことの記録。新しい決定はここに日付つきで追記する。
 
 ## 文献リスト
 - **原典の二重掲載（B-1）**：訳書・再録が引用されたら、原典は単独の項目に出さず、原典の項目に訳書・再録を添える。原典だけが引用されたら単独で出す。
@@ -30,7 +30,7 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
   - 一覧にない言語の項目は `langid` を消す。`checkLang` は biblatex の autolang（`\blx@beglang`）より前に動くので、`\selectlanguage` だけでは、あとから `langid` の言語に上書きされるため。
 
 ## 2026-10-24 追加（提案書 report-thesis-presentation／misc-review への回答）
-提案書：`docs/proposals/2026-10-24-report-thesis-presentation.md`（以下「提案1」）、`docs/proposals/2026-10-24-misc-review.md`（以下「提案2」）。
+提案書「report-thesis-presentation」（以下「提案1」）、「misc-review」（以下「提案2」）への回答。
 
 ### 学位論文・学会報告（提案1 の B・C）
 - 欧文の博士論文（type=phdthesis）は **PhD dissertation**（ASA）。括弧は付けない：Doe, Jane, 2012, “Title,” PhD dissertation, University of …
@@ -83,7 +83,6 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **欧文の署名記事**（ASA）：Smith, Tom, 1998, “Test News,” The New York Times, November 3, p. A1.。日付は月日だけ（年は著者の後に出している）。ページの前に p.／pp.（biblatex の `\mkpageprefix` は A1 のような数字でないページには付けないので、`\jsr@pgprefix` で範囲かどうかを調べて付ける）。
 
 ## webpagetitle と type=onlinereport（フェーズC 作業5、2026-10-24 決定・実装）
-提案書：`docs/proposals/2026-10-24-webpagetitle-onlinereport.md`。
 - **ウェブサイト名・ブログ名は `titleaddon`**（`@online` の標準フィールド。Zotero も同じ）。欧文の所在地・運営機関名は `location`＋`organization` のまま。
 - **オンラインで取得した報告書は `@online` で書く**（`type=onlinereport` の目印は使わない。`institution` は `organization` に）。
 - **旧形式（`webpagetitle`、`@report`＋`type=onlinereport`）は当面そのまま読める**。biber の sourcemap で読み替え、組版時に警告を出す。次の版で警告を外す。
@@ -93,7 +92,15 @@ claude.ai のプロジェクト文書「jsr-biblatex-課題整理.md」から写
 - **終了年のない範囲は `date={1956/}`**（biblatex の書き方。`1956-` は誤り）：刊行中の叢書・多巻本。年は開始年だけを出す（a、b も付く）。以前は範囲全体（1956/）がそのまま出ていた（`1956-` と書くと年が解釈されず n.d. になる）。終了年のある範囲（`1960/1970`）は従来どおり。
 
 ## 叢書名に判の名前（新書・文庫・選書）が入っているデータ（2026-10-24 決定）
-- 点検（`docs/proposals/2026-10-24-phaseC-review.md` 3-1）：Zotero の series に「朝日選書」などが入っていると、B-3 の決定（和文の series は書名の前に出す）どおりに『朝日選書 書名』と出る。ガイド 4.4(1) は、本の判が新書や文庫であっても、ちくま新書や岩波文庫とは書かない（出版社名を書く）としている。
+- 点検：Zotero の series に「朝日選書」などが入っていると、B-3 の決定（和文の series は書名の前に出す）どおりに『朝日選書 書名』と出る。ガイド 4.4(1) は、本の判が新書や文庫であっても、ちくま新書や岩波文庫とは書かない（出版社名を書く）としている。
 - **(a) を採る：bib 側で、判の名前の series（と、その番号 number）を書かない。スタイルは変えない**（B-3 のまま）。選書も同じ扱い。叢書・講座の名前（『講座社会学 12 環境』など）は従来どおり出す。
 - マニュアル第2章の `series` の説明に、この書き方を追記した。
 - `../bib`：ブランチ `jsr-series-bunko` で、朝日選書・りぶらりあ選書・岩波現代文庫・講談社学術文庫の4件の series（と number）を削除した。`test.bib` の「架空新書」は、series の出力を試す架空のテストデータなので残した。
+
+## 署名のない新聞・雑誌記事は skipbib で文献リストから外す（2026-10-25 決定・実装）
+- **問題**：署名のない記事（author がない）は article ドライバが何も出さないが、リストの項目（`\item`）は残り、空行ができた（無署名の 2 件で先頭に 1 行分の空き）。
+- **(a) を採る**：sourcemap で、`entrysubtype` が newspaper／magazine（互換の `type=` も含む）で `author` がないエントリに `options={skipbib}` を加える。`options` が既にあれば `,skipbib` を追記する（`overwrite=true`＋`append`）。ドライバの `\ifnameundef{author}` は残す。
+- **(b) は採らない**：`\defbibcheck` で除くと、利用者の `\printbibliography[check=…]` と衝突する。
+- **影響**：skipbib はリストから外すだけで、ラベルは通常どおり付く。文献注は従来どおり出る。署名のない記事には labelname がないので extradate は付かず、a・b の振り直しや、訳書・再録をまとめる仕組みにも影響しない（回帰テスト `layout`、`guide`、実データの前後比較で確認）。bib 側の `options = {skipbib=true}` は不要になる。
+- **検査**：空行は文字の比較では見えないので、回帰テスト `layout` が組版された行を調べる（文字のない行がない、「，」の直後の空白が 0.5 全角以下）。
+- 同じ回の修正：同じ著者の 2 件目以降が `@incollection` のとき「————， 2014」と読点の後に空白が入る不具合（`incollection` マクロの `\setboolean{…}{false} %` の `%` の前の空白が原因）。`jsr.dbx` に `translatortype`／`translatoratype` を `\DeclareDatamodelEntryfields` で宣言した（`biber --validate_datamodel` の警告が消える）。

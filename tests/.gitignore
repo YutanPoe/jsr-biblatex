@@ -7,6 +7,7 @@
 *.run.xml
 *.pdf
 *.lines.txt
+*.layout.txt
 *.actual.txt
 *.expected.norm.txt
 *.diff

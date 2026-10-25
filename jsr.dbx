@@ -24,7 +24,9 @@
 \DeclareDatamodelFields[type=list, datatype=name, label=true]{translatora}
 \DeclareDatamodelEntryfields{translatora}
 \DeclareDatamodelFields[type=field,datatype=literal]{translatortype}
+\DeclareDatamodelEntryfields{translatortype}
 \DeclareDatamodelFields[type=field,datatype=literal]{translatoratype}
+\DeclareDatamodelEntryfields{translatoratype}
 % 同一著者の並び順（単著→単独編書→共著→共編書）のためのソート用フィールド。bbx の sourcemap が設定する
 \DeclareDatamodelFields[type=field,datatype=integer]{jsrsortrole}
 \DeclareDatamodelEntryfields{jsrsortrole}

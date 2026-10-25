@@ -140,6 +140,34 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
       \step[notfield=xref, final]%
       \step[fieldset=jsrnosortname, fieldvalue={1}]%
     }%
+    % 署名のない新聞・雑誌記事（author がない）は文献リストに載せない（文献注にだけ出る）。
+    % skipbib を加えると，リストに空の項目（空行）ができない。ラベルは通常どおり付くので，文献注の
+    % extradate には影響しない。entrysubtype と互換の type=、options が既にあるときとないときで 4 つに分ける。
+    % （options があるときは，overwrite を立てて追記する。biber は値をそのまま連結するので先頭にコンマを付ける）
+    \map{%
+      \step[notfield=author, final]%
+      \step[notfield=options, final]%
+      \step[fieldsource=entrysubtype, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=options, fieldvalue={skipbib}]%
+    }%
+    \map[overwrite=true]{%
+      \step[notfield=author, final]%
+      \step[fieldsource=options, final]%
+      \step[fieldsource=entrysubtype, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=options, fieldvalue={,skipbib}, append]%
+    }%
+    \map{%
+      \step[notfield=author, final]%
+      \step[notfield=options, final]%
+      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=options, fieldvalue={skipbib}]%
+    }%
+    \map[overwrite=true]{%
+      \step[notfield=author, final]%
+      \step[fieldsource=options, final]%
+      \step[fieldsource=type, match=\regexp{\A(newspaper|magazine)\Z}, final]%
+      \step[fieldset=options, fieldvalue={,skipbib}, append]%
+    }%
     % ソート用：著者がいれば 1，編者のみなら 2
     \map{%
       \step[fieldsource=author, final]%
@@ -1146,7 +1174,7 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \newbibmacro*{incollection}{%
   \unspace%
   \usebibmacro{translator/author/editor}%% 著者名
-  \setboolean{reversenamebool}{false} % 先頭の引用が終了したのでfalseに
+  \setboolean{reversenamebool}{false}% 先頭の引用が終了したのでfalseに
   \usebibmacro{originaldate}% 初出を出力
   \usebibmacro{date+extradate}%
   % 表題

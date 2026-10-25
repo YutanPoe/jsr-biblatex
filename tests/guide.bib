@@ -1464,3 +1464,31 @@
   langid       = {american},
 }
 
+
+%% ---------------------------------------------------------------------
+%% 同じ著者の 2 件目以降が編書論文のときも，ダッシュの直後に空白を入れない（「————，2014」。空白の幅は layout で確かめる）
+%% ---------------------------------------------------------------------
+
+@incollection{Wakabayashi2012,
+  author     = {若林, 幹夫},
+  sortname   = {Wakabayashi, Mikio},
+  date       = {2012},
+  title      = {テスト論文A},
+  booktitle  = {テスト論集},
+  editor     = {山田, 太郎},
+  publisher  = {テスト出版},
+  pages      = {1--2},
+  langid     = {japanese},
+}
+
+@incollection{Wakabayashi2014,
+  author     = {若林, 幹夫},
+  sortname   = {Wakabayashi, Mikio},
+  date       = {2014},
+  title      = {テスト論文B},
+  booktitle  = {テスト論集二},
+  editor     = {伊藤, 守},
+  publisher  = {テスト書房},
+  pages      = {183--200},
+  langid     = {japanese},
+}

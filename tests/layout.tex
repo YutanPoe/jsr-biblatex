@@ -1,0 +1,31 @@
+%% jsr-biblatex 回帰テスト：文字の比較では見えない組版の確認
+%%  ・「，」の直後に，和文の句読点の約物間グルー以上の空白が入らない（S2：「————， 2014」）
+%%  ・文献リストに，文字のない行（空の項目）ができない（S3：署名のない新聞・雑誌記事）
+%% 文献注のほうは，署名のない記事も出ることを textdump の行で確かめる（layout.expected.txt の C01〜）。
+\documentclass[paper={1500mm,1000mm},line_length=1450mm,number_of_lines=150]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\addbibresource{layout.bib}
+\AtBeginBibliography{\raggedright}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\newcommand*{\case}[2]{#1 #2\par}
+\directlua{dofile(kpse.find_file('layoutdump.lua'))}
+
+\begin{document}
+\raggedright
+== CITATIONS ==\par
+\case{C01}{\parencite{Unsigned1991}}
+\case{C02}{\parencite{Unsigned1992}}
+\case{C03}{\parencite{UnsignedMag1993}}
+\case{C04}{\parencite{UnsignedType1994}}
+\case{C05}{\parencite{UnsignedOptions1995}}
+\case{C06}{\parencite{UnsignedTypeOptions1996}}
+\case{C07}{\parencite{Signed1997}}
+\nocite{*}
+== BIBLIOGRAPHY ==\par
+\printbibliography[heading=none]
+\end{document}

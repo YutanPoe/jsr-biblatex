@@ -1,5 +1,5 @@
 \section{内部の仕組み}\label{sec:internals}
-この章は，スタイルを改造・保守する人のための短い説明です。利用者は読まなくてかまいません。詳しくは，リポジトリの \file{CLAUDE.md} と \file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx} にあります。
+この章は，スタイルを改造・保守する人のための短い説明です。利用者は読まなくてかまいません。詳しくは，\file{jsr.bbx}，\file{jsr.cbx}，\file{jsr.dbx} のコメントと，リポジトリの \file{tests/README.md}，\file{docs/DECISIONS.md} にあります。
 
 \subsection{原典を代表にする方式}
 訳書・再録（\bibfield{related} ＋ \bibfield{relatedtype} が \texttt{translationof} または \texttt{reprintof}）は，単独の項目にせず，原典の項目に添えて出します。原典が引用されていないときは，biber が作る原典の複製（clone）が代表になります。
@@ -14,6 +14,9 @@
 
 \subsection{sortname の印}
 \bibfield{sortname} は bbl に書き出されません（biber が並べ替えにだけ使います）。TeX 側で有無を調べたいときは，sourcemap で印のフィールド（\bibfield{jsrnosortname}，\bibfield{jsrsortrole}。\file{jsr.dbx} で宣言）を付けます。
+
+\subsection{署名のない記事の除外}
+署名のない新聞・雑誌記事（\bibfield{entrysubtype} または互換の \bibfield{type} が \texttt{newspaper}／\texttt{magazine}で，\bibfield{author} がない）には，sourcemap で \bibfield{options} に \texttt{skipbib} を加えます（\bibfield{options} が既にあるときは追記します）。ドライバが何も出さないだけだと，文献リストに空の項目（空行）が残るためです。\texttt{skipbib} の項目も，ラベルは通常どおり付くので，文献注と extradate には影響しません。
 
 \subsection{旧形式の読み替え}
 \bibfield{webpagetitle} と \texttt{type=onlinereport} は，sourcemap で読み替えます。このとき，警告用の印（\bibfield{jsrlegacy}）を付けておき，組版時に警告を出します。

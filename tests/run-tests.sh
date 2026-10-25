@@ -4,7 +4,7 @@
 #   必要なもの: lualatex, biber, python3
 #   biber の場所は環境変数 BIBER で指定できる（既定は PATH 上の biber）。
 #   このリポジトリの jsr.bbx / jsr.cbx / lbx を、texmf にあるものより優先して読み込む。
-#   テスト文書は guide（スタイルガイドの例文）、noextra（a、b の付く文献がない文書）、doi（オプション doi=true）。
+#   テスト文書は guide（スタイルガイドの例文）、noextra（a、b の付く文献がない文書）、doi（オプション doi=true）、kinsoku（禁則）、layout（空白の幅・空の項目）。
 set -u
 cd "$(dirname "$0")"
 REPO="$(cd .. && pwd)"
@@ -47,6 +47,20 @@ if python3 check-kinsoku.py "$name".lines.txt >"$name".diff; then
   echo "OK: $name: no kinsoku violations"
 else
   echo "NG: $name: kinsoku violations (see tests/$name.diff)"; head -3 "$name".diff
+  [ "$status" -eq 0 ] && status=1
+fi
+
+# 組版の確認（「，」の直後の空白の幅，文献リストの空の項目，署名のない記事。文字の比較では見えないもの）
+name=layout
+rm -f "$name".layout.txt "$name".aux "$name".bbl "$name".bcf "$name".run.xml
+lualatex -interaction=nonstopmode -halt-on-error "$name".tex >/dev/null 2>&1
+"${BIBER:-biber}" --quiet "$name" >"$name".biber.log 2>&1 || { echo "$name: biber failed"; cat "$name".biber.log; exit 2; }
+lualatex -interaction=nonstopmode "$name".tex >/dev/null 2>&1
+lualatex -interaction=nonstopmode "$name".tex >/dev/null 2>&1 || { echo "$name: lualatex failed (see tests/$name.log)"; exit 2; }
+if python3 check-layout.py "$name".layout.txt "$name".expected.txt >"$name".diff; then
+  echo "OK: $name: no layout problems"
+else
+  echo "NG: $name: layout problems (see tests/$name.diff)"; head -3 "$name".diff
   [ "$status" -eq 0 ] && status=1
 fi
 

@@ -11,7 +11,7 @@ sh tests/run-tests.sh
 - 必要なもの：lualatex、biber、python3
 - biber は PATH 上のものを使う。別の場所のものを使うときは環境変数 `BIBER` で指定する（例：cpan で入れた biber は `PERL5LIB=$HOME/perl5/lib/perl5 BIBER=$HOME/perl5/bin/biber sh tests/run-tests.sh`）。
 - このリポジトリの `jsr.bbx`／`jsr.cbx`／`lbx/` を、texmf にインストールしたものより優先して読み込む（`TEXINPUTS` で指定）。
-- テスト文書は4つ。`guide`（スタイルガイドの例文）、`noextra`（a、b の付く文献が1つもない文書。extradate の振り直しで未定義のリストを扱わないことを確かめる）、`doi`（オプション `doi=true`）、`kinsoku`（禁則。後述）。
+- テスト文書は5つ。`guide`（スタイルガイドの例文）、`noextra`（a、b の付く文献が1つもない文書。extradate の振り直しで未定義のリストを扱わないことを確かめる）、`doi`（オプション `doi=true`）、`kinsoku`（禁則。後述）、`layout`（文字の比較では見えない組版。後述）。
 - 結果は文書ごとに `OK` か `NG: n expected line(s) not matched, m unexpected line(s)` と表示され、最後に全体の結果が出る。差分は `tests/<文書名>.diff` に出る（`-` が期待値、`+` が実際の出力）。LaTeX のエラーがあれば、ログの場所とともに表示する。
 
 ## 実データの変更前後比較
@@ -40,6 +40,7 @@ sh tests/compare-real.sh [REV]
 | `guide.expected.txt` | 期待値（スタイルガイドに準拠） |
 | `noextra.tex`、`noextra.expected.txt` | a、b のない文書のテストと、その期待値 |
 | `doi.tex`、`doi.expected.txt` | オプション `doi=true` のテストと、その期待値 |
+| `layout.tex`、`layout.bib`、`layout.expected.txt`、`layoutdump.lua`、`check-layout.py` | 組版のテスト（文字の比較では見えないもの）。「，」の直後の空白が 0.5 全角以下であること（編書論文のダッシュ「————，2014」）、文献リストに文字のない行（空の項目）がないこと（署名のない新聞・雑誌記事は skipbib で外れる）、文献注と文献リストの行が期待値と一致すること |
 | `kinsoku.tex`、`check-kinsoku.py` | 禁則のテスト（行幅を変えた箱に文献リストを繰り返し組み、行頭に閉じ括弧・句読点、行末に開き括弧が来る行がないことを確かめる） |
 | `run-tests.sh` | 実行スクリプト |
 | `compare-real.sh` | 実データ（`../test.tex`）の変更前後比較 |
