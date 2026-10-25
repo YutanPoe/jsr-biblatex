@@ -9,6 +9,8 @@ set -u
 cd "$(dirname "$0")"
 REPO="$(cd .. && pwd)"
 export TEXINPUTS="$REPO//:"
+# ログの折り返しで警告の照合が失敗しないよう，1 行の長さを広げる
+export max_print_line=10000
 
 status=0
 for name in guide noextra doi dash; do
