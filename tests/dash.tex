@@ -1,0 +1,21 @@
+%% jsr-biblatex 回帰テスト：同一著者のダッシュ（————）は，ページの先頭の項目でも名前に戻さない（J3）。
+%% 1 ページに 3 行しか入らない紙面にして，同一著者の項目がページの先頭に来るようにしている。
+%% biblatex 標準（authoryear.bbx の bbx:dashcheck）はページ先頭の項目で名前を出し直すが，jsr はそうしない。
+\documentclass[paper={100mm,60mm},line_length=80mm,number_of_lines=3]{jlreq}
+\usepackage{luatexja}
+\usepackage[american,japanese]{babel}
+\usepackage[autostyle=true]{csquotes}
+\usepackage{xurl}
+\usepackage[backend=biber,style=jsr,date=ymd]{biblatex}
+\addbibresource{dash.bib}
+\AtBeginBibliography{\raggedright}
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\directlua{dofile(kpse.find_file('textdump.lua'))}
+
+\begin{document}
+\raggedright
+== BIBLIOGRAPHY ==\par
+\nocite{*}
+\printbibliography[heading=none]
+\end{document}

@@ -627,6 +627,23 @@ doi=false,% 既定は，取得日（urldate）があるときだけ DOI を出�
 \newbibmacro*{translator:after}{%
   \ifnameundef{translator}{}{\usebibmacro{translator}}}%
 
+%%% 同一著者のダッシュの判定 %%%
+% authoryear.bbx の定義から，ページの先頭の項目では名前を出し直す条件（not test \iffirstonpage）だけを除いた。
+% 同一著者は，ページに関係なく常にダッシュにする（2026-10-25 決定）。ほかの条件（直前と同じ fullhash，
+% セット内の扱い）は標準のまま。TeX Live 2026（biblatex 3.22）の authoryear.bbx で確認した。
+\renewbibmacro*{bbx:dashcheck}[2]{%
+  \ifboolexpr{
+    test {\iffieldequals{fullhash}{\bbx@lasthash}}
+    and
+    (
+       not bool {bbx@inset}
+       or
+       test {\iffieldequalstr{entrysetcount}{1}}
+    )
+  }
+    {#1}
+    {#2}}
+
 %%% 著者名 + authortype(あれば) %%%
 \renewbibmacro*{author}%
 {\ifboolexpr{%

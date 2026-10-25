@@ -4,14 +4,14 @@
 #   必要なもの: lualatex, biber, python3
 #   biber の場所は環境変数 BIBER で指定できる（既定は PATH 上の biber）。
 #   このリポジトリの jsr.bbx / jsr.cbx / lbx を、texmf にあるものより優先して読み込む。
-#   テスト文書は guide（スタイルガイドの例文）、noextra（a、b の付く文献がない文書）、doi（オプション doi=true）、kinsoku（禁則）、layout（空白の幅・空の項目）。
+#   テスト文書は dash（同一著者のダッシュ），guide（スタイルガイドの例文）、noextra（a、b の付く文献がない文書）、doi（オプション doi=true）、kinsoku（禁則）、layout（空白の幅・空の項目）。
 set -u
 cd "$(dirname "$0")"
 REPO="$(cd .. && pwd)"
 export TEXINPUTS="$REPO//:"
 
 status=0
-for name in guide noextra doi; do
+for name in guide noextra doi dash; do
   rm -f "$name".lines.txt "$name".aux "$name".bbl "$name".bcf "$name".run.xml
   lualatex -interaction=nonstopmode -halt-on-error "$name".tex >/dev/null 2>&1
   "${BIBER:-biber}" --quiet "$name" >"$name".biber.log 2>&1 || { echo "$name: biber failed"; cat "$name".biber.log; exit 2; }
