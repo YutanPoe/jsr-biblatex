@@ -202,7 +202,7 @@
 %%  2. 枠の直後に，同じキーだけの文献リストを組む。例ごとに refsection を分ける
 %%     （訳書だけを指定しても，原典の複製が代表になって実際と同じ形で出る）
 %%  3. 出力は，文献リストと同じぶら下げ（2zw）・\small。左に spot 色の細い縦線と，左余白に「出力」の文字
-%%  枠と出力は 1 つの箱（vbox）に入れるので，別のページに分かれない
+%%  bib の枠はページをまたいでよい（枠の最後の行と出力は離さない）。出力は 1 つの箱（vbox）で，途中では分かれない
 \newcommand*{\jsr@exfiles}{}
 \newcommand*{\bibexamplefiles}[1]{%
   \renewcommand*{\jsr@exfiles}{#1}%
@@ -227,12 +227,14 @@
   \stepcounter{jsrex}%
   \directlua{jsrdoc.extract("\jsr@exfiles", "\luaescapestring{#2}", "\jobname-ex\thejsrex.tmp")}%
   \par\nopagebreak\medskip % 導きの文（直前の段落）と例を別のページに分けない
+  % bib の枠は，biblatex のマニュアルと同じく，ページをまたいでよい（箱に入れない）。
+  % 枠の最後の行と出力は離れないように，間に \nopagebreak を置く
+  \ifnum#1>0
+    \lstinputlisting[style=jsrbib]{\jobname-ex\thejsrex.tmp}%
+    \par\nopagebreak\smallskip
+  \fi
+  \ifnum#1<2
   \noindent\vbox{\hsize=\linewidth\relax\parindent=0pt\relax
-    \ifnum#1>0
-      \lstinputlisting[style=jsrbib]{\jobname-ex\thejsrex.tmp}%
-      \par\smallskip
-    \fi
-    \ifnum#1<2
     % 出力：縦線と「出力」の文字を，出力の 1 行目のベースラインにそろえる（その位置は Lua で測る）
     % \savebox は内容を \hbox で包むので，縦組みの箱のまま持つ \setbox を使う
     \setbox\jsr@outbox\vbox{\hsize=\linewidth\relax\parindent=0pt\relax
@@ -243,8 +245,8 @@
     \noindent\hbox to \linewidth{%
       \hbox to 0pt{\hss\raisebox{\dimexpr\ht\jsr@outbox-\jsr@fb\relax}[0pt][0pt]{\marglistfont 出力}\hspace{\marglistsep}}%
       \hbox to 0pt{\hss{\color{spot}\vrule width 2pt height\ht\jsr@outbox depth\dp\jsr@outbox}\hspace{4pt}}%
-      \usebox{\jsr@outbox}\hss}%
-    \fi}%
+      \usebox{\jsr@outbox}\hss}}%
+  \fi
   \par\medskip}
 
 %%% 表の列：左そろえの段落列（\raggedright）。両端そろえだと，狭い列で字間が間延びする

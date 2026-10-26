@@ -164,6 +164,13 @@ bib ファイルは UTF-8 のテキストファイルで，文献1件ごとに�
 \reqitem{author, title, journaltitle, date, langid}
 \optitem{subtitle, volume, number, pages, publisher, howpublished, doi, url, urldate, eprinttype, entrysubtype, issue, note, related, relatedtype}
 
+\typeitem{periodical}
+
+雑誌の号全体（特集号）です。雑誌の号に著者はいないので，編集主体（学会・編集委員会など）を \bibfield{editor} に書きます。\bibfield{title} は誌名で，特集名は \bibfield{issuetitle} に書きます（\ref{sec:periodical} 節）。\bibfield{editor} がないと警告が出ます。
+
+\reqitem{editor, title, date, langid}
+\optitem{issuetitle, issuesubtitle, subtitle, volume, number, pages, doi, url, urldate}
+
 \typeitem{report}
 
 調査報告書・政府刊行物です。\bibfield{author}，\bibfield{editor}，\bibfield{institution} のうち，先にあるものが先頭の名前になります。
